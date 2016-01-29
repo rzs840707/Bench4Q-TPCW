@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -49,9 +49,9 @@ public class admin_request_servlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
+			ServletException {
 		String url;
 		PrintWriter out = res.getWriter();
 
@@ -59,12 +59,13 @@ public class admin_request_servlet extends HttpServlet {
 		res.setContentType("text/html");
 
 		HttpSession session = req.getSession(false);
-
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
+		
+		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
+		String strSessionPriorityLevel = req
+				.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null
+				&& !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -75,15 +76,16 @@ public class admin_request_servlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
+							igrSessionPri);
 				}
 			}
 		}
-
+		
 		String I_IDstr = req.getParameter("I_ID");
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
-
+		
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();
 		if (sessionIdStrToAppend != null) {
@@ -91,6 +93,7 @@ public class admin_request_servlet extends HttpServlet {
 		} else {
 			sessionIdStrToAppend = "";
 		}
+		
 
 		int I_ID = Integer.parseInt(I_IDstr, 10);
 
@@ -99,30 +102,31 @@ public class admin_request_servlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD><TITLE>Product Update Page</TITLE></HEAD>");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
-		// out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
-		out.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
+		out
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 
 		out.print("<H2 ALIGN=\"center\">Admin Request Page</H2>");
 
 		out.print("<H2 ALIGN=\"center\">Title:" + book.i_title + "</H2>\n");
 		out.print("<P ALIGN=\"LEFT\">Author: " + book.a_fname + " " + book.a_lname + "<BR></P>\n");
-		ImageUtil.readAndWriteImage(book.i_image);
-		out.print("<IMG SRC=\"Images/" + ImageUtil.convertFileName(book.i_image) + "\" ALIGN=\"RIGHT\" BORDER=\"0\" "
+		out.print("<IMG SRC=\"Images/" + book.i_image + "\" ALIGN=\"RIGHT\" BORDER=\"0\" "
 				+ "WIDTH=\"200\" HEIGHT=\"200\" >\n");
-		ImageUtil.readAndWriteImage(book.i_thumbnail);
-		out.print("<IMG SRC=\"Images/" + ImageUtil.convertFileName(book.i_thumbnail) + "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
+		out.print("<IMG SRC=\"Images/" + book.i_thumbnail + "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
 		out.print("<P><BR><BR></P>");
-
+		
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		out.print("<FORM ACTION=\"admin_response" + sessionIdStrToAppend + "\" METHOD=\"get\">\n");
-
+		out.print("<FORM ACTION=\"admin_response" + sessionIdStrToAppend
+				+ "\" METHOD=\"get\">\n");
+		
 		out.print("<INPUT NAME=\"I_ID\" TYPE=\"hidden\" VALUE=\"" + I_ID + "\">\n");
 		out.print("<TABLE BORDER=\"0\">\n");
-		out.print("<TR><TD><B>Suggested Retail:</B></TD><TD><B>$ " + book.i_srp + "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Our Current Price: </B></TD>" + "<TD><FONT COLOR=\"#dd0000\"><B>$ " + book.i_cost
-				+ "</B></FONT></TD></TR>\n");
-		out.print(
-				"<TR><TD><B>Enter New Price</B></TD>" + "<TD ALIGN=\"right\">$ <INPUT NAME=\"I_NEW_COST\"></TD></TR>");
+		out.print("<TR><TD><B>Suggested Retail:</B></TD><TD><B>$ " + book.i_srp
+				+ "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Our Current Price: </B></TD>" + "<TD><FONT COLOR=\"#dd0000\"><B>$ "
+				+ book.i_cost + "</B></FONT></TD></TR>\n");
+		out.print("<TR><TD><B>Enter New Price</B></TD>"
+				+ "<TD ALIGN=\"right\">$ <INPUT NAME=\"I_NEW_COST\"></TD></TR>");
 		out.print("<TR><TD><B>Enter New Picture</B></TD><TD ALIGN=\"right\">"
 				+ "<INPUT NAME=\"I_NEW_IMAGE\"></TD></TR>\n");
 		out.print("<TR><TD><B>Enter New Thumbnail</B></TD><TD ALIGN=\"RIGHT\">"

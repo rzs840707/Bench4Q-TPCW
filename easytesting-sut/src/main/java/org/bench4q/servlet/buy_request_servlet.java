@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -32,7 +32,6 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -51,7 +50,6 @@ public class buy_request_servlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("deprecation")
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
 		PrintWriter out = res.getWriter();
@@ -91,9 +89,9 @@ public class buy_request_servlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD><TITLE>Buy Request</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"ffffff\">\n");
-//		out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
 		out
-				.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"CENTER\">Buy Request Page</H2>\n");
 
 		if (RETURNING_FLAG == null) {
@@ -109,8 +107,8 @@ public class buy_request_servlet extends HttpServlet {
 			}
 
 			cust = Database.getCustomer(UNAME);
-			if(cust != null) Database.refreshSession(cust.c_id);
-			if (cust == null || !PASSWD.equals(cust.c_passwd)) {
+			Database.refreshSession(cust.c_id);
+			if (!PASSWD.equals(cust.c_passwd)) {
 				out.print("Error: Incorrect Password</BODY></HTML>");
 				return;
 			}
@@ -126,12 +124,7 @@ public class buy_request_servlet extends HttpServlet {
 			cust.co_name = req.getParameter("COUNTRY");
 			cust.c_phone = req.getParameter("PHONE");
 			cust.c_email = req.getParameter("EMAIL");
-			String dateString = req.getParameter("BIRTHDATE").trim();
-			if (dateString.isEmpty()) {
-				cust.c_birthdate = new GregorianCalendar().getTime();
-			} else {
-				cust.c_birthdate = new Date(req.getParameter("BIRTHDATE"));
-			}
+			cust.c_birthdate = new Date(req.getParameter("BIRTHDATE"));
 			cust.c_data = req.getParameter("DATA");
 			cust = Database.createNewCustomer(cust);
 		} else

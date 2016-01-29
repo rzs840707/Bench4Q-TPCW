@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -38,12 +38,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-@SuppressWarnings({"rawtypes", "deprecation" })
+
 public class shopping_cart_servlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
@@ -127,9 +126,9 @@ public class shopping_cart_servlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><!--Shopping Cart--> <HEAD><TITLE>Shopping Cart</TITLE></HEAD> \n");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
-//		out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
 		out
-				.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"center\">Shopping Cart Page</H2>\n");
 
 		// Print out the promotional processing stuff

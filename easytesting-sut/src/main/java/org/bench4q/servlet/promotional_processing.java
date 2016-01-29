@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -35,11 +35,10 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@SuppressWarnings({ "rawtypes", "deprecation" })
 public class promotional_processing {
 
-	public static void DisplayPromotions(PrintWriter out, HttpServletRequest req, HttpServletResponse res,
-			int new_sid) {
+	public static void DisplayPromotions(PrintWriter out, HttpServletRequest req,
+			HttpServletResponse res, int new_sid) {
 		int I_ID = Util.getRandomI_ID();
 		Vector related_item_ids = new Vector();
 		Vector thumbnails = new Vector();
@@ -54,8 +53,8 @@ public class promotional_processing {
 		// Create table and "Click on our latest books..." row
 		out.print("<TABLE ALIGN=CENTER BORDER=0 WIDTH=660>\n");
 		out.print("<TR ALIGN=CENTER VALIGN=top>\n");
-		out.print("<TD COLSPAN=5><B><FONT COLOR=#ff0000 SIZE=+1>" + "Click on one of our latest books to find out more!"
-				+ "</FONT></B></TD></TR>\n");
+		out.print("<TD COLSPAN=5><B><FONT COLOR=#ff0000 SIZE=+1>"
+				+ "Click on one of our latest books to find out more!" + "</FONT></B></TD></TR>\n");
 		out.print("<TR ALIGN=CENTER VALIGN=top>\n");
 
 		// Create links and references to book images
@@ -69,9 +68,8 @@ public class promotional_processing {
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 			out.print("<TD><A HREF=\"" + res.encodeUrl(url));
-			ImageUtil.readAndWriteImage(thumbnails.elementAt(i).toString());
-			out.print("\"><IMG SRC=\"Images/" + ImageUtil.convertFileName(thumbnails.elementAt(i).toString())
-					+ "\" ALT=\"Book " + String.valueOf(i + 1) + "\" WIDTH=\"100\" HEIGHT=\"150\"></A>\n");
+			out.print("\"><IMG SRC=\"Images/" + thumbnails.elementAt(i) + "\" ALT=\"Book "
+					+ String.valueOf(i + 1) + "\" WIDTH=\"100\" HEIGHT=\"150\"></A>\n");
 			out.print("</TD>");
 		}
 		out.print("</TR></TABLE>\n");

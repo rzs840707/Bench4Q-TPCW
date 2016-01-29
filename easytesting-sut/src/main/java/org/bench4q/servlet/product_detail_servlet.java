@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -38,7 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@SuppressWarnings({ "deprecation" })
 public class product_detail_servlet extends HttpServlet {
 
 	/**
@@ -51,15 +50,17 @@ public class product_detail_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
+			ServletException {
 		String url;
 		HttpSession session = req.getSession(false);
-
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
+		
+		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
+		String strSessionPriorityLevel = req
+				.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null
+				&& !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -70,11 +71,12 @@ public class product_detail_servlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
+							igrSessionPri);
 				}
 			}
 		}
-
+		
 		String I_IDstr = req.getParameter("I_ID");
 		int I_ID = Integer.parseInt(I_IDstr);
 		String C_ID = req.getParameter("C_ID");
@@ -85,13 +87,11 @@ public class product_detail_servlet extends HttpServlet {
 
 		Book mybook = Database.getBook(I_ID);
 
-		ImageUtil.readAndWriteImage(mybook.i_image);
-		ImageUtil.readAndWriteImage(mybook.i_thumbnail);
-
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD> <TITLE>Product Detail Page</TITLE>\n");
-		// out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
-		out.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
+		out
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 
 		out.print("</CENTER> <H2 ALIGN=\"center\">Product Detail Page</H2>\n");
 
@@ -103,7 +103,8 @@ public class product_detail_servlet extends HttpServlet {
 		out.print("<BLOCKQUOTE><P><B>Suggested Retail: " + mybook.i_srp + "</B>\n");
 		out.print("<BR><B>Our Price:</B>\n");
 		out.print("<FONT COLOR=\"#dd0000\"> <B> " + mybook.i_cost + "</B></FONT><BR>\n");
-		out.print("<B>You Save:</B><FONT COLOR=\"#dd0000\"> $" + (mybook.i_srp - mybook.i_cost) + "</B></FONT></P>\n");
+		out.print("<B>You Save:</B><FONT COLOR=\"#dd0000\"> $" + (mybook.i_srp - mybook.i_cost)
+				+ "</B></FONT></P>\n");
 		out.print("</BLOCKQUOTE><DL><DT><FONT SIZE=\"2\">\n");
 		out.print("Backing: " + mybook.i_backing + ", " + mybook.i_page + " pages<BR>\n");
 		out.print("Published by " + mybook.i_publisher + "<BR>\n");

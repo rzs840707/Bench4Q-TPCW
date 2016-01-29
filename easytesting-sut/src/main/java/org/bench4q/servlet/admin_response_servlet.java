@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -41,9 +41,9 @@ import javax.servlet.http.HttpSession;
 public class admin_response_servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
+			ServletException {
 		PrintWriter out = res.getWriter();
 		String url;
 
@@ -51,12 +51,13 @@ public class admin_response_servlet extends HttpServlet {
 		res.setContentType("text/html");
 
 		HttpSession session = req.getSession(false);
-
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
+		
+		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
+		String strSessionPriorityLevel = req
+				.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null
+				&& !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -67,7 +68,8 @@ public class admin_response_servlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
+							igrSessionPri);
 				}
 			}
 		}
@@ -89,10 +91,12 @@ public class admin_response_servlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML> <HEAD><TITLE>Admin Response Page</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"#FFFFFF\">\n");
-		// out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
-		out.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
+		out
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 
-		if (I_NEW_COSTstr.length() == 0 || I_NEW_IMAGE.length() == 0 || I_NEW_THUMBNAIL.length() == 0) {
+		if (I_NEW_COSTstr.length() == 0 || I_NEW_IMAGE.length() == 0
+				|| I_NEW_THUMBNAIL.length() == 0) {
 			out.print("<H2>Invalid Input</H2>");
 		} else {
 			// Update the database
@@ -101,11 +105,9 @@ public class admin_response_servlet extends HttpServlet {
 			out.print("<H2>Product Updated</H2>");
 			out.print("<H2>Title: " + book.i_title + "</H2>\n");
 			out.print("<P>Author: " + book.a_fname + " " + book.a_lname + "</P>\n");
-			ImageUtil.readAndWriteImage(I_NEW_IMAGE);
-			out.print("<P><IMG SRC=\"Images/" + ImageUtil.convertFileName(I_NEW_IMAGE)
+			out.print("<P><IMG SRC=\"Images/" + I_NEW_IMAGE
 					+ "\" ALIGN=\"RIGHT\" BORDER=\"0\" WIDTH=\"200\" " + "HEIGHT=\"200\">");
-			ImageUtil.readAndWriteImage(I_NEW_THUMBNAIL);
-			out.print("<IMG SRC=\"Images/" + ImageUtil.convertFileName(I_NEW_THUMBNAIL)
+			out.print("<IMG SRC=\"Images/" + I_NEW_THUMBNAIL
 					+ "\" ALT=\"Book 1\" ALIGN=\"RIGHT\" WIDTH=\"100\"" + " HEIGHT=\"150\">\n");
 			out.print("Description: " + book.i_desc + "</P>\n");
 			out.print("<BLOCKQUOTE><P><B>Suggested Retail: $" + book.i_srp
@@ -113,7 +115,9 @@ public class admin_response_servlet extends HttpServlet {
 					+ "</B></FONT><BR><B>You Save: </B><FONT " + "COLOR=\"#DD0000\"><B>"
 					+ Double.toString((book.i_srp - (Double.valueOf(I_NEW_COSTstr)).doubleValue()))
 					+ "</B></FONT></P></BLOCKQUOTE> ");
-			out.print("<P><FONT SIZE=\"2\">" + book.i_backing + ", " + book.i_page + " pages<BR>\n");
+			out
+					.print("<P><FONT SIZE=\"2\">" + book.i_backing + ", " + book.i_page
+							+ " pages<BR>\n");
 			out.print("Published by " + book.i_publisher + "<BR>\n");
 			out.print("Publication date: " + book.i_pub_Date + "<BR>\n");
 			out.print("Dimensions (in inches): " + book.i_dimensions + "<BR>\n");

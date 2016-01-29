@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -39,10 +39,8 @@ public class Cart {
 	public double SC_SHIP_COST;
 	public double SC_TOTAL;
 
-	@SuppressWarnings("rawtypes")
 	public Vector lines;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Cart(ResultSet rs, double C_DISCOUNT) throws java.sql.SQLException {
 		int i;
 		int total_items;

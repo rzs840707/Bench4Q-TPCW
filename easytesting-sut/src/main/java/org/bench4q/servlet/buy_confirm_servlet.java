@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -31,7 +31,6 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,7 +73,6 @@ public class buy_confirm_servlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
@@ -115,19 +113,12 @@ public class buy_confirm_servlet extends HttpServlet {
 
 		String CC_TYPE = req.getParameter("CC_TYPE");
 		String CC_NUMBERstr = req.getParameter("CC_NUMBER");
-		if (CC_NUMBERstr.isEmpty()) {
-			CC_NUMBERstr = "123456";
-		}
 		long CC_NUMBER = Long.parseLong(CC_NUMBERstr);
 		String CC_NAME = req.getParameter("CC_NAME");
 		String CC_EXPIRYstr = req.getParameter("CC_EXPIRY");
-		java.util.Date CC_EXPIRY = null;
-		if (CC_EXPIRYstr.isEmpty()) {
-			CC_EXPIRY = new GregorianCalendar().getTime();
-		} else {
-			CC_EXPIRY = new java.util.Date(CC_EXPIRYstr);
-		}
+		java.util.Date CC_EXPIRY = new java.util.Date(CC_EXPIRYstr);
 		String SHIPPING = req.getParameter("SHIPPING");
+
 		String STREET_1 = req.getParameter("STREET_1");
 		BuyConfirmResult result = null;
 		if (!STREET_1.equals("")) {
@@ -153,9 +144,9 @@ public class buy_confirm_servlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\"> <HTML>\n");
 		out.print("<HEAD><TITLE>Order Confirmation</TITLE></HEAD> ");
 		out.print("<BODY BGCOLOR=\"#FFFFFF\">");
-//		out.print("<H1 ALIGN=\"center\">TPC-W Book Store</H1>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
 		out
-				.print("<H1 ALIGN=\"center\">TPC-W B2C Benchmark</H1>\n");
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"CENTER\">Buy Confirm Page</H2>\n");
 		out.print("<BLOCKQUOTE><BLOCKQUOTE><BLOCKQUOTE><BLOCKQUOTE>\n");
 		out.print("<H2 ALIGN=\"LEFT\">Order Information:</H2>\n");
@@ -183,7 +174,7 @@ public class buy_confirm_servlet extends HttpServlet {
 		out.print("<TD><H4>$" + result.cart.SC_TOTAL + "</H4></TD></TR></TABLE>\n");
 		out.print("<P><BR></P><H2>Order Number: " + result.order_id + "</H2>\n");
 		out.print("<!--STUB Total:" + result.cart.SC_TOTAL + "-->\n");
-		out.print("<H1>Thank you for shopping at TPC-W Book Store</H1> <P></P>\n");
+		out.print("<H1>Thank you for shopping at Bench4Q</H1> <P></P>\n");
 
 		// Add the buttons
 		url = "search_request?SHOPPING_ID=" + SHOPPING_ID;

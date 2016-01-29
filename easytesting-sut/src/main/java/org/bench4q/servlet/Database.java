@@ -1,9 +1,9 @@
 /**
  * =========================================================================
- * 					TPC-W Book Store version 1.0.0
+ * 					Bench4Q version 1.0.0
  * =========================================================================
  * 
- * TPC-W Book Store is available on the Internet at http://forge.ow2.org/projects/jaspte
+ * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
  * You can find latest version there. 
  * 
  * Distributed according to the GNU Lesser General Public Licence. 
@@ -35,17 +35,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.util.Enumeration;
-import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-@SuppressWarnings({ "rawtypes", "unchecked", "unused"})
 public class Database {
 	static Date date = new Date(System.currentTimeMillis());
 
@@ -63,7 +59,7 @@ public class Database {
 		}
 	}
 
-	public static Connection getConnection() throws SQLException, ClassNotFoundException {
+	public static Connection getConnection() {
 		Connection conn = null;
 		try {
 			if (ctx == null)
@@ -71,6 +67,7 @@ public class Database {
 			DataSource ds = null;
 			ds = (DataSource) ctx.lookup(dsName);
 			conn = ds.getConnection();
+			conn.setAutoCommit(false);
 		} catch (NamingException ne) {
 			ne.printStackTrace();
 		} catch (SQLException e) {
@@ -144,7 +141,7 @@ public class Database {
 			rs.next();
 			name[0] = rs.getString("c_fname");
 			name[1] = rs.getString("c_lname");
-			// con.commit();
+			con.commit();
 
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
@@ -172,7 +169,7 @@ public class Database {
 			// Results
 			rs.next();
 			book = new Book(rs);
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -202,9 +199,10 @@ public class Database {
 			if (rs.next())
 				cust = new Customer(rs);
 			else {
+				System.err.println("ERROR: NULL returned in getCustomer!");
 				return null;
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -224,7 +222,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title LIMIT 50");
+					.prepareStatement("SELECT top 50 * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title");
 
 			// Set parameter
 			statement.setString(1, search_key);
@@ -234,7 +232,7 @@ public class Database {
 			while (rs.next()) {
 				vec.addElement(new Book(rs));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -254,7 +252,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title LIMIT 50");
+					.prepareStatement("SELECT top 50 * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -264,7 +262,7 @@ public class Database {
 			while (rs.next()) {
 				vec.addElement(new Book(rs));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -284,7 +282,7 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			statement = con
-					.prepareStatement("SELECT * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title LIMIT 50");
+					.prepareStatement("SELECT top 50 * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -294,7 +292,7 @@ public class Database {
 			while (rs.next()) {
 				vec.addElement(new Book(rs));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -315,8 +313,8 @@ public class Database {
 			con = getConnection();
 			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
 					+ "FROM item, author " + "WHERE item.i_a_id = author.a_id "
-					+ "AND item.i_subject = ? " + "ORDER BY item.i_pub_date DESC,item.i_title "
-					+ "LIMIT 50");
+					+ "AND item.i_subject = ? " + "ORDER BY item.i_pub_date DESC,item.i_title LIMIT 50"
+					);
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -326,7 +324,7 @@ public class Database {
 			while (rs.next()) {
 				vec.addElement(new ShortBook(rs));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -346,12 +344,12 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			// The following is the original, unoptimized best sellers query.
-			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
+			statement = con.prepareStatement("SELECT top 50 i_id, i_title, a_fname, a_lname "
 					+ "FROM item, author, order_line " + "WHERE item.i_id = order_line.ol_i_id "
 					+ "AND item.i_a_id = author.a_id "
 					+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)"
 					+ "AND item.i_subject = ? " + "GROUP BY i_id, i_title, a_fname, a_lname "
-					+ "ORDER BY SUM(ol_qty) DESC " + "LIMIT 50");
+					+ "ORDER BY SUM(ol_qty) DESC ");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -361,7 +359,7 @@ public class Database {
 			while (rs.next()) {
 				vec.addElement(new ShortBook(rs));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -395,7 +393,7 @@ public class Database {
 				i_id_vec.addElement(new Integer(rs.getInt(1)));
 				i_thumbnail_vec.addElement(rs.getString(2));
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -413,15 +411,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			/*
-			 * wangyanshi: change for ADDDATE()
-			 */
-			GregorianCalendar calendar = new GregorianCalendar();
-			DateFormat formatter = DateFormat.getDateInstance();
-			String date1 = formatter.format(calendar.getTime());
-			
 			statement = con
-					.prepareStatement("UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = '" + date1 + "' WHERE i_id = ?");
+					.prepareStatement("UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = CURRENT_DATE WHERE i_id = ?");
 
 			// Set parameter
 			statement.setDouble(1, cost);
@@ -431,7 +422,7 @@ public class Database {
 			statement.executeUpdate();
 			statement.close();
 			related = con
-					.prepareStatement("SELECT ol_i_id "
+					.prepareStatement("SELECT top 5 ol_i_id "
 							+ "FROM orders, order_line "
 							+ "WHERE orders.o_id = order_line.ol_o_id "
 							+ "AND NOT (order_line.ol_i_id = ?) "
@@ -440,8 +431,7 @@ public class Database {
 							+ "                      WHERE orders.o_id = order_line.ol_o_id "
 							+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
 							+ "                      AND order_line.ol_i_id = ?) "
-							+ "GROUP BY ol_i_id " + "ORDER BY SUM(ol_qty) DESC "
-							+ "LIMIT 5");
+							+ "GROUP BY ol_i_id " + "ORDER BY SUM(ol_qty) DESC ");
 
 			// Set parameter
 			related.setInt(1, i_id);
@@ -479,7 +469,7 @@ public class Database {
 				statement.setInt(6, i_id);
 				statement.executeUpdate();
 			}
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -505,8 +495,9 @@ public class Database {
 			rs = get_user_name.executeQuery();
 
 			// Results
-			if(rs.next()) u_name = rs.getString("c_uname");
-			// con.commit();
+			rs.next();
+			u_name = rs.getString("c_uname");
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -533,7 +524,7 @@ public class Database {
 			// Results
 			rs.next();
 			passwd = rs.getString("c_passwd");
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -585,10 +576,9 @@ public class Database {
 			con = getConnection();
 
 			// *** Get the o_id of the most recent order for this user
-			get_most_recent_order_id = con.prepareStatement("SELECT o_id "
+			get_most_recent_order_id = con.prepareStatement("SELECT top 1 o_id "
 					+ "FROM customer, orders " + "WHERE customer.c_id = orders.o_c_id "
-					+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC "
-					+ "LIMIT 1");
+					+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC ");
 
 			// Set parameter
 			get_most_recent_order_id.setString(1, c_uname);
@@ -597,7 +587,7 @@ public class Database {
 			if (rs.next()) {
 				order_id = rs.getInt("o_id");
 			} else {
-				// con.commit();
+				con.commit();
 				return null;
 			}
 
@@ -629,7 +619,7 @@ public class Database {
 			if (!rs2.next()) {
 				// FIXME - This case is due to an error due to a database
 				// population error
-				// con.commit();
+				con.commit();
 				return null;
 			}
 			order = new Order(rs2);
@@ -647,7 +637,7 @@ public class Database {
 				order_lines.addElement(new OrderLine(rs3));
 			}
 
-			// con.commit();
+			con.commit();
 			return order;
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
@@ -684,7 +674,7 @@ public class Database {
 				SHOPPING_ID = rs.getInt(1);
 			}
 			// System.out.println(SHOPPING_ID);
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -711,7 +701,7 @@ public class Database {
 			cart = Database.getCart(con, SHOPPING_ID, 0.0);
 
 			// Close connection
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -785,7 +775,7 @@ public class Database {
 					statement.setInt(1, SHOPPING_ID);
 					statement.setInt(2, I_ID);
 					statement.executeUpdate();
-					// con.commit();
+					con.commit();
 				} else { // we update the quantity
 					statement = con
 							.prepareStatement("UPDATE shopping_cart_line SET scl_qty = ? WHERE scl_sc_id = ? AND scl_i_id = ?");
@@ -793,7 +783,7 @@ public class Database {
 					statement.setInt(2, SHOPPING_ID);
 					statement.setInt(3, I_ID);
 					statement.executeUpdate();
-					// con.commit();
+					con.commit();
 				}
 			}
 		} catch (java.lang.Exception ex) {
@@ -842,7 +832,7 @@ public class Database {
 			// Set parameter
 			statement.setInt(1, SHOPPING_ID);
 			statement.executeUpdate();
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -856,7 +846,7 @@ public class Database {
 		try {
 			con = getConnection();
 			mycart = getCart(con, SHOPPING_ID, c_discount);
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -895,21 +885,13 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			/*
-			 * wangyanshi: change for ADDDATE()
-			 */
-			GregorianCalendar calendar = new GregorianCalendar();
-			DateFormat formatter = DateFormat.getDateTimeInstance();
-			String time1 = formatter.format(calendar.getTime());
-			calendar.set(GregorianCalendar.HOUR_OF_DAY, calendar.get(GregorianCalendar.HOUR_OF_DAY) + 2);
-			String time2 = formatter.format(calendar.getTime());
-//			updateLogin = con.prepareStatement("UPDATE customer SET c_login = '" + time1 +"', c_expiration = ADDDATE(CURRENT_TIMESTAMP, INTERVAL 2 HOUR) WHERE c_id = ?");
-			updateLogin = con.prepareStatement("UPDATE customer SET c_login = '" + time1 +"', c_expiration = '" + time2 +"' WHERE c_id = ?");
+			updateLogin = con
+					.prepareStatement("UPDATE customer SET c_login = CURRENT_TIMESTAMP, c_expiration = CURRENT_TIMESTAMP + 2 HOURS WHERE c_id = ?");
 
 			// Set parameter
 			updateLogin.setInt(1, C_ID);
 			updateLogin.executeUpdate();
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -946,10 +928,8 @@ public class Database {
 			insert_customer_row.setString(7, cust.c_email);
 			insert_customer_row.setDate(8, new java.sql.Date(cust.c_since.getTime()));
 			insert_customer_row.setDate(9, new java.sql.Date(cust.c_last_visit.getTime()));
-			// wangyanshi: change login and expiration from Date to TimeStamp 
-			insert_customer_row.setTimestamp(10, new java.sql.Timestamp(cust.c_login.getTime()));
-			insert_customer_row.setTimestamp(11, new java.sql.Timestamp(cust.c_expiration.getTime()));
-			
+			insert_customer_row.setDate(10, new java.sql.Date(cust.c_login.getTime()));
+			insert_customer_row.setDate(11, new java.sql.Date(cust.c_expiration.getTime()));
 			insert_customer_row.setDouble(12, cust.c_discount);
 			insert_customer_row.setDouble(13, cust.c_balance);
 			insert_customer_row.setDouble(14, cust.c_ytd_pmt);
@@ -975,7 +955,7 @@ public class Database {
 			updateUnameANDPasswd.setString(2, cust.c_passwd);
 			updateUnameANDPasswd.setLong(3, cust.c_id);
 			updateUnameANDPasswd.executeUpdate();
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1004,7 +984,7 @@ public class Database {
 			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
 					result.cart.SC_TOTAL, ship_addr_id);
 			clearCart(con, shopping_id);
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1029,7 +1009,7 @@ public class Database {
 			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
 					result.cart.SC_TOTAL, ship_addr_id);
 			clearCart(con, shopping_id);
-			// con.commit();
+			con.commit();
 
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
@@ -1054,7 +1034,8 @@ public class Database {
 			rs = statement.executeQuery();
 
 			// Results
-			if(rs.next()) c_discount = rs.getDouble(1);
+			rs.next();
+			c_discount = rs.getDouble(1);
 
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
@@ -1080,7 +1061,8 @@ public class Database {
 			rs = statement.executeQuery();
 
 			// Results
-			if(rs.next()) c_addr_id = rs.getInt(1);
+			rs.next();
+			c_addr_id = rs.getInt(1);
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1096,14 +1078,16 @@ public class Database {
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
+			statement = con
+					.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
 
 			// Set parameter
 			statement.setInt(1, c_id);
 			rs = statement.executeQuery();
 
 			// Results
-			if(rs.next()) c_addr_id = rs.getInt(1);
+			rs.next();
+			c_addr_id = rs.getInt(1);
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1129,41 +1113,20 @@ public class Database {
 
 		try {
 			// Prepare SQL
-			/*
-			 * wangyanshi: change for ADDDATE()
-			 */
-			String sql = "SELECT co_id FROM address, country WHERE addr_id = ? AND addr_co_id = co_id";
-			PreparedStatement statement2 = con.prepareStatement(sql);
-			statement2.setInt(1, ship_addr_id);
-			ResultSet rs = statement2.executeQuery();
-			int co_id = 0;
-			while (rs.next()) {
-				co_id = rs.getInt(1);
-				break;
-			}
-			rs.close();
-			
-			GregorianCalendar calendar = new GregorianCalendar();
-			DateFormat formatter = DateFormat.getDateInstance();
-			String date1 = formatter.format(calendar.getTime());
-			
 			statement = con
 					.prepareStatement("INSERT into cc_xacts (cx_o_id, cx_type, cx_num, cx_name, cx_expire, cx_xact_amt, cx_xact_date, cx_co_id) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-			
-			
-			//TODO use rig
+							+ "VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, (SELECT co_id FROM address, country WHERE addr_id = ? AND addr_co_id = co_id))");
+
 			// Set parameter
 			statement.setInt(1, o_id); // cx_o_id
 			statement.setString(2, cc_type); // cx_type
-			statement.setLong(3, cc_number); // cx_num TODO
+			statement.setLong(3, cc_number); // cx_num
 			statement.setString(4, cc_name); // cx_name
 			statement.setDate(5, cc_expiry); // cx_expiry
-			statement.setInt(6, (new Double(total)).intValue()); // cx_xact_amount
-			statement.setString(7, date1);
-			statement.setInt(8, co_id); // ship_addr_id
+			statement.setDouble(6, total); // cx_xact_amount
+			statement.setInt(7, ship_addr_id); // ship_addr_id
 			statement.executeUpdate();
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1183,7 +1146,7 @@ public class Database {
 			statement.setInt(1, shopping_id);
 			statement.executeUpdate();
 			// by dch
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1263,27 +1226,16 @@ public class Database {
 		PreparedStatement insert_row = null;
 		ResultSet rs = null;
 		try {
-			/*
-			 * wangyanshi: change for ADDDATE()
-			 */
-			GregorianCalendar calendar = new GregorianCalendar();
-			DateFormat formatter = DateFormat.getDateInstance();
-			String date1 = formatter.format(calendar.getTime());
-			
-			
 			insert_row = con
 					.prepareStatement(
 							"INSERT into orders (o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) "
-									+ "VALUES ( ?, '"+ date1 + "', ?, 8.25, ?, ?, ?, ?, ?, 'Pending')",
+									+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, CURRENT_DATE + ? DAYS, ?, ?, 'Pending')",
 							Statement.RETURN_GENERATED_KEYS);
 			insert_row.setInt(1, customer_id);
 			insert_row.setDouble(2, cart.SC_SUB_TOTAL);
 			insert_row.setDouble(3, cart.SC_TOTAL);
 			insert_row.setString(4, shipping);
-
-			calendar.set(GregorianCalendar.DAY_OF_MONTH, calendar.get(GregorianCalendar.DAY_OF_MONTH) + Util.getRandom(7));
-			insert_row.setString(5, formatter.format(calendar.getTime()));
-			
+			insert_row.setInt(5, Util.getRandom(7));
 			insert_row.setInt(6, getCAddrID(con, customer_id));
 			insert_row.setInt(7, ship_addr_id);
 
@@ -1336,7 +1288,7 @@ public class Database {
 			insert_row.setString(6, ol_comment);
 			insert_row.executeUpdate();
 			// dch
-			// // con.commit();
+			// con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1375,7 +1327,7 @@ public class Database {
 			update_row.setInt(2, i_id);
 			update_row.executeUpdate();
 			// by dch
-			// // con.commit();
+			// con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -1430,7 +1382,7 @@ public class Database {
 				id_expected++;
 			}
 
-			// con.commit();
+			con.commit();
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
 		} finally {
