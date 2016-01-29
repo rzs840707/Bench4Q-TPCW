@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<project name="Hibernate_SUT" default="war" basedir="."> 
+	<target name="war" description="for the bench4Q SUT of hibernate version"> 
+      	<war warfile="${basedir}/bench4Qhib.war" webxml="${basedir}/WEB-INF/web.xml"> 
+        	<fileset dir="${basedir}"> 
+          		<include name="**"/> 
+				<exclude name="build.xml" /> 
+        		<!--exclude name="/WEB-INF/lib/**" /--> 
+				<exclude name="/WEB-INF/web.xml" /> 
+        	</fileset> 
+      	</war> 
+  	</target> 
+</project> 

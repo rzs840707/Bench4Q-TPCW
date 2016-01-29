@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.cache.provider_class">
+			com.tangosol.coherence.hibernate.CoherenceCacheProvider
+		</property>
+		<property name="hibernate.cache.use_minimal_puts">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		
+		<property name="hibernate.show_sql">false</property>
+		
+
+		<property name="connection.driver_class">dm.jdbc.driver.DmDriver</property>
+		<property name="connection.url">jdbc:dm://192.168.0.132:5238/bench4Q</property>
+		<property name="connection.username">SYSDBA</property>
+		<property name="connection.password">SYSDBA</property>
+		<property name="dialect">org.hibernate.dialect.OracleDialect</property>
+		
+		<!-- 
+		<property name="connection.driver_class">com.ibm.db2.jcc.DB2Driver</property>
+		<property name="connection.url">jdbc:db2://localhost:50000/bench4Q</property>
+		<property name="connection.username">db2admin</property>
+		<property name="connection.password">admin</property>
+		<property name="dialect">org.hibernate.dialect.DB2Dialect</property>
+		 -->
+
+		 
+		<!-- 
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.max_size">30</property>
+		<property name="hibernate.c3p0.time_out">1800</property>
+		<property name="hibernate.c3p0.max_statement">50</property>
+	 	-->
+		
+		
+		<property name="hibernate.hbm2ddl.auto">update</property>	
+
+		<mapping resource="org/bench4Q/hibernate/Customer.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/OrderLine.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/Item.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/ShoppingCart.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/Orders.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/ShoppingCartLine.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/Address.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/Author.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/Country.hbm.xml" />
+		<mapping resource="org/bench4Q/hibernate/CcXacts.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>

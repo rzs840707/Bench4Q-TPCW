@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.bench4Q.hibernate.Author" table="AUTHOR">
+    	<cache usage="nonstrict-read-write"/>
+        <id name="AId" type="java.lang.Integer">
+            <column name="A_ID" />
+            <generator class="native" />
+        </id>
+        <property lazy="false" name="AFname" type="java.lang.String">
+            <column name="A_FNAME" length="20" />
+        </property>
+        <property lazy="false" name="ALname" type="java.lang.String">
+            <column name="A_LNAME" length="20" />
+        </property>
+        <property lazy="false" name="AMname" type="java.lang.String">
+            <column name="A_MNAME" length="20" />
+        </property>
+        <property lazy="false" name="ADob" type="java.util.Date">
+            <column name="A_DOB" length="10" />
+        </property>
+        <property lazy="false" name="ABio" type="java.lang.String">
+            <column name="A_BIO" length="500" />
+        </property>
+    </class>
+</hibernate-mapping>
