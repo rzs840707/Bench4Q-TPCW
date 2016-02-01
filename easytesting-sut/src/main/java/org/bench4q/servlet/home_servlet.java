@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -39,20 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class home_servlet extends HttpServlet {
 
-	/**
-	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
-	 * Institute of Software, Chinese Academy of Sciences Beijing 100190, China
-	 * Email:duanzhiquan07@otcaix.iscas.ac.cn
-	 * 
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4127813261397643940L;
+	private static Logger LOGGER = LoggerFactory.getLogger(home_servlet.class);
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 		int i;
 		String url;
 		Vector column1 = new Vector();
@@ -85,13 +53,12 @@ public class home_servlet extends HttpServlet {
 		HttpSession session = req.getSession(false);
 		if (session == null)
 			session = req.getSession(true);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -102,12 +69,11 @@ public class home_servlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
-		
+
 		// This must be after the getSession() call.
 		PrintWriter out = res.getWriter();
 		// Set the content type of this servlet's result.
@@ -122,8 +88,7 @@ public class home_servlet extends HttpServlet {
 		out.print("<HTML> <HEAD> <TITLE>Home Page</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
-		out
-				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
+		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 
 		out.print("<P ALIGN=\"CENTER\">\n");
 		out.print("<H2 ALIGN=\"center\">Home Page</H2>\n");
@@ -231,7 +196,7 @@ public class home_servlet extends HttpServlet {
 
 		out.print("</font> </BODY> </HTML>\n");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 
 }
