@@ -13,10 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class home_servlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4127813261397643940L;
-	private static Logger LOGGER = LoggerFactory.getLogger(home_servlet.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(HomeServlet.class);
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {

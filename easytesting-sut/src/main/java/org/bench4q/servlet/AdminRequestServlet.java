@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class admin_request_servlet extends HttpServlet {
+public class AdminRequestServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -5064925769299508253L;
-	private static Logger LOGGER = LoggerFactory.getLogger(admin_request_servlet.class);
+	private static final long serialVersionUID = 8997466111706977319L;
+	private static Logger LOGGER = LoggerFactory.getLogger(AdminRequestServlet.class);
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {

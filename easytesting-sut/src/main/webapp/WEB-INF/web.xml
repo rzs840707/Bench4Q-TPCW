@@ -6,9 +6,9 @@
 	<display-name>Bench4Q</display-name>
 	<description>Bench4Q</description>
 	<servlet>
-		<servlet-name>home_servlet</servlet-name>
+		<servlet-name>HomeServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.home_servlet
+			org.bench4q.servlet.HomeServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -90,22 +90,22 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>admin_request_servlet</servlet-name>
+		<servlet-name>AdminRequestServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.admin_request_servlet
+			org.bench4q.servlet.AdminRequestServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>admin_response_servlet</servlet-name>
+		<servlet-name>AdminResponseServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.admin_response_servlet
+			org.bench4q.servlet.AdminResponseServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>home_servlet</servlet-name>
+		<servlet-name>HomeServlet</servlet-name>
 		<url-pattern>/home</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
@@ -153,11 +153,11 @@
 		<url-pattern>/buy_confirm</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>admin_request_servlet</servlet-name>
+		<servlet-name>AdminRequestServlet</servlet-name>
 		<url-pattern>/admin_request</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>admin_response_servlet</servlet-name>
+		<servlet-name>AdminResponseServlet</servlet-name>
 		<url-pattern>/admin_response</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>

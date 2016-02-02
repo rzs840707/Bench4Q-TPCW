@@ -1,4 +1,5 @@
 package org.bench4q.servlet;
 
-class Address {
+public class Address {
+
 }
