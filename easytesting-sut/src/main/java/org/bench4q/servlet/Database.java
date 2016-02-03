@@ -161,8 +161,7 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT * FROM item,author WHERE item.i_a_id = author.a_id AND i_id = ?");
+			statement = con.prepareStatement("SELECT * FROM item,author WHERE item.i_a_id = author.a_id AND i_id = ?");
 			// Set parameter
 			statement.setInt(1, i_id);
 			rs = statement.executeQuery();
@@ -188,8 +187,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT * FROM customer, address, country WHERE customer.c_addr_id = address.addr_id AND address.addr_co_id = country.co_id AND customer.c_uname = ?");
+			statement = con.prepareStatement(
+					"SELECT * FROM customer, address, country WHERE customer.c_addr_id = address.addr_id AND address.addr_co_id = country.co_id AND customer.c_uname = ?");
 
 			// Set parameter
 			statement.setString(1, UNAME);
@@ -221,8 +220,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT top 50 * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title");
+			statement = con.prepareStatement(
+					"SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_subject = ? ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key);
@@ -251,8 +250,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT top 50 * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title");
+			statement = con.prepareStatement(
+					"SELECT * FROM item, author WHERE item.i_a_id = author.a_id AND item.i_title LIKE ? ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -281,8 +280,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT top 50 * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title");
+			statement = con.prepareStatement(
+					"SELECT * FROM author, item WHERE author.a_lname LIKE ? AND item.i_a_id = author.a_id ORDER BY item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, search_key + "%");
@@ -311,10 +310,9 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname "
-					+ "FROM item, author " + "WHERE item.i_a_id = author.a_id "
-					+ "AND item.i_subject = ? " + "ORDER BY item.i_pub_date DESC,item.i_title LIMIT 50"
-					);
+			statement = con.prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item, author "
+					+ "WHERE item.i_a_id = author.a_id " + "AND item.i_subject = ? "
+					+ "ORDER BY item.i_pub_date DESC,item.i_title LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -344,12 +342,11 @@ public class Database {
 			// Prepare SQL
 			con = getConnection();
 			// The following is the original, unoptimized best sellers query.
-			statement = con.prepareStatement("SELECT top 50 i_id, i_title, a_fname, a_lname "
-					+ "FROM item, author, order_line " + "WHERE item.i_id = order_line.ol_i_id "
-					+ "AND item.i_a_id = author.a_id "
-					+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)"
-					+ "AND item.i_subject = ? " + "GROUP BY i_id, i_title, a_fname, a_lname "
-					+ "ORDER BY SUM(ol_qty) DESC ");
+			statement = con
+					.prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item, author, order_line "
+							+ "WHERE item.i_id = order_line.ol_i_id " + "AND item.i_a_id = author.a_id "
+							+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)" + "AND item.i_subject = ? "
+							+ "GROUP BY i_id, i_title, a_fname, a_lname " + "ORDER BY SUM(ol_qty) DESC LIMIT 50");
 
 			// Set parameter
 			statement.setString(1, subject);
@@ -377,8 +374,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("SELECT J.i_id,J.i_thumbnail from item I, item J where (I.i_related1 = J.i_id or I.i_related2 = J.i_id or I.i_related3 = J.i_id or I.i_related4 = J.i_id or I.i_related5 = J.i_id) and I.i_id = ?");
+			statement = con.prepareStatement(
+					"SELECT J.i_id,J.i_thumbnail from item I, item J where (I.i_related1 = J.i_id or I.i_related2 = J.i_id or I.i_related3 = J.i_id or I.i_related4 = J.i_id or I.i_related5 = J.i_id) and I.i_id = ?");
 
 			// Set parameter
 			statement.setInt(1, i_id);
@@ -411,8 +408,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			statement = con
-					.prepareStatement("UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = CURRENT_DATE WHERE i_id = ?");
+			statement = con.prepareStatement(
+					"UPDATE item SET i_cost = ?, i_image = ?, i_thumbnail = ?, i_pub_date = CURRENT_DATE WHERE i_id = ?");
 
 			// Set parameter
 			statement.setDouble(1, cost);
@@ -421,17 +418,13 @@ public class Database {
 			statement.setInt(4, i_id);
 			statement.executeUpdate();
 			statement.close();
-			related = con
-					.prepareStatement("SELECT top 5 ol_i_id "
-							+ "FROM orders, order_line "
-							+ "WHERE orders.o_id = order_line.ol_o_id "
-							+ "AND NOT (order_line.ol_i_id = ?) "
-							+ "AND orders.o_c_id IN (SELECT o_c_id "
-							+ "                      FROM orders, order_line "
-							+ "                      WHERE orders.o_id = order_line.ol_o_id "
-							+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
-							+ "                      AND order_line.ol_i_id = ?) "
-							+ "GROUP BY ol_i_id " + "ORDER BY SUM(ol_qty) DESC ");
+			related = con.prepareStatement("SELECT ol_i_id " + "FROM orders, order_line "
+					+ "WHERE orders.o_id = order_line.ol_o_id " + "AND NOT (order_line.ol_i_id = ?) "
+					+ "AND orders.o_c_id IN (SELECT o_c_id " + "                      FROM orders, order_line "
+					+ "                      WHERE orders.o_id = order_line.ol_o_id "
+					+ "                      AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)"
+					+ "                      AND order_line.ol_i_id = ?) " + "GROUP BY ol_i_id "
+					+ "ORDER BY SUM(ol_qty) DESC LIMIT 5");
 
 			// Set parameter
 			related.setInt(1, i_id);
@@ -457,8 +450,8 @@ public class Database {
 
 			{
 				// Prepare SQL
-				statement = con
-						.prepareStatement("UPDATE item SET i_related1 = ?, i_related2 = ?, i_related3 = ?, i_related4 = ?, i_related5 = ? WHERE i_id = ?");
+				statement = con.prepareStatement(
+						"UPDATE item SET i_related1 = ?, i_related2 = ?, i_related3 = ?, i_related4 = ?, i_related5 = ? WHERE i_id = ?");
 
 				// Set parameter
 				statement.setInt(1, related_items[0]);
@@ -576,9 +569,9 @@ public class Database {
 			con = getConnection();
 
 			// *** Get the o_id of the most recent order for this user
-			get_most_recent_order_id = con.prepareStatement("SELECT top 1 o_id "
-					+ "FROM customer, orders " + "WHERE customer.c_id = orders.o_c_id "
-					+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC ");
+			get_most_recent_order_id = con
+					.prepareStatement("SELECT o_id " + "FROM customer, orders " + "WHERE customer.c_id = orders.o_c_id "
+							+ "AND c_uname = ? " + "ORDER BY o_date, orders.o_id DESC LIMIT 1");
 
 			// Set parameter
 			get_most_recent_order_id.setString(1, c_uname);
@@ -592,23 +585,17 @@ public class Database {
 			}
 
 			// *** Get the order info for this o_id
-			get_order = con.prepareStatement("SELECT orders.*, customer.*, "
-					+ "  cc_xacts.cx_type, " + "  ship.addr_street1 AS ship_addr_street1, "
-					+ "  ship.addr_street2 AS ship_addr_street2, "
-					+ "  ship.addr_state AS ship_addr_state, "
-					+ "  ship.addr_zip AS ship_addr_zip, " + "  ship_co.co_name AS ship_co_name, "
-					+ "  bill.addr_street1 AS bill_addr_street1, "
-					+ "  bill.addr_street2 AS bill_addr_street2, "
-					+ "  bill.addr_state AS bill_addr_state, "
+			get_order = con.prepareStatement("SELECT orders.*, customer.*, " + "  cc_xacts.cx_type, "
+					+ "  ship.addr_street1 AS ship_addr_street1, " + "  ship.addr_street2 AS ship_addr_street2, "
+					+ "  ship.addr_state AS ship_addr_state, " + "  ship.addr_zip AS ship_addr_zip, "
+					+ "  ship_co.co_name AS ship_co_name, " + "  bill.addr_street1 AS bill_addr_street1, "
+					+ "  bill.addr_street2 AS bill_addr_street2, " + "  bill.addr_state AS bill_addr_state, "
 					+ "  bill.addr_zip AS bill_addr_zip, " + "  bill_co.co_name AS bill_co_name "
-					+ "FROM customer, orders, cc_xacts," + "  address AS ship, "
-					+ "  country AS ship_co, " + "  address AS bill,  " + "  country AS bill_co "
-					+ "WHERE orders.o_id = ? " + "  AND cx_o_id = orders.o_id "
-					+ "  AND customer.c_id = orders.o_c_id "
-					+ "  AND orders.o_bill_addr_id = bill.addr_id "
-					+ "  AND bill.addr_co_id = bill_co.co_id "
-					+ "  AND orders.o_ship_addr_id = ship.addr_id "
-					+ "  AND ship.addr_co_id = ship_co.co_id "
+					+ "FROM customer, orders, cc_xacts," + "  address AS ship, " + "  country AS ship_co, "
+					+ "  address AS bill,  " + "  country AS bill_co " + "WHERE orders.o_id = ? "
+					+ "  AND cx_o_id = orders.o_id " + "  AND customer.c_id = orders.o_c_id "
+					+ "  AND orders.o_bill_addr_id = bill.addr_id " + "  AND bill.addr_co_id = bill_co.co_id "
+					+ "  AND orders.o_ship_addr_id = ship.addr_id " + "  AND ship.addr_co_id = ship_co.co_id "
 					+ "  AND orders.o_c_id = customer.c_id");
 
 			// Set parameter
@@ -625,8 +612,8 @@ public class Database {
 			order = new Order(rs2);
 
 			// *** Get the order_lines for this o_id
-			get_order_lines = con.prepareStatement("SELECT * " + "FROM order_line, item "
-					+ "WHERE ol_o_id = ? " + "AND ol_i_id = i_id");
+			get_order_lines = con.prepareStatement(
+					"SELECT * " + "FROM order_line, item " + "WHERE ol_o_id = ? " + "AND ol_i_id = i_id");
 
 			// Set parameter
 			get_order_lines.setInt(1, order_id);
@@ -666,8 +653,7 @@ public class Database {
 			insert_cart = null;
 			rs = null;
 			insert_cart = con.createStatement();
-			insert_cart.executeUpdate(
-					"INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP)",
+			insert_cart.executeUpdate("INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP)",
 					Statement.RETURN_GENERATED_KEYS);
 			rs = insert_cart.getGeneratedKeys();
 			if (rs.next()) {
@@ -732,8 +718,8 @@ public class Database {
 				// The shopping cart id, item pair were already in the table
 				int currqty = rs.getInt("scl_qty");
 				currqty += 1;
-				PreparedStatement update_qty = con
-						.prepareStatement("UPDATE shopping_cart_line SET scl_qty = ? WHERE scl_sc_id = ? AND scl_i_id = ?");
+				PreparedStatement update_qty = con.prepareStatement(
+						"UPDATE shopping_cart_line SET scl_qty = ? WHERE scl_sc_id = ? AND scl_i_id = ?");
 				update_qty.setInt(1, currqty);
 				update_qty.setInt(2, SHOPPING_ID);
 				update_qty.setInt(3, I_ID);
@@ -742,8 +728,8 @@ public class Database {
 			} else {// We need to add a new row to the table.
 
 				// Stick the item info in a new shopping_cart_line
-				PreparedStatement put_line = con
-						.prepareStatement("INSERT into shopping_cart_line (scl_sc_id, scl_qty, scl_i_id) VALUES (?,?,?)");
+				PreparedStatement put_line = con.prepareStatement(
+						"INSERT into shopping_cart_line (scl_sc_id, scl_qty, scl_i_id) VALUES (?,?,?)");
 				put_line.setInt(1, SHOPPING_ID);
 				put_line.setInt(2, 1);
 				put_line.setInt(3, I_ID);
@@ -777,8 +763,8 @@ public class Database {
 					statement.executeUpdate();
 					con.commit();
 				} else { // we update the quantity
-					statement = con
-							.prepareStatement("UPDATE shopping_cart_line SET scl_qty = ? WHERE scl_sc_id = ? AND scl_i_id = ?");
+					statement = con.prepareStatement(
+							"UPDATE shopping_cart_line SET scl_qty = ? WHERE scl_sc_id = ? AND scl_i_id = ?");
 					statement.setInt(1, QTY);
 					statement.setInt(2, SHOPPING_ID);
 					statement.setInt(3, I_ID);
@@ -802,8 +788,7 @@ public class Database {
 
 		try {
 			// Check to see if the cart is empty
-			get_cart = con
-					.prepareStatement("SELECT COUNT(*) from shopping_cart_line where scl_sc_id = ?");
+			get_cart = con.prepareStatement("SELECT COUNT(*) from shopping_cart_line where scl_sc_id = ?");
 			get_cart.setInt(1, SHOPPING_ID);
 			rs = get_cart.executeQuery();
 			rs.next();
@@ -815,8 +800,8 @@ public class Database {
 			}
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
-			System.out.println("Adding entry to shopping cart failed: shopping id = " + SHOPPING_ID
-					+ " related_item = " + related_item);
+			System.out.println("Adding entry to shopping cart failed: shopping id = " + SHOPPING_ID + " related_item = "
+					+ related_item);
 		} finally {
 			closeResultSet(rs);
 			closeStmt(get_cart);
@@ -827,8 +812,7 @@ public class Database {
 	private static void resetCartTime(Connection con, int SHOPPING_ID) {
 		PreparedStatement statement = null;
 		try {
-			statement = con
-					.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT_TIMESTAMP WHERE sc_id = ?");
+			statement = con.prepareStatement("UPDATE shopping_cart SET sc_time = CURRENT_TIMESTAMP WHERE sc_id = ?");
 			// Set parameter
 			statement.setInt(1, SHOPPING_ID);
 			statement.executeUpdate();
@@ -861,8 +845,8 @@ public class Database {
 		PreparedStatement get_cart = null;
 		ResultSet rs = null;
 		try {
-			get_cart = con.prepareStatement("SELECT * " + "FROM shopping_cart_line, item "
-					+ "WHERE scl_i_id = item.i_id AND scl_sc_id = ?");
+			get_cart = con.prepareStatement(
+					"SELECT * " + "FROM shopping_cart_line, item " + "WHERE scl_i_id = item.i_id AND scl_sc_id = ?");
 			get_cart.setInt(1, SHOPPING_ID);
 			rs = get_cart.executeQuery();
 			mycart = new Cart(rs, c_discount);
@@ -885,8 +869,8 @@ public class Database {
 		try {
 			// Prepare SQL
 			con = getConnection();
-			updateLogin = con
-					.prepareStatement("UPDATE customer SET c_login = CURRENT_TIMESTAMP, c_expiration = CURRENT_TIMESTAMP + 2 HOURS WHERE c_id = ?");
+			updateLogin = con.prepareStatement(
+					"UPDATE customer SET c_login = CURRENT_TIMESTAMP, c_expiration = TIMESTAMPADD(HOUR,2,CURRENT_TIMESTAMP) WHERE c_id = ?");
 
 			// Set parameter
 			updateLogin.setInt(1, C_ID);
@@ -918,10 +902,9 @@ public class Database {
 			cust.c_expiration = new Date(System.currentTimeMillis() + 7200000);// milliseconds
 			// in 2
 			// hours
-			insert_customer_row = con
-					.prepareStatement(
-							"INSERT into customer (c_uname, c_passwd, c_fname, c_lname, c_addr_id, c_phone, c_email, c_since, c_last_login, c_login, c_expiration, c_discount, c_balance, c_ytd_pmt, c_birthdate, c_data) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-							Statement.RETURN_GENERATED_KEYS);
+			insert_customer_row = con.prepareStatement(
+					"INSERT into customer (c_uname, c_passwd, c_fname, c_lname, c_addr_id, c_phone, c_email, c_since, c_last_login, c_login, c_expiration, c_discount, c_balance, c_ytd_pmt, c_birthdate, c_data) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 			insert_customer_row.setString(3, cust.c_fname);
 			insert_customer_row.setString(4, cust.c_lname);
 			insert_customer_row.setString(6, cust.c_phone);
@@ -936,8 +919,8 @@ public class Database {
 			insert_customer_row.setDate(15, new java.sql.Date(cust.c_birthdate.getTime()));
 			insert_customer_row.setString(16, cust.c_data);
 
-			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city,
-					cust.addr_state, cust.addr_zip, cust.co_name);
+			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city, cust.addr_state,
+					cust.addr_zip, cust.co_name);
 
 			insert_customer_row.setString(1, cust.c_uname);
 			insert_customer_row.setString(2, cust.c_passwd);
@@ -968,8 +951,8 @@ public class Database {
 
 	// BUY CONFIRM
 
-	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
-			long cc_number, String cc_name, Date cc_expiry, String shipping) {
+	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type, long cc_number,
+			String cc_name, Date cc_expiry, String shipping) {
 
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
@@ -979,10 +962,9 @@ public class Database {
 			double c_discount = getCDiscount(con, customer_id);
 			result.cart = getCart(con, shopping_id, c_discount);
 			int ship_addr_id = getCAddr(con, customer_id);
-			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping,
-					c_discount);
-			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
-					result.cart.SC_TOTAL, ship_addr_id);
+			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping, c_discount);
+			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry, result.cart.SC_TOTAL,
+					ship_addr_id);
 			clearCart(con, shopping_id);
 			con.commit();
 		} catch (java.lang.Exception ex) {
@@ -993,9 +975,9 @@ public class Database {
 		return result;
 	}
 
-	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type,
-			long cc_number, String cc_name, Date cc_expiry, String shipping, String street_1,
-			String street_2, String city, String state, String zip, String country) {
+	public static BuyConfirmResult doBuyConfirm(int shopping_id, int customer_id, String cc_type, long cc_number,
+			String cc_name, Date cc_expiry, String shipping, String street_1, String street_2, String city,
+			String state, String zip, String country) {
 
 		BuyConfirmResult result = new BuyConfirmResult();
 		Connection con = null;
@@ -1004,10 +986,9 @@ public class Database {
 			double c_discount = getCDiscount(con, customer_id);
 			result.cart = getCart(con, shopping_id, c_discount);
 			int ship_addr_id = enterAddress(con, street_1, street_2, city, state, zip, country);
-			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping,
-					c_discount);
-			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry,
-					result.cart.SC_TOTAL, ship_addr_id);
+			result.order_id = enterOrder(con, customer_id, result.cart, ship_addr_id, shipping, c_discount);
+			enterCCXact(con, result.order_id, cc_type, cc_number, cc_name, cc_expiry, result.cart.SC_TOTAL,
+					ship_addr_id);
 			clearCart(con, shopping_id);
 			con.commit();
 
@@ -1026,8 +1007,7 @@ public class Database {
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_discount FROM customer WHERE customer.c_id = ?");
+			statement = con.prepareStatement("SELECT c_discount FROM customer WHERE customer.c_id = ?");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1053,8 +1033,7 @@ public class Database {
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
+			statement = con.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1078,8 +1057,7 @@ public class Database {
 		ResultSet rs = null;
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
+			statement = con.prepareStatement("SELECT c_addr_id FROM customer WHERE customer.c_id = ?");
 
 			// Set parameter
 			statement.setInt(1, c_id);
@@ -1113,8 +1091,8 @@ public class Database {
 
 		try {
 			// Prepare SQL
-			statement = con
-					.prepareStatement("INSERT into cc_xacts (cx_o_id, cx_type, cx_num, cx_name, cx_expire, cx_xact_amt, cx_xact_date, cx_co_id) "
+			statement = con.prepareStatement(
+					"INSERT into cc_xacts (cx_o_id, cx_type, cx_num, cx_name, cx_expire, cx_xact_amt, cx_xact_date, cx_co_id) "
 							+ "VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, (SELECT co_id FROM address, country WHERE addr_id = ? AND addr_co_id = co_id))");
 
 			// Set parameter
@@ -1180,9 +1158,9 @@ public class Database {
 
 			// Get address id for this customer, possible insert row in
 			// address table
-			match_address = con.prepareStatement("SELECT addr_id FROM address "
-					+ "WHERE addr_street1 = ? " + "AND addr_street2 = ? " + "AND addr_city = ? "
-					+ "AND addr_state = ? " + "AND addr_zip = ? " + "AND addr_co_id = ?");
+			match_address = con.prepareStatement("SELECT addr_id FROM address " + "WHERE addr_street1 = ? "
+					+ "AND addr_street2 = ? " + "AND addr_city = ? " + "AND addr_state = ? " + "AND addr_zip = ? "
+					+ "AND addr_co_id = ?");
 			match_address.setString(1, street1);
 			match_address.setString(2, street2);
 			match_address.setString(3, city);
@@ -1193,7 +1171,8 @@ public class Database {
 			if (!rs.next()) {// We didn't match an address in the addr table
 				insert_address_row = con.prepareStatement(
 						"INSERT into address (addr_street1, addr_street2, addr_city, addr_state, addr_zip, addr_co_id) "
-								+ "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+								+ "VALUES (?, ?, ?, ?, ?, ?)",
+						Statement.RETURN_GENERATED_KEYS);
 				insert_address_row.setString(1, street1);
 				insert_address_row.setString(2, street2);
 				insert_address_row.setString(3, city);
@@ -1220,17 +1199,16 @@ public class Database {
 		return addr_id;
 	}
 
-	public static int enterOrder(Connection con, int customer_id, Cart cart, int ship_addr_id,
-			String shipping, double c_discount) {
+	public static int enterOrder(Connection con, int customer_id, Cart cart, int ship_addr_id, String shipping,
+			double c_discount) {
 		int o_id = 0;
 		PreparedStatement insert_row = null;
 		ResultSet rs = null;
 		try {
-			insert_row = con
-					.prepareStatement(
-							"INSERT into orders (o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) "
-									+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, CURRENT_DATE + ? DAYS, ?, ?, 'Pending')",
-							Statement.RETURN_GENERATED_KEYS);
+			insert_row = con.prepareStatement(
+					"INSERT into orders (o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) "
+							+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, CURRENT_DATE + ? DAYS, ?, ?, 'Pending')",
+					Statement.RETURN_GENERATED_KEYS);
 			insert_row.setInt(1, customer_id);
 			insert_row.setDouble(2, cart.SC_SUB_TOTAL);
 			insert_row.setDouble(3, cart.SC_TOTAL);
@@ -1271,13 +1249,13 @@ public class Database {
 		return o_id;
 	}
 
-	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id,
-			int ol_qty, double ol_discount, String ol_comment) {
+	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id, int ol_qty, double ol_discount,
+			String ol_comment) {
 		int success = 0;
 		PreparedStatement insert_row = null;
 		try {
-			insert_row = con
-					.prepareStatement("INSERT into order_line (ol_id, ol_o_id, ol_i_id, ol_qty, ol_discount, ol_comments) "
+			insert_row = con.prepareStatement(
+					"INSERT into order_line (ol_id, ol_o_id, ol_i_id, ol_qty, ol_discount, ol_comments) "
 							+ "VALUES (?, ?, ?, ?, ?, ?)");
 
 			insert_row.setInt(1, ol_id);
