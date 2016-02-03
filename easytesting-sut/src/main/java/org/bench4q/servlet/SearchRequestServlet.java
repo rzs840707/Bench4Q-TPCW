@@ -31,7 +31,6 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class execute_search_servlet extends HttpServlet {
+public class SearchRequestServlet extends HttpServlet {
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -53,9 +52,9 @@ public class execute_search_servlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
-
-		int i;
-
+		PrintWriter out = res.getWriter();
+		// Set the content type of this servlet's result.
+		res.setContentType("text/html");
 		HttpSession session = req.getSession(false);
 		
 		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
@@ -79,78 +78,49 @@ public class execute_search_servlet extends HttpServlet {
 				}
 			}
 		}
-
-		String search_type = req.getParameter("search_type");
-		String search_string = req.getParameter("search_string");
-
+		
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String url;
-		PrintWriter out = res.getWriter();
-		res.setContentType("text/plain");
 
-		// Set the content type of this servlet's result.
-		res.setContentType("text/html");
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
-		out.print("<HTML><HEAD><TITLE>Search Results Page: " + search_string + "</TITLE></HEAD>\n");
+		out.print("<HTML> <HEAD><TITLE>Search Request Page</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
-		out.print("<P ALIGN=\"center\">\n");
+		out.print("<H2 ALIGN=\"center\">");
+		out.print("<H2 ALIGN=\"center\">Search Request Page</H2>");
 
-		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string
-				+ "</H2>\n");
-
-		// Display promotions
+		// Insert Promotional processing
 		promotional_processing.DisplayPromotions(out, req, res, -1);
-
-		Vector books = null; // placate javac
-		// Display new products
-		if (search_type.equals("author"))
-			books = Database.doAuthorSearch(search_string);
-		else if (search_type.equals("title"))
-			books = Database.doTitleSearch(search_string);
-		else if (search_type.equals("subject"))
-			books = Database.doSubjectSearch(search_string);
-
-		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"1\" CELLSPACING=\"1\">\n");
-		out.print("<TR> <TD WIDTH=\"30\"></TD>\n");
-		out.print("<TD><FONT SIZE=\"+1\">Author</FONT></TD>\n");
-		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
-
-		// Print out a line for each item returned by the DB
-		for (i = 0; i < books.size(); i++) {
-			Book myBook = (Book) books.elementAt(i);
-			out.print("<TR><TD>" + (i + 1) + "</TD>\n");
-			out.print("<TD><I>" + myBook.a_fname + " " + myBook.a_lname + "</I></TD>");
-			url = "product_detail?I_ID=" + String.valueOf(myBook.i_id);
-			if (SHOPPING_ID != null)
-				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
-				url = url + "&C_ID=" + C_ID;
-			out.print("<TD><A HREF=\"" + res.encodeUrl(url));
-			out.print("\">" + myBook.i_title + "</A></TD></TR>\n");
+		
+		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
+		String sessionIdStrToAppend = req.getRequestedSessionId();
+		if (sessionIdStrToAppend != null) {
+			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
+		} else {
+			sessionIdStrToAppend = "";
 		}
 
-		out.print("</TABLE><P><CENTER>\n");
+		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
+		out.print("<FORM ACTION=\"execute_search" + sessionIdStrToAppend
+				+ "\" METHOD=\"get\">\n");
+		
+		out.print("<TABLE ALIGN=\"center\"><TR><TD ALIGN=\"right\">\n");
+		out.print("<H3>Search by:</H3></TD><TD WIDTH=\"100\"></TD></TR>\n");
+		out.print("<TR><TD ALIGN=\"right\">\n");
+		out.print("<SELECT NAME=\"search_type\" SIZE=\"1\">\n");
+		out.print("<OPTION SELECTED=\"SELECTED\" VALUE=\"author\">Author</OPTION>\n");
+		out.print("<OPTION VALUE=\"title\">Title</OPTION>\n");
+		out.print("<OPTION VALUE=\"subject\">Subject</OPTION></SELECT></TD>\n");
 
-		url = "shopping_cart?ADD_FLAG=N";
+		out.print("<TD><INPUT NAME=\"search_string\" SIZE=\"30\"></TD></TR>\n");
+		out.print("</TABLE>\n");
+		out.print("<P ALIGN=\"CENTER\"><CENTER>\n");
+		out.print("<INPUT TYPE=\"IMAGE\" NAME=\"Search\"" + " SRC=\"Images/submit_B.gif\">\n");
+
 		if (SHOPPING_ID != null)
-			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
+			out.print("<INPUT TYPE=HIDDEN NAME=\"SHOPPING_ID\" value = \"" + SHOPPING_ID + "\">\n");
 		if (C_ID != null)
-			url = url + "&C_ID=" + C_ID;
-
-		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
-
-		url = "search_request";
-		if (SHOPPING_ID != null) {
-			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
-				url = url + "&C_ID=" + C_ID;
-		} else if (C_ID != null)
-			url = url + "?C_ID=" + C_ID;
-
-		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
+			out.print("<INPUT TYPE=HIDDEN NAME=\"C_ID\" value = \"" + C_ID + "\">\n");
 
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -161,8 +131,16 @@ public class execute_search_servlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
-		out.print("</BODY> </HTML>\n");
+		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
+		url = "shopping_cart?ADD_FLAG=N";
+		if (SHOPPING_ID != null)
+			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
+		if (C_ID != null)
+			url = url + "&C_ID=" + C_ID;
+
+		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
+		out.print("</CENTER></P></FORM></BODY></HTML>");
 		out.close();
 		return;
 	}

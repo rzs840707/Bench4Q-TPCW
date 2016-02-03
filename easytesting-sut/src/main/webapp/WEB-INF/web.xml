@@ -13,37 +13,37 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>shopping_cart_servlet</servlet-name>
+		<servlet-name>ShoppingCartServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.shopping_cart_servlet
+			org.bench4q.servlet.ShoppingCartServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>order_inquiry_servlet</servlet-name>
+		<servlet-name>OrderInquiryServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.order_inquiry_servlet
+			org.bench4q.servlet.OrderInquiryServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>order_display_servlet</servlet-name>
+		<servlet-name>OrderDisplayServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.order_display_servlet
+			org.bench4q.servlet.OrderDisplayServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>search_request_servlet</servlet-name>
+		<servlet-name>SearchRequestServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.search_request_servlet
+			org.bench4q.servlet.SearchRequestServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>execute_search_servlet</servlet-name>
+		<servlet-name>ExecuteSearchServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.execute_search_servlet
+			org.bench4q.servlet.ExecuteSearchServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -109,23 +109,23 @@
 		<url-pattern>/home</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>shopping_cart_servlet</servlet-name>
+		<servlet-name>ShoppingCartServlet</servlet-name>
 		<url-pattern>/shopping_cart</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>order_inquiry_servlet</servlet-name>
+		<servlet-name>OrderInquiryServlet</servlet-name>
 		<url-pattern>/order_inquiry</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>order_display_servlet</servlet-name>
+		<servlet-name>OrderDisplayServlet</servlet-name>
 		<url-pattern>/order_display</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>search_request_servlet</servlet-name>
+		<servlet-name>SearchRequestServlet</servlet-name>
 		<url-pattern>/search_request</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>execute_search_servlet</servlet-name>
+		<servlet-name>ExecuteSearchServlet</servlet-name>
 		<url-pattern>/execute_search</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>

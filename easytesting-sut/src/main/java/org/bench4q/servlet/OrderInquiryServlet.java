@@ -38,23 +38,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class search_request_servlet extends HttpServlet {
-
-	/**
-	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
-	 * Institute of Software, Chinese Academy of Sciences Beijing 100190, China
-	 * Email:duanzhiquan07@otcaix.iscas.ac.cn
-	 * 
-	 * 
-	 */
+public class OrderInquiryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
-		PrintWriter out = res.getWriter();
-		// Set the content type of this servlet's result.
-		res.setContentType("text/html");
 		HttpSession session = req.getSession(false);
 		
 		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
@@ -78,20 +67,23 @@ public class search_request_servlet extends HttpServlet {
 				}
 			}
 		}
-		
+
+		PrintWriter out = res.getWriter();
+		// Set the content type of this servlet's result.
+		res.setContentType("text/html");
+		String username = "";
+		String url;
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
-		String url;
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
-		out.print("<HTML> <HEAD><TITLE>Search Request Page</TITLE></HEAD>\n");
-		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
-		out.print("<H2 ALIGN=\"center\">");
-		out.print("<H2 ALIGN=\"center\">Search Request Page</H2>");
+		out.print("<HTML><HEAD><TITLE>Order Inquiry Page</TITLE>\n");
+		out.print("</HEAD><BODY BGCOLOR=\"#ffffff\">\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
+		out
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
+		out.print("<H2 ALIGN=\"center\">Order Inquiry Page</H2>\n");
 
-		// Insert Promotional processing
-		promotional_processing.DisplayPromotions(out, req, res, -1);
-		
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();
 		if (sessionIdStrToAppend != null) {
@@ -99,28 +91,34 @@ public class search_request_servlet extends HttpServlet {
 		} else {
 			sessionIdStrToAppend = "";
 		}
-
+		
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		out.print("<FORM ACTION=\"execute_search" + sessionIdStrToAppend
+		out.print("<FORM ACTION=\"order_display" + sessionIdStrToAppend
 				+ "\" METHOD=\"get\">\n");
 		
-		out.print("<TABLE ALIGN=\"center\"><TR><TD ALIGN=\"right\">\n");
-		out.print("<H3>Search by:</H3></TD><TD WIDTH=\"100\"></TD></TR>\n");
-		out.print("<TR><TD ALIGN=\"right\">\n");
-		out.print("<SELECT NAME=\"search_type\" SIZE=\"1\">\n");
-		out.print("<OPTION SELECTED=\"SELECTED\" VALUE=\"author\">Author</OPTION>\n");
-		out.print("<OPTION VALUE=\"title\">Title</OPTION>\n");
-		out.print("<OPTION VALUE=\"subject\">Subject</OPTION></SELECT></TD>\n");
+		out.print("<TABLE ALIGN=\"CENTER\">\n");
+		out.print("<TR> <TD> <H4>Username:</H4></TD>\n");
+		out.print("<TD><INPUT NAME=\"UNAME\" VALUE=\"" + username + "\" SIZE=\"23\"></TD></TR>\n");
+		out.print("<TR><TD> <H4>Password:</H4></TD>\n");
+		out.print("<TD> <INPUT NAME=\"PASSWD\" SIZE=\"14\" " + "TYPE=\"password\"></TD>\n");
+		out.print("</TR></TABLE> <P ALIGN=\"CENTER\"><CENTER>\n");
 
-		out.print("<TD><INPUT NAME=\"search_string\" SIZE=\"30\"></TD></TR>\n");
-		out.print("</TABLE>\n");
-		out.print("<P ALIGN=\"CENTER\"><CENTER>\n");
-		out.print("<INPUT TYPE=\"IMAGE\" NAME=\"Search\"" + " SRC=\"Images/submit_B.gif\">\n");
-
+		out.print("<INPUT TYPE=\"IMAGE\" NAME=\"Display Last Order\" "
+				+ "SRC=\"Images/display_last_order_B.gif\">\n");
 		if (SHOPPING_ID != null)
 			out.print("<INPUT TYPE=HIDDEN NAME=\"SHOPPING_ID\" value = \"" + SHOPPING_ID + "\">\n");
 		if (C_ID != null)
 			out.print("<INPUT TYPE=HIDDEN NAME=\"C_ID\" value = \"" + C_ID + "\">\n");
+		url = "search_request";
+		if (SHOPPING_ID != null) {
+			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
+			if (C_ID != null)
+				url = url + "&C_ID=" + C_ID;
+		} else if (C_ID != null)
+			url = url + "?C_ID=" + C_ID;
+
+		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
 
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -131,16 +129,8 @@ public class search_request_servlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
-		url = "shopping_cart?ADD_FLAG=N";
-		if (SHOPPING_ID != null)
-			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-		if (C_ID != null)
-			url = url + "&C_ID=" + C_ID;
-
-		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
-		out.print("</CENTER></P></FORM></BODY></HTML>");
+		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+		out.print("</CENTER></FORM></BODY></HTML>");
 		out.close();
 		return;
 	}
