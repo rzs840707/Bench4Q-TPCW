@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class buy_request_servlet extends HttpServlet {
+public class BuyRequestServlet extends HttpServlet {
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering

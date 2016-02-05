@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class customer_registration_servlet extends HttpServlet {
+public class CustomerRegistrationServlet extends HttpServlet {
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering

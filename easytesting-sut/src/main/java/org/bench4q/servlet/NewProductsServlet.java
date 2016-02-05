@@ -39,14 +39,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class best_sellers_servlet extends HttpServlet {
+public class NewProductsServlet extends HttpServlet {
+
+	/**
+	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
+	 * Institute of Software, Chinese Academy of Sciences Beijing 100190, China
+	 * Email:duanzhiquan07@otcaix.iscas.ac.cn
+	 * 
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
-		String url;
 		PrintWriter out = res.getWriter();
-
+		int i;
+		String url;
 		HttpSession session = req.getSession(false);
 		
 		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
@@ -70,7 +79,7 @@ public class best_sellers_servlet extends HttpServlet {
 				}
 			}
 		}
-
+		
 		String subject = req.getParameter("subject");
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
@@ -78,11 +87,11 @@ public class best_sellers_servlet extends HttpServlet {
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
-		out.print("<HTML><HEAD><TITLE> Best Sellers: " + subject + "</TITLE></HEAD>\n");
+		out.print("<HTML><HEAD><TITLE> New " + subject + "</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
 		out.print("<P ALIGN=\"center\">\n");
 
-		out.print("<H2 ALIGN=\"center\">Best Sellers Page - Subject: " + subject + "</H2>\n");
+		out.print("<H2 ALIGN=\"center\">New Products Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
 		promotional_processing.DisplayPromotions(out, req, res, -1);
@@ -94,11 +103,10 @@ public class best_sellers_servlet extends HttpServlet {
 		out.print("<TD><FONT SIZE=\"+1\">Author</FONT></TD>\n");
 		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
 
-		// Get best sellers from DB
-		Vector books = Database.getBestSellers(subject);
+		// Need to insert code here to get new products from the database,
+		// and then spit them out in html to complete the table
 
-		// Print out the best sellers.
-		int i;
+		Vector books = Database.getNewProducts(subject);
 		for (i = 0; i < books.size(); i++) {
 			ShortBook book = (ShortBook) books.elementAt(i);
 			out.print("<TR><TD>" + (i + 1) + "</TD>\n");
@@ -119,9 +127,9 @@ public class best_sellers_servlet extends HttpServlet {
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
-
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
+
 		url = "search_request";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
@@ -132,6 +140,7 @@ public class best_sellers_servlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
+
 		url = "home";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
@@ -139,10 +148,8 @@ public class best_sellers_servlet extends HttpServlet {
 				url = url + "&C_ID=" + C_ID;
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
-
 		out.print("<A HREF=\"" + res.encodeUrl(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
-
 		out.print("</BODY> </HTML>\n");
 		out.close();
 		return;

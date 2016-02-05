@@ -62,7 +62,7 @@ import javax.servlet.http.HttpSession;
 // unique O_ID.
 //   
 
-public class buy_confirm_servlet extends HttpServlet {
+public class BuyConfirmServlet extends HttpServlet {
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering

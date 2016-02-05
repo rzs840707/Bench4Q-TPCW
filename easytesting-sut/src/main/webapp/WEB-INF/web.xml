@@ -48,44 +48,44 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>new_products_servlet</servlet-name>
+		<servlet-name>NewProductsServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.new_products_servlet
+			org.bench4q.servlet.NewProductsServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>best_sellers_servlet</servlet-name>
+		<servlet-name>BestSellersServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.best_sellers_servlet
+			org.bench4q.servlet.BestSellersServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>product_detail_servlet</servlet-name>
+		<servlet-name>ProductDetailServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.product_detail_servlet
+			org.bench4q.servlet.ProductDetailServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>customer_registration_servlet</servlet-name>
+		<servlet-name>CustomerRegistrationServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.customer_registration_servlet
+			org.bench4q.servlet.CustomerRegistrationServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>buy_request_servlet</servlet-name>
+		<servlet-name>BuyRequestServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.buy_request_servlet
+			org.bench4q.servlet.BuyRequestServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet>
-		<servlet-name>buy_confirm_servlet</servlet-name>
+		<servlet-name>BuyConfirmServlet</servlet-name>
 		<servlet-class>
-			org.bench4q.servlet.buy_confirm_servlet
+			org.bench4q.servlet.BuyConfirmServlet
 		</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -129,27 +129,27 @@
 		<url-pattern>/execute_search</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>new_products_servlet</servlet-name>
+		<servlet-name>NewProductsServlet</servlet-name>
 		<url-pattern>/new_products</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>best_sellers_servlet</servlet-name>
+		<servlet-name>BestSellersServlet</servlet-name>
 		<url-pattern>/best_sellers</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>product_detail_servlet</servlet-name>
+		<servlet-name>ProductDetailServlet</servlet-name>
 		<url-pattern>/product_detail</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>customer_registration_servlet</servlet-name>
+		<servlet-name>CustomerRegistrationServlet</servlet-name>
 		<url-pattern>/customer_registration</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>buy_request_servlet</servlet-name>
+		<servlet-name>BuyRequestServlet</servlet-name>
 		<url-pattern>/buy_request</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>buy_confirm_servlet</servlet-name>
+		<servlet-name>BuyConfirmServlet</servlet-name>
 		<url-pattern>/buy_confirm</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>

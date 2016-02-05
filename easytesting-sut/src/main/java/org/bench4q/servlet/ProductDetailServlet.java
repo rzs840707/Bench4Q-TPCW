@@ -31,7 +31,6 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class new_products_servlet extends HttpServlet {
+public class ProductDetailServlet extends HttpServlet {
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -53,8 +52,6 @@ public class new_products_servlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
 			ServletException {
-		PrintWriter out = res.getWriter();
-		int i;
 		String url;
 		HttpSession session = req.getSession(false);
 		
@@ -80,57 +77,54 @@ public class new_products_servlet extends HttpServlet {
 			}
 		}
 		
-		String subject = req.getParameter("subject");
+		String I_IDstr = req.getParameter("I_ID");
+		int I_ID = Integer.parseInt(I_IDstr);
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
-		// Set the content type of this servlet's result.
+		PrintWriter out = res.getWriter();
 		res.setContentType("text/html");
+
+		Book mybook = Database.getBook(I_ID);
+
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
-		out.print("<HTML><HEAD><TITLE> New " + subject + "</TITLE></HEAD>\n");
-		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
-		out.print("<P ALIGN=\"center\">\n");
+		out.print("<HTML><HEAD> <TITLE>Product Detail Page</TITLE>\n");
+		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
+		out
+				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 
-		out.print("<H2 ALIGN=\"center\">New Products Page - Subject: " + subject + "</H2>\n");
+		out.print("</CENTER> <H2 ALIGN=\"center\">Product Detail Page</H2>\n");
 
-		// Display promotions
-		promotional_processing.DisplayPromotions(out, req, res, -1);
+		out.print("<H2> Title: " + mybook.i_title + "</H2>\n");
+		out.print("<P>Author: " + mybook.a_fname + " " + mybook.a_lname + "<BR>\n");
+		out.print("Subject: " + mybook.i_subject + "\n");
 
-		// Display new products
+		out.print("Decription: <I>" + mybook.i_desc + "</I></P>\n");
+		out.print("<BLOCKQUOTE><P><B>Suggested Retail: " + mybook.i_srp + "</B>\n");
+		out.print("<BR><B>Our Price:</B>\n");
+		out.print("<FONT COLOR=\"#dd0000\"> <B> " + mybook.i_cost + "</B></FONT><BR>\n");
+		out.print("<B>You Save:</B><FONT COLOR=\"#dd0000\"> $" + (mybook.i_srp - mybook.i_cost)
+				+ "</B></FONT></P>\n");
+		out.print("</BLOCKQUOTE><DL><DT><FONT SIZE=\"2\">\n");
+		out.print("Backing: " + mybook.i_backing + ", " + mybook.i_page + " pages<BR>\n");
+		out.print("Published by " + mybook.i_publisher + "<BR>\n");
+		out.print("Publication date: " + mybook.i_pub_Date + "<BR>\n");
+		out.print("Avail date: " + mybook.i_avail + "<BR>\n");
+		out.print("Dimensions (in inches): " + mybook.i_dimensions + "<BR>\n");
+		out.print("ISBN: " + mybook.i_isbn + "</FONT></DT></DL><P>\n");
 
-		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"1\" CELLSPACING=\"1\">\n");
-		out.print("<TR> <TD WIDTH=\"30\"></TD>\n");
-		out.print("<TD><FONT SIZE=\"+1\">Author</FONT></TD>\n");
-		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
-
-		// Need to insert code here to get new products from the database,
-		// and then spit them out in html to complete the table
-
-		Vector books = Database.getNewProducts(subject);
-		for (i = 0; i < books.size(); i++) {
-			ShortBook book = (ShortBook) books.elementAt(i);
-			out.print("<TR><TD>" + (i + 1) + "</TD>\n");
-			out.print("<TD><I>" + book.a_fname + " " + book.a_lname + "</I></TD>\n");
-			url = "product_detail?I_ID=" + String.valueOf(book.i_id);
-			if (SHOPPING_ID != null)
-				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
-				url = url + "&C_ID=" + C_ID;
-			out.print("<TD><A HREF=\"" + res.encodeUrl(url));
-			out.print("\">" + book.i_title + "</A></TD></TR>\n");
-		}
-
-		out.print("</TABLE><P><CENTER>\n");
-
-		url = "shopping_cart?ADD_FLAG=N";
+		url = "shopping_cart?I_ID=" + I_ID + "&QTY=1";
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
-		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
+		url = url + "&ADD_FLAG=Y";
+		out.print("<CENTER> <A HREF=\"" + res.encodeUrl(url));
+		out.print("\">\n");
 
+		out.print("<IMG SRC=\"Images/add_B.gif\"" + " ALT=\"Add to Basket\"></A>\n");
 		url = "search_request";
+
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
@@ -139,8 +133,8 @@ public class new_products_servlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
 
+		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
 		url = "home";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
@@ -148,8 +142,19 @@ public class new_products_servlet extends HttpServlet {
 				url = url + "&C_ID=" + C_ID;
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
+
 		out.print("<A HREF=\"" + res.encodeUrl(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A>\n");
+
+		url = "admin_request?I_ID=" + I_ID;
+		if (SHOPPING_ID != null)
+			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
+		if (C_ID != null)
+			url = url + "&C_ID=" + C_ID;
+
+		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("\"><IMG SRC=\"Images/update_B.gif\"" + " ALT=\"Update\"></A>\n");
+
 		out.print("</BODY> </HTML>\n");
 		out.close();
 		return;
