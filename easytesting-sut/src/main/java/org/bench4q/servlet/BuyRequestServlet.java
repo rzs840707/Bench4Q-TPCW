@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -39,7 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BuyRequestServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1381775065017531645L;
+	private static Logger LOGGER = LoggerFactory.getLogger(BuyConfirmServlet.class);
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -48,23 +25,21 @@ public class BuyRequestServlet extends HttpServlet {
 	 * 
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 		PrintWriter out = res.getWriter();
 		String url;
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
 
 		HttpSession session = req.getSession(false);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -75,8 +50,7 @@ public class BuyRequestServlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
@@ -90,8 +64,7 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("<HTML><HEAD><TITLE>Buy Request</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"ffffff\">\n");
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
-		out
-				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
+		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"CENTER\">Buy Request Page</H2>\n");
 
 		if (RETURNING_FLAG == null) {
@@ -143,14 +116,13 @@ public class BuyRequestServlet extends HttpServlet {
 			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
 		} else {
 			sessionIdStrToAppend = "";
-		}		
-		
+		}
+
 		// Print out the web page
-		
+
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		out.print("<HR><FORM ACTION=\"buy_confirm" + sessionIdStrToAppend
-				+ "\" METHOD=\"GET\">\n");
-		
+		out.print("<HR><FORM ACTION=\"buy_confirm" + sessionIdStrToAppend + "\" METHOD=\"GET\">\n");
+
 		out.print("<TABLE BORDER=\"0\" WIDTH=\"90%\">\n");
 		out.print("<TR ALIGN=\"LEFT\" VALIGN=\"TOP\">\n");
 		out.print("<TD VALIGN=\"TOP\" WIDTH=\"45%\">\n");
@@ -185,11 +157,9 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("<TR><TD>Addr_street_ 2:</TD>\n");
 		out.print("<TD><INPUT NAME=\"STREET_2\" SIZE=\"40\" VALUE=\"\"></TD></TR>\n");
 		out.print("<TR><TD>City:</TD><TD><INPUT NAME=\"CITY\" SIZE=\"30\" VALUE=\"\"></TD></TR>\n");
-		out
-				.print("<TR><TD>State:</TD><TD><INPUT NAME=\"STATE\" SIZE=\"20\" VALUE=\"\"></TD></TR>\n");
+		out.print("<TR><TD>State:</TD><TD><INPUT NAME=\"STATE\" SIZE=\"20\" VALUE=\"\"></TD></TR>\n");
 		out.print("<TR><TD>Zip:</TD><TD><INPUT NAME=\"ZIP\" SIZE=\"10\" VALUE=\"\"></TD></TR>\n");
-		out
-				.print("<TR><TD>Country:</TD><TD><INPUT NAME=\"COUNTRY\" VALUE=\"\" SIZE=\"40\"></TD></TR>\n");
+		out.print("<TR><TD>Country:</TD><TD><INPUT NAME=\"COUNTRY\" VALUE=\"\" SIZE=\"40\"></TD></TR>\n");
 
 		//
 		// Order Information Section
@@ -206,8 +176,7 @@ public class BuyRequestServlet extends HttpServlet {
 		for (i = 0; i < mycart.lines.size(); i++) {
 			CartLine thisline = (CartLine) mycart.lines.elementAt(i);
 			out.print("<TR><TD VALIGN=\"TOP\">" + thisline.scl_qty + "</TD>\n");
-			out.print("<TD VALIGN=\"TOP\">Title:<I>" + thisline.scl_title + "</I> - Backing: "
-					+ thisline.scl_backing);
+			out.print("<TD VALIGN=\"TOP\">Title:<I>" + thisline.scl_title + "</I> - Backing: " + thisline.scl_backing);
 			out.print("<BR>SRP. $" + thisline.scl_srp);
 			out.print("<FONT COLOR=\"#aa0000\">\n");
 			out.print("<B>Your Price:" + thisline.scl_cost + "</B>\n");
@@ -216,16 +185,12 @@ public class BuyRequestServlet extends HttpServlet {
 
 		out.print("</TABLE>\n");
 		out.print("<P><BR></P><TABLE BORDER=\"0\">\n");
-		out
-				.print("<TR><TD><B>Subtotal with discount (" + cust.c_discount
-						+ "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SUB_TOTAL
-						+ "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Tax</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TAX
+		out.print("<TR><TD><B>Subtotal with discount (" + cust.c_discount + "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$"
+				+ mycart.SC_SUB_TOTAL + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Tax</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TAX + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Shipping &amp; Handling</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SHIP_COST
 				+ "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Shipping &amp; Handling</B></TD><TD ALIGN=\"RIGHT\"><B>$"
-				+ mycart.SC_SHIP_COST + "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Total</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TOTAL
-				+ "</B></TD></TR></TABLE>\n");
+		out.print("<TR><TD><B>Total</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TOTAL + "</B></TD></TR></TABLE>\n");
 
 		//
 		// Credit Card Stuff
@@ -234,14 +199,11 @@ public class BuyRequestServlet extends HttpServlet {
 
 		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"5\" " + "CELLSPACING=\"0\"><TR>\n");
 		out.print("<TD>Credit Card Type</TD>\n");
-		out.print("<TD><INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" VALUE=\"Visa\" "
-				+ "CHECKED=\"CHECKED\">Visa\n");
+		out.print("<TD><INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" VALUE=\"Visa\" " + "CHECKED=\"CHECKED\">Visa\n");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" " + "VALUE=\"Master\">MasterCard\n");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" " + "VALUE=\"Discover\">Discover\n");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" " + "VALUE=\"Amex\">American Express\n");
-		out
-				.print("<INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" "
-						+ "VALUE=\"Diners\">Diners</TD></TR>\n");
+		out.print("<INPUT TYPE=\"RADIO\" NAME=\"CC_TYPE\" " + "VALUE=\"Diners\">Diners</TD></TR>\n");
 
 		out.print("<TR><TD>Name on Credit Card</TD>\n");
 		out.print("<TD><INPUT NAME=\"CC_NAME\" SIZE=\"30\" VALUE=\"\"></TD></TR>\n");
@@ -251,8 +213,7 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("<TD><INPUT NAME=\"CC_EXPIRY\" SIZE=\"15\" VALUE=\"\"></TD></TR>\n");
 
 		out.print("<TR><TD>Shipping Method</TD>\n");
-		out
-				.print("<TD><INPUT TYPE=\"RADIO\" NAME=\"SHIPPING\" VALUE=\"AIR\" CHECKED=\"CHECKED\">AIR");
+		out.print("<TD><INPUT TYPE=\"RADIO\" NAME=\"SHIPPING\" VALUE=\"AIR\" CHECKED=\"CHECKED\">AIR");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"SHIPPING\" VALUE=\"UPS\">UPS\n");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"SHIPPING\" VALUE=\"FEDEX\">FEDEX\n");
 		out.print("<INPUT TYPE=\"RADIO\" NAME=\"SHIPPING\" VALUE=\"SHIP\">SHIP\n");
@@ -277,6 +238,6 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/order_status_B.gif\" " + "ALT=\"Order Status\"></A>\n");
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 }

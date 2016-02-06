@@ -20,8 +20,8 @@ public class AdminResponseServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		LOGGER.debug("Enter function: doGet");
-		PrintWriter out = res.getWriter();
 		String url;
+		PrintWriter out = res.getWriter();
 
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
