@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -38,7 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SearchRequestServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 6149172269244554791L;
+	private static Logger LOGGER = LoggerFactory.getLogger(SearchRequestServlet.class);
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -47,22 +24,20 @@ public class SearchRequestServlet extends HttpServlet {
 	 * 
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 		PrintWriter out = res.getWriter();
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
 		HttpSession session = req.getSession(false);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -73,12 +48,11 @@ public class SearchRequestServlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
-		
+
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String url;
@@ -91,7 +65,7 @@ public class SearchRequestServlet extends HttpServlet {
 
 		// Insert Promotional processing
 		promotional_processing.DisplayPromotions(out, req, res, -1);
-		
+
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();
 		if (sessionIdStrToAppend != null) {
@@ -101,9 +75,8 @@ public class SearchRequestServlet extends HttpServlet {
 		}
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		out.print("<FORM ACTION=\"execute_search" + sessionIdStrToAppend
-				+ "\" METHOD=\"get\">\n");
-		
+		out.print("<FORM ACTION=\"execute_search" + sessionIdStrToAppend + "\" METHOD=\"get\">\n");
+
 		out.print("<TABLE ALIGN=\"center\"><TR><TD ALIGN=\"right\">\n");
 		out.print("<H3>Search by:</H3></TD><TD WIDTH=\"100\"></TD></TR>\n");
 		out.print("<TR><TD ALIGN=\"right\">\n");
@@ -142,6 +115,6 @@ public class SearchRequestServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
 		out.print("</CENTER></P></FORM></BODY></HTML>");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 }
