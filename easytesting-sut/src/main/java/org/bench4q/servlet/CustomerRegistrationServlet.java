@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -38,7 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CustomerRegistrationServlet extends HttpServlet {
+
+	private static final long serialVersionUID = -1887034331494955755L;
+	private static Logger LOGGER = LoggerFactory.getLogger(CustomerRegistrationServlet.class);
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -47,21 +24,19 @@ public class CustomerRegistrationServlet extends HttpServlet {
 	 * 
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 
 		String url;
 		HttpSession session = req.getSession(false);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -72,12 +47,11 @@ public class CustomerRegistrationServlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
-		
+
 		PrintWriter out = res.getWriter();
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
@@ -97,10 +71,9 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.print("<HEAD><TITLE>Customer Registration</TITLE></HEAD>\n");
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
-		out
-				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
+		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("</H1><H2 ALIGN=\"center\">Customer Registration Page</H2>\n");
-		
+
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();
 		if (sessionIdStrToAppend != null) {
@@ -109,10 +82,9 @@ public class CustomerRegistrationServlet extends HttpServlet {
 			sessionIdStrToAppend = "";
 		}
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4		
-		out.print("<FORM ACTION=\"buy_request" + sessionIdStrToAppend
-				+ "\" METHOD=\"get\">");
-		
+		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
+		out.print("<FORM ACTION=\"buy_request" + sessionIdStrToAppend + "\" METHOD=\"get\">");
+
 		out.print("<BLOCKQUOTE><BLOCKQUOTE>\n");
 		out.print("<HR><TABLE BORDER=\"0\"><TR>\n");
 		out.print("<TD><INPUT CHECKED=\"CHECKED\" NAME=\"RETURNING_FLAG\" "
@@ -120,15 +92,12 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.print("</TD></TR><TR><TD>\n");
 		out.print("<INPUT NAME=\"RETURNING_FLAG\" TYPE=\"radio\" VALUE=\"N\">"
 				+ "I am a first time customer</TD></TR></TABLE>\n");
-		out.print("<HR><P><B>If you're an existing customer, enter your User "
-				+ "ID and Password:</B><BR><BR></P>\n");
+		out.print("<HR><P><B>If you're an existing customer, enter your User " + "ID and Password:</B><BR><BR></P>\n");
 		out.print("<TABLE><TR ALIGN=\"left\">\n");
 		out.print("<TD>User ID: <INPUT NAME=\"UNAME\" SIZE=\"23\"></TD></TR>\n");
 		out.print("<TR ALIGN=\"left\">\n");
-		out.print("<TD>Password: <INPUT SIZE=\"14\" NAME=\"PASSWD\" "
-				+ "TYPE=\"password\"></TD></TR></TABLE> \n");
-		out.print("<HR><P><B>If you re a first time customer, enter the "
-				+ "details below:</B><BR></P>\n");
+		out.print("<TD>Password: <INPUT SIZE=\"14\" NAME=\"PASSWD\" " + "TYPE=\"password\"></TD></TR></TABLE> \n");
+		out.print("<HR><P><B>If you re a first time customer, enter the " + "details below:</B><BR></P>\n");
 		out.print("<TABLE><TR><TD>Enter your birth date (mm/dd/yyyy):</TD>\n");
 		out.print("<TD> <INPUT NAME=\"BIRTHDATE\" SIZE=\"10\"></TD></TR>");
 		out.print("<TR><TD>Enter your First Name:</TD>\n");
@@ -141,8 +110,7 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.print("<TD> <INPUT NAME=\"STREET2\" SIZE=\"40\"></TD></TR>\n");
 
 		out.print("<TR><TD>Enter your City, State, Zip:</TD>\n");
-		out.print("<TD><INPUT NAME=\"CITY\" SIZE=\"30\">"
-				+ "<INPUT NAME=\"STATE\"><INPUT NAME=\"ZIP\" SIZE=\"10\">\n");
+		out.print("<TD><INPUT NAME=\"CITY\" SIZE=\"30\">" + "<INPUT NAME=\"STATE\"><INPUT NAME=\"ZIP\" SIZE=\"10\">\n");
 		out.print("</TD></TR>");
 
 		out.print("<TR><TD>Enter your Country:</TD>\n");
@@ -184,6 +152,6 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.print("</CENTER></FORM>");
 		out.print("</BODY></HTML>");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 }

@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -39,7 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ExecuteSearchServlet extends HttpServlet {
+
+	private static final long serialVersionUID = -3888865319481400580L;
+	private static Logger LOGGER = LoggerFactory.getLogger(ExecuteSearchServlet.class);
 
 	/**
 	 * 2009-3-6 author: duanzhiquan Technology Center for Software Engineering
@@ -48,22 +25,19 @@ public class ExecuteSearchServlet extends HttpServlet {
 	 * 
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
-
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 		int i;
 
 		HttpSession session = req.getSession(false);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -74,8 +48,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
@@ -96,8 +69,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
 		out.print("<P ALIGN=\"center\">\n");
 
-		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string
-				+ "</H2>\n");
+		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string + "</H2>\n");
 
 		// Display promotions
 		promotional_processing.DisplayPromotions(out, req, res, -1);
@@ -164,6 +136,6 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</BODY> </HTML>\n");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 }

@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.IOException;
@@ -39,22 +10,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OrderDisplayServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 783064388417406500L;
+	private static Logger LOGGER = LoggerFactory.getLogger(OrderDisplayServlet.class);
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException,
-			ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		LOGGER.debug("Enter function: doGet");
 
 		PrintWriter out = res.getWriter();
 		HttpSession session = req.getSession(false);
-		
-		// by xiaowei zhou, determine session-based differentiated service priority level, 20101116
-		String strSessionPriorityLevel = req
-				.getParameter(Util.SESSION_PRIORITY_KEY);
+
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
 		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null
-				&& !strSessionPriorityLevel.equals("")) {
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
 			try {
 				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
 			} catch (NumberFormatException e) {
@@ -65,12 +40,11 @@ public class OrderDisplayServlet extends HttpServlet {
 					igrSessionPri = Util.DEFAULT_PRIORITY;
 				}
 				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY,
-							igrSessionPri);
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
 				}
 			}
 		}
-		
+
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String url;
@@ -81,8 +55,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD><TITLE>Order Display Page</TITLE></HEAD>\n");
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
-		out
-				.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
+		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"CENTER\">Order Display Page</H2>\n");
 		out.print("<BLOCKQUOTE> <BLOCKQUOTE> <BLOCKQUOTE> <BLOCKQUOTE> <HR>\n");
 
@@ -143,8 +116,7 @@ public class OrderDisplayServlet extends HttpServlet {
 
 		out.print("<TABLE BORDER=\"0\" WIDTH=\"80%\">\n");
 		out.print("<TR><TD><B>Bill To:</B></TD><TD><B>Ship To:</B></TD></TR>");
-		out.print("<TR><TD COLSPAN=\"2\"> <H4>" + order.c_fname + " " + order.c_lname
-				+ "</H4></TD></TR>\n");
+		out.print("<TR><TD COLSPAN=\"2\"> <H4>" + order.c_fname + " " + order.c_lname + "</H4></TD></TR>\n");
 		out.print("<TR><TD WIDTH=\"50%\"><ADDRESS>" + order.ship_addr_street1 + "<BR>\n");
 		out.print(order.ship_addr_street2 + "<BR>\n");
 		out.print(order.ship_addr_state + " " + order.ship_addr_zip + "<BR>\n");
@@ -153,9 +125,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("Phone: " + order.c_phone + "</ADDRESS><BR><P>\n");
 		out.print("Credit Card Type: " + order.cx_type + "<BR>\n");
 		out.print("Order Status: " + order.o_status + "</P></TD>\n");
-		out
-				.print("<TD VALIGN=\"TOP\" WIDTH=\"50%\"><ADDRESS>" + order.bill_addr_street1
-						+ "<BR>\n");
+		out.print("<TD VALIGN=\"TOP\" WIDTH=\"50%\"><ADDRESS>" + order.bill_addr_street1 + "<BR>\n");
 		out.print(order.bill_addr_street2 + "<BR>\n");
 		out.print(order.bill_addr_state + " " + order.bill_addr_zip + "<BR>\n");
 		out.print(order.bill_co_name + "\n");
@@ -175,8 +145,8 @@ public class OrderDisplayServlet extends HttpServlet {
 				OrderLine line = (OrderLine) lines.elementAt(i);
 				out.print("<TR>");
 				out.print("<TD> <H4>" + line.ol_i_id + "</H4></TD>\n");
-				out.print("<TD VALIGN=\"top\"><H4>" + line.i_title + "<BR>Publisher: "
-						+ line.i_publisher + "</H4></TD>\n");
+				out.print("<TD VALIGN=\"top\"><H4>" + line.i_title + "<BR>Publisher: " + line.i_publisher
+						+ "</H4></TD>\n");
 				out.print("<TD> <H4>" + line.i_cost + "</H4></TD>\n"); // Cost
 				out.print("<TD> <H4>" + line.ol_qty + "</H4></TD>\n"); // Qty
 				out.print("<TD> <H4>" + line.ol_discount + "</H4></TD>\n"); // Discount
@@ -185,6 +155,6 @@ public class OrderDisplayServlet extends HttpServlet {
 		}
 		out.print("</TABLE><BR></CENTER>\n");
 		out.close();
-		return;
+		LOGGER.debug("Exit function: doGet");
 	}
 }
