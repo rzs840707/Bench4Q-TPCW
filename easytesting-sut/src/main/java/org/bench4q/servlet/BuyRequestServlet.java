@@ -227,14 +227,14 @@ public class BuyRequestServlet extends HttpServlet {
 		url = "shopping_cart?ADD_FLAG=N&C_ID=" + cust.c_id;
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
 
 		url = "order_inquiry?C_ID=" + cust.c_id;
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/order_status_B.gif\" " + "ALT=\"Order Status\"></A>\n");
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();

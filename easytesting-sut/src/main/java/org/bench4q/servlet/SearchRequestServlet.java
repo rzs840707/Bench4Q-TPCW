@@ -103,7 +103,7 @@ public class SearchRequestServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
 		url = "shopping_cart?ADD_FLAG=N";
 		if (SHOPPING_ID != null)
@@ -111,7 +111,7 @@ public class SearchRequestServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
 		out.print("</CENTER></P></FORM></BODY></HTML>");
 		out.close();

@@ -119,7 +119,7 @@ public class HomeServlet extends HttpServlet {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
-			out.print("<A HREF=\"" + res.encodeUrl(url));
+			out.print("<A HREF=\"" + res.encodeURL(url));
 
 			out.print("\">" + column1.elementAt(i) + "</A></P></TD>\n");
 			url = "new_products";
@@ -129,7 +129,7 @@ public class HomeServlet extends HttpServlet {
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 
-			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeUrl(url));
+			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeURL(url));
 
 			out.print("\">" + column2.elementAt(i) + "</A></P></TD>\n");
 			out.print("<TD BGCOLOR=\"#ffffff\" WIDTH=\"50\"></TD>\n");
@@ -141,7 +141,7 @@ public class HomeServlet extends HttpServlet {
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 
-			out.print("<A HREF=\"" + res.encodeUrl(url));
+			out.print("<A HREF=\"" + res.encodeURL(url));
 
 			out.print("\">" + column1.elementAt(i) + "</A></P></TD>\n");
 
@@ -152,7 +152,7 @@ public class HomeServlet extends HttpServlet {
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 
-			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeUrl(url));
+			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeURL(url));
 			out.print("\">" + column2.elementAt(i) + "</A></P></TD>\n");
 			out.print("</TR>\n");
 		}
@@ -167,7 +167,7 @@ public class HomeServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
 
@@ -179,7 +179,7 @@ public class HomeServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
 
 		url = "order_inquiry";
@@ -190,7 +190,7 @@ public class HomeServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 
 		out.print("\"><IMG SRC=\"Images/order_status_B.gif\"" + " ALT=\"Order Status\"></A>\n");
 

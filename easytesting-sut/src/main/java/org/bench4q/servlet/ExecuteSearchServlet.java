@@ -98,7 +98,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
-			out.print("<TD><A HREF=\"" + res.encodeUrl(url));
+			out.print("<TD><A HREF=\"" + res.encodeURL(url));
 			out.print("\">" + myBook.i_title + "</A></TD></TR>\n");
 		}
 
@@ -110,7 +110,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
 
 		url = "search_request";
@@ -121,7 +121,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
 
 		url = "home";
@@ -132,7 +132,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</BODY> </HTML>\n");
 		out.close();

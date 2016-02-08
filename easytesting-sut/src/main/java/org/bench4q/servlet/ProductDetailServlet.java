@@ -91,7 +91,7 @@ public class ProductDetailServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 		url = url + "&ADD_FLAG=Y";
-		out.print("<CENTER> <A HREF=\"" + res.encodeUrl(url));
+		out.print("<CENTER> <A HREF=\"" + res.encodeURL(url));
 		out.print("\">\n");
 
 		out.print("<IMG SRC=\"Images/add_B.gif\"" + " ALT=\"Add to Basket\"></A>\n");
@@ -104,7 +104,7 @@ public class ProductDetailServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 
 		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
 		url = "home";
@@ -115,7 +115,7 @@ public class ProductDetailServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A>\n");
 
 		url = "admin_request?I_ID=" + I_ID;
@@ -124,7 +124,7 @@ public class ProductDetailServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/update_B.gif\"" + " ALT=\"Update\"></A>\n");
 
 		out.print("</BODY> </HTML>\n");

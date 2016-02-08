@@ -108,7 +108,7 @@ public class AdminRequestServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -118,7 +118,7 @@ public class AdminRequestServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P>\n");
 
 		out.print("</FORM></BODY></HTML>");

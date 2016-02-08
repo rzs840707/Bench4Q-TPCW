@@ -151,14 +151,14 @@ public class BuyConfirmServlet extends HttpServlet {
 		url = "search_request?SHOPPING_ID=" + SHOPPING_ID;
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
-		out.print("<CENTER><P><A HREF=\"" + res.encodeUrl(url));
+		out.print("<CENTER><P><A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
 
 		url = "home?SHOPPING_ID=" + SHOPPING_ID;
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
 
-		out.print("<A HREF=\"" + res.encodeUrl(url));
+		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
 		out.print("</CENTER></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE>" + "</BLOCKQUOTE></BODY></HTML>");
 		out.close();

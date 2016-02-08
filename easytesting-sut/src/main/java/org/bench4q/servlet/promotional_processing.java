@@ -67,7 +67,7 @@ public class promotional_processing {
 				url = url + "&SHOPPING_ID=" + new_sid;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
-			out.print("<TD><A HREF=\"" + res.encodeUrl(url));
+			out.print("<TD><A HREF=\"" + res.encodeURL(url));
 			out.print("\"><IMG SRC=\"Images/" + thumbnails.elementAt(i) + "\" ALT=\"Book "
 					+ String.valueOf(i + 1) + "\" WIDTH=\"100\" HEIGHT=\"150\"></A>\n");
 			out.print("</TD>");
