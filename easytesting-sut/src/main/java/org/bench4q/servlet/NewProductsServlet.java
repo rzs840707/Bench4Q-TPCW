@@ -80,7 +80,7 @@ public class NewProductsServlet extends HttpServlet {
 		// Need to insert code here to get new products from the database,
 		// and then spit them out in html to complete the table
 
-		Vector books = Database.getNewProducts(subject);
+		Vector<ShortBook> books = Database.getNewProducts(subject);
 		for (i = 0; i < books.size(); i++) {
 			ShortBook book = (ShortBook) books.elementAt(i);
 			out.print("<TR><TD>" + (i + 1) + "</TD>\n");

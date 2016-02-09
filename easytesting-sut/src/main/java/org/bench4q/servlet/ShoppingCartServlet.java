@@ -76,8 +76,8 @@ public class ShoppingCartServlet extends HttpServlet {
 
 		// We need to parse an arbitrary number of I_ID/QTR pairs from
 		// the url line.
-		Vector quantities = new Vector();
-		Vector ids = new Vector();
+		Vector<String> quantities = new Vector<String>();
+		Vector<String> ids = new Vector<String>();
 		int i = 0;
 		String curr_QTYstr;
 		String curr_I_IDstr;

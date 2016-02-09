@@ -23,8 +23,8 @@ public class HomeServlet extends HttpServlet {
 		LOGGER.debug("Enter function: doGet");
 		int i;
 		String url;
-		Vector column1 = new Vector();
-		Vector column2 = new Vector();
+		Vector<String> column1 = new Vector<String>();
+		Vector<String> column2 = new Vector<String>();
 
 		column1.addElement(new String("ARTS"));// 1
 		column2.addElement(new String("NON-FICTION"));

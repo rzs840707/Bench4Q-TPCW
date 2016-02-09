@@ -67,7 +67,7 @@ public class OrderDisplayServlet extends HttpServlet {
 			if (!storedpasswd.equals(passwd)) {
 				out.print("Error: Incorrect password.\n");
 			} else {
-				Vector lines = new Vector();
+				Vector<OrderLine> lines = new Vector<OrderLine>();
 				Order order = Database.GetMostRecentOrder(uname, lines);
 				if (order != null)
 					printOrder(order, lines, out);
@@ -104,7 +104,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("</CENTER></FORM></BODY></HTML>");
 	}
 
-	private void printOrder(Order order, Vector lines, PrintWriter out) {
+	private void printOrder(Order order, Vector<OrderLine> lines, PrintWriter out) {
 		int i;
 		out.print("<P>Order ID:" + order.o_id + "<BR>\n");
 		out.print("Order Placed on " + order.o_date + "<BR>\n");
