@@ -40,11 +40,11 @@ public class say_hello {
 
 		// If we have seen this session id before
 		if (!session.isNew()) {
-			int C_ID[] = (int[]) session.getValue("C_ID");
+			int C_ID[] = (int[]) session.getAttribute("C_ID");
 			// check and see if we have a customer name yet
 			if (C_ID != null) // Say hello.
-				out.println("Hello " + (String) session.getValue("C_FNAME") + " "
-						+ (String) session.getValue("C_LNAME"));
+				out.println("Hello " + (String) session.getAttribute("C_FNAME") + " "
+						+ (String) session.getAttribute("C_LNAME"));
 			else
 				out.println("Hello unknown user");
 		} else {
@@ -65,9 +65,9 @@ public class say_hello {
 					out.println("Hello unknown user!");
 					return;
 				}
-				session.putValue("C_ID", C_ID);
-				session.putValue("C_FNAME", name[0]);
-				session.putValue("C_LNAME", name[1]);
+				session.setAttribute("C_ID", C_ID);
+				session.setAttribute("C_FNAME", name[0]);
+				session.setAttribute("C_LNAME", name[1]);
 				out.println("Hello " + name[0] + " " + name[1] + ".");
 
 			} else

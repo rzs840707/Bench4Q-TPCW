@@ -70,7 +70,7 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
 
 		// Get best sellers from DB
-		Vector books = Database.getBestSellers(subject);
+		Vector<ShortBook> books = Database.getBestSellers(subject);
 
 		// Print out the best sellers.
 		int i;

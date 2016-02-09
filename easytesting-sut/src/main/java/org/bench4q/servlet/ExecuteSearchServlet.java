@@ -74,7 +74,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		// Display promotions
 		promotional_processing.DisplayPromotions(out, req, res, -1);
 
-		Vector books = null; // placate javac
+		Vector<Book> books = null; // placate javac
 		// Display new products
 		if (search_type.equals("author"))
 			books = Database.doAuthorSearch(search_string);

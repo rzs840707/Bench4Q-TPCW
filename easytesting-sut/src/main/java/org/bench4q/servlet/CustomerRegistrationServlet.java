@@ -59,12 +59,13 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
-		String username;
-		if (C_ID != null) {
-			int c_idnum = Integer.parseInt(C_ID);
-			username = Database.GetUserName(c_idnum);
-		} else
-			username = "";
+		// String username;
+		// if (C_ID != null) {
+		// int c_idnum = Integer.parseInt(C_ID);
+		// username = Database.GetUserName(c_idnum);
+		// } else {
+		// username = "";
+		// }
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML>\n");

@@ -212,8 +212,8 @@ public class Database {
 		return cust;
 	}
 
-	public static Vector doSubjectSearch(String search_key) {
-		Vector vec = new Vector();
+	public static Vector<Book> doSubjectSearch(String search_key) {
+		Vector<Book> vec = new Vector<Book>();
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -242,8 +242,8 @@ public class Database {
 		return vec;
 	}
 
-	public static Vector doTitleSearch(String search_key) {
-		Vector vec = new Vector();
+	public static Vector<Book> doTitleSearch(String search_key) {
+		Vector<Book> vec = new Vector<Book>();
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -272,8 +272,8 @@ public class Database {
 		return vec;
 	}
 
-	public static Vector doAuthorSearch(String search_key) {
-		Vector vec = new Vector();
+	public static Vector<Book> doAuthorSearch(String search_key) {
+		Vector<Book> vec = new Vector<Book>();
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -302,8 +302,8 @@ public class Database {
 		return vec;
 	}
 
-	public static Vector getNewProducts(String subject) {
-		Vector vec = new Vector(); // Vector of Books
+	public static Vector<ShortBook> getNewProducts(String subject) {
+		Vector<ShortBook> vec = new Vector<ShortBook>(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -333,8 +333,8 @@ public class Database {
 		return vec;
 	}
 
-	public static Vector getBestSellers(String subject) {
-		Vector vec = new Vector(); // Vector of Books
+	public static Vector<ShortBook> getBestSellers(String subject) {
+		Vector<ShortBook> vec = new Vector<ShortBook>(); // Vector of Books
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -367,7 +367,7 @@ public class Database {
 		return vec;
 	}
 
-	public static void getRelated(int i_id, Vector i_id_vec, Vector i_thumbnail_vec) {
+	public static void getRelated(int i_id, Vector<Integer> i_id_vec, Vector<String> i_thumbnail_vec) {
 		Connection con = null;
 		PreparedStatement statement = null;
 		ResultSet rs = null;
@@ -552,7 +552,7 @@ public class Database {
 		return related1;
 	}
 
-	public static Order GetMostRecentOrder(String c_uname, Vector order_lines) {
+	public static Order GetMostRecentOrder(String c_uname, Vector<OrderLine> order_lines) {
 		Connection con = null;
 		PreparedStatement get_most_recent_order_id = null;
 		PreparedStatement get_order = null;
@@ -671,7 +671,7 @@ public class Database {
 		return SHOPPING_ID;
 	}
 
-	public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector ids, Vector quantities) {
+	public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector<String> ids, Vector<String> quantities) {
 		Cart cart = null;
 		Connection con = null;
 
@@ -745,7 +745,7 @@ public class Database {
 		}
 	}
 
-	private static void refreshCart(Connection con, int SHOPPING_ID, Vector ids, Vector quantities) {
+	private static void refreshCart(Connection con, int SHOPPING_ID, Vector<String> ids, Vector<String> quantities) {
 		PreparedStatement statement = null;
 		int i;
 		try {
@@ -1229,7 +1229,7 @@ public class Database {
 			closeStmt(insert_row);
 		}
 
-		Enumeration e = cart.lines.elements();
+		Enumeration<CartLine> e = cart.lines.elements();
 		int counter = 0;
 		while (e.hasMoreElements()) {
 			// - Creates one or more 'order_line' rows.
@@ -1251,7 +1251,7 @@ public class Database {
 
 	public static void addOrderLine(Connection con, int ol_id, int ol_o_id, int ol_i_id, int ol_qty, double ol_discount,
 			String ol_comment) {
-		int success = 0;
+		// int success = 0;
 		PreparedStatement insert_row = null;
 		try {
 			insert_row = con.prepareStatement(

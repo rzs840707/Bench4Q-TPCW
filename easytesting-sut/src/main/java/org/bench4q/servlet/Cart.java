@@ -10,12 +10,12 @@ public class Cart {
 	public double SC_SHIP_COST;
 	public double SC_TOTAL;
 
-	public Vector lines;
+	public Vector<CartLine> lines;
 
 	public Cart(ResultSet rs, double C_DISCOUNT) throws java.sql.SQLException {
 		int i;
 		int total_items;
-		lines = new Vector();
+		lines = new Vector<CartLine>();
 		while (rs.next()) {// While there are lines remaining
 			CartLine line = new CartLine(rs.getString("i_title"), rs.getDouble("i_cost"), rs.getDouble("i_srp"),
 					rs.getString("i_backing"), rs.getInt("scl_qty"), rs.getInt("scl_i_id"));
