@@ -1332,6 +1332,8 @@ public class Database {
 				}
 				id_expected++;
 			}
+			rs.close();
+			get_ids.close();
 
 			id_expected = 1;
 			// Verify the item table
@@ -1345,6 +1347,8 @@ public class Database {
 				}
 				id_expected++;
 			}
+			rs.close();
+			get_ids.close();
 
 			id_expected = 1;
 			// Verify the address table
@@ -1359,6 +1363,8 @@ public class Database {
 				}
 				id_expected++;
 			}
+			rs.close();
+			get_ids.close();
 
 			con.commit();
 		} catch (java.lang.Exception ex) {

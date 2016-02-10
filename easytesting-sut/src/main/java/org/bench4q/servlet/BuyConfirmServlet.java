@@ -2,6 +2,8 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -90,7 +92,13 @@ public class BuyConfirmServlet extends HttpServlet {
 		long CC_NUMBER = Long.parseLong(CC_NUMBERstr);
 		String CC_NAME = req.getParameter("CC_NAME");
 		String CC_EXPIRYstr = req.getParameter("CC_EXPIRY");
-		java.util.Date CC_EXPIRY = new java.util.Date(CC_EXPIRYstr);
+		java.util.Date CC_EXPIRY = null;
+		try {
+			CC_EXPIRY = new SimpleDateFormat("dd/MM/YYYY").parse(CC_EXPIRYstr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String SHIPPING = req.getParameter("SHIPPING");
 
 		String STREET_1 = req.getParameter("STREET_1");

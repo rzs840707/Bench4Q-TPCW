@@ -2,7 +2,8 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -97,7 +98,12 @@ public class BuyRequestServlet extends HttpServlet {
 			cust.co_name = req.getParameter("COUNTRY");
 			cust.c_phone = req.getParameter("PHONE");
 			cust.c_email = req.getParameter("EMAIL");
-			cust.c_birthdate = new Date(req.getParameter("BIRTHDATE"));
+			try {
+				cust.c_birthdate = new SimpleDateFormat("dd/MM/YYYY").parse(req.getParameter("BIRTHDATE"));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			cust.c_data = req.getParameter("DATA");
 			cust = Database.createNewCustomer(cust);
 		} else
