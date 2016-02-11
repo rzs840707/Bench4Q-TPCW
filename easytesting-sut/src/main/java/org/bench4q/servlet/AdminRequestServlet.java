@@ -95,19 +95,21 @@ public class AdminRequestServlet extends HttpServlet {
 				+ "<INPUT TYPE=\"TEXT\" NAME=\"I_NEW_THUMBNAIL\"></TD></TR>\n");
 		out.print("</TABLE>");
 		out.print("<P><BR CLEAR=\"ALL\"></P> <P ALIGN=\"center\">");
-		if (SHOPPING_ID != null)
+		if (SHOPPING_ID != null) {
 			out.print("<INPUT TYPE=HIDDEN NAME=\"SHOPPING_ID\" value = \"" + SHOPPING_ID + "\">\n");
-		if (C_ID != null)
+		}
+		if (C_ID != null) {
 			out.print("<INPUT TYPE=HIDDEN NAME=\"C_ID\" value = \"" + C_ID + "\">\n");
+		}
 		out.print("<INPUT TYPE=\"IMAGE\" NAME=\"Submit\"" + " SRC=\"Images/submit_B.gif\">\n");
 		url = "search_request";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
-		} else if (C_ID != null)
+		} else if (C_ID != null) {
 			url = url + "?C_ID=" + C_ID;
-
+		}
 		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
 		url = "home";
@@ -115,14 +117,16 @@ public class AdminRequestServlet extends HttpServlet {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
-		} else if (C_ID != null)
+		} else if (C_ID != null) {
 			url = url + "?C_ID=" + C_ID;
+		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P>\n");
 
 		out.print("</FORM></BODY></HTML>");
 		out.close();
+
 		LOGGER.debug("Exit function: doGet");
 	}
 }

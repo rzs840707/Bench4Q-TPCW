@@ -60,7 +60,7 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Best Sellers Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		promotional_processing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
 
 		// Display new products
 

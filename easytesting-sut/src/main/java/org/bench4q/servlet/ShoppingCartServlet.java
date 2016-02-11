@@ -104,7 +104,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Shopping Cart Page</H2>\n");
 
 		// Print out the promotional processing stuff
-		promotional_processing.DisplayPromotions(out, req, res, SHOPPING_ID);
+		PromotionalProcessing.DisplayPromotions(out, req, res, SHOPPING_ID);
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();

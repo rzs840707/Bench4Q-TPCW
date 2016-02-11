@@ -64,7 +64,7 @@ public class SearchRequestServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Request Page</H2>");
 
 		// Insert Promotional processing
-		promotional_processing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();

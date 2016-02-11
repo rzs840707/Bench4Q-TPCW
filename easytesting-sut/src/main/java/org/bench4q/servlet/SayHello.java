@@ -1,32 +1,3 @@
-/**
- * =========================================================================
- * 					Bench4Q version 1.0.0
- * =========================================================================
- * 
- * Bench4Q is available on the Internet at http://forge.ow2.org/projects/jaspte
- * You can find latest version there. 
- * 
- * Distributed according to the GNU Lesser General Public Licence. 
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by   
- * the Free Software Foundation; either version 2.1 of the License, or any
- * later version.
- * 
- * SEE Copyright.txt FOR FULL COPYRIGHT INFORMATION.
- * 
- * This source code is distributed "as is" in the hope that it will be
- * useful.  It comes with no warranty, and no author or distributor
- * accepts any responsibility for the consequences of its use.
- *
- *
- * This version is a based on the implementation of TPC-W from University of Wisconsin. 
- * This version used some source code of The Grinder.
- *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- *  * Initial developer(s): Zhiquan Duan.
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
- * 
- */
 package org.bench4q.servlet;
 
 import java.io.PrintWriter;
@@ -34,7 +5,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class say_hello {
+public class SayHello {
 
 	public static void print_hello(HttpSession session, HttpServletRequest req, PrintWriter out) {
 
@@ -42,11 +13,12 @@ public class say_hello {
 		if (!session.isNew()) {
 			int C_ID[] = (int[]) session.getAttribute("C_ID");
 			// check and see if we have a customer name yet
-			if (C_ID != null) // Say hello.
+			if (C_ID != null) { // Say hello.
 				out.println("Hello " + (String) session.getAttribute("C_FNAME") + " "
 						+ (String) session.getAttribute("C_LNAME"));
-			else
+			} else {
 				out.println("Hello unknown user");
+			}
 		} else {
 			// This is a brand new session
 			out.println("This is a new session!");
@@ -70,8 +42,9 @@ public class say_hello {
 				session.setAttribute("C_LNAME", name[1]);
 				out.println("Hello " + name[0] + " " + name[1] + ".");
 
-			} else
+			} else {
 				out.println("Hello unknown user!");
+			}
 		}
 	}
 }
