@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,8 @@ public class OrderInquiryServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+		
 		HttpSession session = req.getSession(false);
 
 		// by xiaowei zhou, determine session-based differentiated service
@@ -103,6 +105,8 @@ public class OrderInquiryServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("OrderInquiryServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 }

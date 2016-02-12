@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +28,8 @@ public class SearchRequestServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+		
 		PrintWriter out = res.getWriter();
 		// Set the content type of this servlet's result.
 		res.setContentType("text/html");
@@ -115,6 +117,8 @@ public class SearchRequestServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
 		out.print("</CENTER></P></FORM></BODY></HTML>");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("SearchRequestServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 }

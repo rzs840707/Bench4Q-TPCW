@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -53,7 +54,8 @@ public class BuyConfirmServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+
 		int i;
 		String url;
 		PrintWriter out = res.getWriter();
@@ -170,7 +172,9 @@ public class BuyConfirmServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
 		out.print("</CENTER></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE>" + "</BLOCKQUOTE></BODY></HTML>");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("BuyConfirmServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

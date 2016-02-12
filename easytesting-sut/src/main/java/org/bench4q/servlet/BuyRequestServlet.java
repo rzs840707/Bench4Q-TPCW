@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -28,7 +29,8 @@ public class BuyRequestServlet extends HttpServlet {
 	 */
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+
 		PrintWriter out = res.getWriter();
 		String url;
 		// Set the content type of this servlet's result.
@@ -244,6 +246,8 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/order_status_B.gif\" " + "ALT=\"Order Status\"></A>\n");
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("BuyRequestServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 }

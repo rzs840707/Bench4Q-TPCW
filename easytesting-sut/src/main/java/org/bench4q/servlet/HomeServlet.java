@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,8 @@ public class HomeServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+
 		int i;
 		String url;
 		Vector<String> column1 = new Vector<String>();
@@ -196,7 +198,9 @@ public class HomeServlet extends HttpServlet {
 
 		out.print("</font> </BODY> </HTML>\n");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("HomeServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

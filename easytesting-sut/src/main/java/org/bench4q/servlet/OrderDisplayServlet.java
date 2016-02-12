@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ public class OrderDisplayServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
 
 		PrintWriter out = res.getWriter();
 		HttpSession session = req.getSession(false);
@@ -102,6 +103,8 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("OrderDisplayServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 	private void printOrder(Order order, Vector<OrderLine> lines, PrintWriter out) {
@@ -155,6 +158,6 @@ public class OrderDisplayServlet extends HttpServlet {
 		}
 		out.print("</TABLE><BR></CENTER>\n");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
 	}
 }

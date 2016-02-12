@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +28,8 @@ public class ProductDetailServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+		
 		String url;
 		HttpSession session = req.getSession(false);
 
@@ -129,6 +131,8 @@ public class ProductDetailServlet extends HttpServlet {
 
 		out.print("</BODY> </HTML>\n");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("ProductDetailServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 }

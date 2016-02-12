@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,8 @@ public class ShoppingCartServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-		LOGGER.debug("Enter function: doGet");
+		Date before = new Date(System.currentTimeMillis());
+
 		Cart cart;
 		String url;
 		HttpSession session = req.getSession(false);
@@ -156,6 +158,8 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<P><INPUT TYPE=\"IMAGE\" NAME=\"Refresh Shopping Cart\"" + "SRC=\"Images/refresh_B.gif\"></P>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
 		out.close();
-		LOGGER.debug("Exit function: doGet");
+
+		Date after = new Date(System.currentTimeMillis());
+		LOGGER.debug("ShoppingCartServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 }
