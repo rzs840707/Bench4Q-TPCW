@@ -1,13 +1,18 @@
 package org.bench4q.servlet;
 
 import java.io.PrintWriter;
+import java.sql.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class SayHello {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	public static void print_hello(HttpSession session, HttpServletRequest req, PrintWriter out) {
+public class SayHello {
+	private static Logger LOGGER = LoggerFactory.getLogger(SayHello.class);
+
+	public static void printHello(HttpSession session, HttpServletRequest req, PrintWriter out) {
 
 		// If we have seen this session id before
 		if (!session.isNew()) {
@@ -31,7 +36,11 @@ public class SayHello {
 				C_ID[0] = Integer.parseInt(C_IDstr, 10);
 				out.flush();
 				// Use C_ID to get the user name from the database.
+				Date databaseBefore = new Date(System.currentTimeMillis());
 				name = Database.getName(C_ID[0]);
+				Date databaseAfter = new Date(System.currentTimeMillis());
+				LOGGER.debug("SayHello - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+
 				// Set the values for this session.
 				if (name == null) {
 					out.println("Hello unknown user!");

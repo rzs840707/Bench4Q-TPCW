@@ -63,18 +63,22 @@ public class OrderDisplayServlet extends HttpServlet {
 		String uname = req.getParameter("UNAME");
 		String passwd = req.getParameter("PASSWD");
 		if (uname != null && passwd != null) {
-
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			String storedpasswd = Database.GetPassword(uname);
 			if (!storedpasswd.equals(passwd)) {
 				out.print("Error: Incorrect password.\n");
 			} else {
 				Vector<OrderLine> lines = new Vector<OrderLine>();
 				Order order = Database.GetMostRecentOrder(uname, lines);
-				if (order != null)
+				if (order != null) {
 					printOrder(order, lines, out);
-				else
+				} else {
 					out.print("User has no order!\n");
+				}
 			}
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"OrderDisplayServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		} else
 			out.print("Error:order_display, " + "uname and passwd not set!.\n");

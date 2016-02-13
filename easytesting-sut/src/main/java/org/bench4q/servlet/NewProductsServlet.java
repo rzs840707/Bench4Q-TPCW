@@ -70,7 +70,7 @@ public class NewProductsServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">New Products Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(out, req, res, -1);
 
 		// Display new products
 
@@ -82,7 +82,11 @@ public class NewProductsServlet extends HttpServlet {
 		// Need to insert code here to get new products from the database,
 		// and then spit them out in html to complete the table
 
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Vector<ShortBook> books = Database.getNewProducts(subject);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug("NewProductsServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+
 		for (i = 0; i < books.size(); i++) {
 			ShortBook book = (ShortBook) books.elementAt(i);
 			out.print("<TR><TD>" + (i + 1) + "</TD>\n");

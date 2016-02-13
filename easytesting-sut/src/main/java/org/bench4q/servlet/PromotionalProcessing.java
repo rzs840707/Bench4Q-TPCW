@@ -1,14 +1,19 @@
 package org.bench4q.servlet;
 
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class PromotionalProcessing {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	public static void DisplayPromotions(PrintWriter out, HttpServletRequest req, HttpServletResponse res,
+public class PromotionalProcessing {
+	private static Logger LOGGER = LoggerFactory.getLogger(PromotionalProcessing.class);
+
+	public static void displayPromotions(PrintWriter out, HttpServletRequest req, HttpServletResponse res,
 			int new_sid) {
 		int I_ID = Util.getRandomI_ID();
 		Vector<Integer> related_item_ids = new Vector<Integer>();
@@ -16,7 +21,11 @@ public class PromotionalProcessing {
 		int i;
 		String url;
 
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Database.getRelated(I_ID, related_item_ids, thumbnails);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"PromotionalProcessing - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");

@@ -56,7 +56,12 @@ public class ShoppingCartServlet extends HttpServlet {
 		String SHOPPING_IDstr = req.getParameter("SHOPPING_ID");
 		int SHOPPING_ID;
 		if (SHOPPING_IDstr == null) {
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			SHOPPING_ID = Database.createEmptyCart();
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"ShoppingCartServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+
 		} else {
 			SHOPPING_ID = Integer.parseInt(SHOPPING_IDstr);
 		}
@@ -93,8 +98,11 @@ public class ShoppingCartServlet extends HttpServlet {
 			curr_QTYstr = req.getParameter("QTY_" + i);
 			curr_I_IDstr = req.getParameter("I_ID_" + i);
 		}
-
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		cart = Database.doCart(SHOPPING_ID, I_ID, ids, quantities);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"ShoppingCartServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Add the top part of the HTML
 
@@ -106,7 +114,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Shopping Cart Page</H2>\n");
 
 		// Print out the promotional processing stuff
-		PromotionalProcessing.DisplayPromotions(out, req, res, SHOPPING_ID);
+		PromotionalProcessing.displayPromotions(out, req, res, SHOPPING_ID);
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();

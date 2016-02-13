@@ -64,7 +64,11 @@ public class AdminRequestServlet extends HttpServlet {
 
 		int I_ID = Integer.parseInt(I_IDstr, 10);
 
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Book book = Database.getBook(I_ID);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"AdminRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD><TITLE>Product Update Page</TITLE></HEAD>");

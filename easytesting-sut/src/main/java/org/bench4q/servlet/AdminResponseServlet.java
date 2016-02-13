@@ -61,7 +61,11 @@ public class AdminResponseServlet extends HttpServlet {
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
 		// Get this book out of the database
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Book book = Database.getBook(I_ID);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Spit out the HTML
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
@@ -74,7 +78,11 @@ public class AdminResponseServlet extends HttpServlet {
 			out.print("<H2>Invalid Input</H2>");
 		} else {
 			// Update the database
+			databaseBefore = new Date(System.currentTimeMillis());
 			Database.adminUpdate(I_ID, I_NEW_COSTdbl.doubleValue(), I_NEW_IMAGE, I_NEW_THUMBNAIL);
+			databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug("AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime())
+					+ " ms");
 
 			out.print("<H2>Product Updated</H2>");
 			out.print("<H2>Title: " + book.i_title + "</H2>\n");
@@ -101,8 +109,9 @@ public class AdminResponseServlet extends HttpServlet {
 				url = url + "?SHOPPING_ID=" + SHOPPING_ID;
 				if (C_ID != null)
 					url = url + "&C_ID=" + C_ID;
-			} else if (C_ID != null)
+			} else if (C_ID != null) {
 				url = url + "?C_ID=" + C_ID;
+			}
 
 			out.print("<A HREF=\"" + res.encodeURL(url));
 			out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
@@ -112,8 +121,9 @@ public class AdminResponseServlet extends HttpServlet {
 				url = url + "?SHOPPING_ID=" + SHOPPING_ID;
 				if (C_ID != null)
 					url = url + "&C_ID=" + C_ID;
-			} else if (C_ID != null)
+			} else if (C_ID != null) {
 				url = url + "?C_ID=" + C_ID;
+			}
 
 			out.print("<A HREF=\"" + res.encodeURL(url));
 

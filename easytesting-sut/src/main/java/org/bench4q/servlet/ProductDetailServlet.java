@@ -29,7 +29,7 @@ public class ProductDetailServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		Date before = new Date(System.currentTimeMillis());
-		
+
 		String url;
 		HttpSession session = req.getSession(false);
 
@@ -61,7 +61,11 @@ public class ProductDetailServlet extends HttpServlet {
 		PrintWriter out = res.getWriter();
 		res.setContentType("text/html");
 
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Book mybook = Database.getBook(I_ID);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"ProductDetailServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD> <TITLE>Product Detail Page</TITLE>\n");

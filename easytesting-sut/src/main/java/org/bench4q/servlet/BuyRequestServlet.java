@@ -81,9 +81,12 @@ public class BuyRequestServlet extends HttpServlet {
 				out.print("Error: Invalid Input</BODY></HTML>");
 				return;
 			}
-
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			cust = Database.getCustomer(UNAME);
 			Database.refreshSession(cust.c_id);
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 			if (!PASSWD.equals(cust.c_passwd)) {
 				out.print("Error: Incorrect Password</BODY></HTML>");
 				return;
@@ -107,7 +110,13 @@ public class BuyRequestServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			cust.c_data = req.getParameter("DATA");
+
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			cust = Database.createNewCustomer(cust);
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+
 		} else
 			out.print("ERROR: RETURNING_FLAG not set to Y or N!\n");
 
@@ -116,7 +125,10 @@ public class BuyRequestServlet extends HttpServlet {
 			return;
 		}
 		// Update the shopping cart cost and get the current contents
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), cust.c_discount);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug("BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		String sessionIdStrToAppend = req.getRequestedSessionId();

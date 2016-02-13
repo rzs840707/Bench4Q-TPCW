@@ -111,11 +111,20 @@ public class BuyConfirmServlet extends HttpServlet {
 			String STATE = req.getParameter("STATE");
 			String ZIP = req.getParameter("ZIP");
 			String COUNTRY = req.getParameter("COUNTRY");
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING, STREET_1, STREET_2, CITY, STATE, ZIP, COUNTRY);
-		} else
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"BuyConfirmServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		} else {
+			Date databaseBefore = new Date(System.currentTimeMillis());
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING);
+			Date databaseAfter = new Date(System.currentTimeMillis());
+			LOGGER.debug(
+					"BuyConfirmServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		}
 
 		// Make Database call to read the current countent of the shopping
 		// cart, etc

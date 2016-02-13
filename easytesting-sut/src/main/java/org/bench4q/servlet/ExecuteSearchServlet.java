@@ -74,16 +74,21 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(out, req, res, -1);
 
 		Vector<Book> books = null; // placate javac
 		// Display new products
-		if (search_type.equals("author"))
+		Date databaseBefore = new Date(System.currentTimeMillis());
+		if (search_type.equals("author")) {
 			books = Database.doAuthorSearch(search_string);
-		else if (search_type.equals("title"))
+		} else if (search_type.equals("title")) {
 			books = Database.doTitleSearch(search_string);
-		else if (search_type.equals("subject"))
+		} else if (search_type.equals("subject")) {
 			books = Database.doSubjectSearch(search_string);
+		}
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug(
+				"ExecuteSearchServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"1\" CELLSPACING=\"1\">\n");
 		out.print("<TR> <TD WIDTH=\"30\"></TD>\n");

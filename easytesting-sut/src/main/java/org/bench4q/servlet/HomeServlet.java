@@ -96,10 +96,10 @@ public class HomeServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Home Page</H2>\n");
 
 		// Say Hello!
-		SayHello.print_hello(session, req, out);
+		SayHello.printHello(session, req, out);
 
 		// Insert the promotional processing
-		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(out, req, res, -1);
 
 		// Generate Table of What's New and BestSellers
 		// Table headings

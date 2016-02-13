@@ -62,7 +62,7 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Best Sellers Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.DisplayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(out, req, res, -1);
 
 		// Display new products
 
@@ -72,7 +72,10 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
 
 		// Get best sellers from DB
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		Vector<ShortBook> books = Database.getBestSellers(subject);
+		Date databaseAfter = new Date(System.currentTimeMillis());
+		LOGGER.debug("BestSellersServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Print out the best sellers.
 		int i;
