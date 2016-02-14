@@ -28,25 +28,7 @@ public class BestSellersServlet extends HttpServlet {
 
 		HttpSession session = req.getSession(false);
 
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
-		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
-			try {
-				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
-			} catch (NumberFormatException e) {
-				// ignore, use default
-			}
-			if (igrSessionPri != null) {
-				if (igrSessionPri < 1 || igrSessionPri > Util.PRIORITY_LEVELS) {
-					igrSessionPri = Util.DEFAULT_PRIORITY;
-				}
-				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
-				}
-			}
-		}
+		determinePriorityLevel(req, session);
 
 		String subject = req.getParameter("subject");
 		String C_ID = req.getParameter("C_ID");
@@ -128,5 +110,27 @@ public class BestSellersServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug("BestSellerServlet - " + (after.getTime() - before.getTime()) + " ms");
+	}
+
+	private void determinePriorityLevel(HttpServletRequest req, HttpSession session) {
+		// by xiaowei zhou, determine session-based differentiated service
+		// priority level, 20101116
+		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
+		Integer igrSessionPri = null;
+		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
+			try {
+				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
+			} catch (NumberFormatException e) {
+				// ignore, use default
+			}
+			if (igrSessionPri != null) {
+				if (igrSessionPri < 1 || igrSessionPri > Util.PRIORITY_LEVELS) {
+					igrSessionPri = Util.DEFAULT_PRIORITY;
+				}
+				if (session != null) {
+					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
+				}
+			}
+		}
 	}
 }
