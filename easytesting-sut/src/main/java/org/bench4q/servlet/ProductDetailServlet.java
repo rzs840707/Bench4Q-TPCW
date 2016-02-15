@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +30,8 @@ public class ProductDetailServlet extends HttpServlet {
 		Date before = new Date(System.currentTimeMillis());
 
 		String url;
-		HttpSession session = req.getSession(false);
 
-		determinePriorityLevel(req, session);
+		Util.determinePriorityLevel(req);
 
 		String I_IDstr = req.getParameter("I_ID");
 		int I_ID = Integer.parseInt(I_IDstr);
@@ -122,25 +120,4 @@ public class ProductDetailServlet extends HttpServlet {
 		LOGGER.debug("ProductDetailServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
-	private void determinePriorityLevel(HttpServletRequest req, HttpSession session) {
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
-		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
-			try {
-				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
-			} catch (NumberFormatException e) {
-				// ignore, use default
-			}
-			if (igrSessionPri != null) {
-				if (igrSessionPri < 1 || igrSessionPri > Util.PRIORITY_LEVELS) {
-					igrSessionPri = Util.DEFAULT_PRIORITY;
-				}
-				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
-				}
-			}
-		}
-	}
 }

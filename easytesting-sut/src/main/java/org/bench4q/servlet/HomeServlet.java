@@ -53,10 +53,11 @@ public class HomeServlet extends HttpServlet {
 
 		/* SERVLET SETUP */
 		HttpSession session = req.getSession(false);
-		if (session == null)
+		if (session == null) {
 			session = req.getSession(true);
+		}
 
-		determinePriorityLevel(req, session);
+		Util.determinePriorityLevel(req);
 
 		// This must be after the getSession() call.
 		PrintWriter out = res.getWriter();
@@ -183,28 +184,6 @@ public class HomeServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug("HomeServlet - " + (after.getTime() - before.getTime()) + " ms");
-	}
-
-	private void determinePriorityLevel(HttpServletRequest req, HttpSession session) {
-		// by xiaowei zhou, determine session-based differentiated service
-		// priority level, 20101116
-		String strSessionPriorityLevel = req.getParameter(Util.SESSION_PRIORITY_KEY);
-		Integer igrSessionPri = null;
-		if (strSessionPriorityLevel != null && !strSessionPriorityLevel.equals("")) {
-			try {
-				igrSessionPri = Integer.valueOf(strSessionPriorityLevel);
-			} catch (NumberFormatException e) {
-				// ignore, use default
-			}
-			if (igrSessionPri != null) {
-				if (igrSessionPri < 1 || igrSessionPri > Util.PRIORITY_LEVELS) {
-					igrSessionPri = Util.DEFAULT_PRIORITY;
-				}
-				if (session != null) {
-					session.setAttribute(Util.DIFFSERV_SESSION_PRIORITY_KEY, igrSessionPri);
-				}
-			}
-		}
 	}
 
 }
