@@ -70,11 +70,14 @@ public class HomeServlet extends HttpServlet {
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
 		// Generate Home Page Head
-		out.print("<HTML> <HEAD> <TITLE>Home Page</TITLE></HEAD>\n");
+		out.println("<html>");
+		out.println("<head>");
+		out.println("<title>Home Page</title>");
+		out.println("</head>");
+
 		out.print("<BODY BGCOLOR=\"#ffffff\">\n");
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
 		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
-
 		out.print("<P ALIGN=\"CENTER\">\n");
 		out.print("<H2 ALIGN=\"center\">Home Page</H2>\n");
 
@@ -100,19 +103,23 @@ public class HomeServlet extends HttpServlet {
 			out.print("<TR><TD><P ALIGN=\"center\">");
 			url = "new_products";
 			url = url + "?subject=" + column1.elementAt(i);
-			if (SHOPPING_ID != null)
+			if (SHOPPING_ID != null) {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			}
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
+			}
 			out.print("<A HREF=\"" + res.encodeURL(url));
 
 			out.print("\">" + column1.elementAt(i) + "</A></P></TD>\n");
 			url = "new_products";
 			url = url + "?subject=" + column2.elementAt(i);
-			if (SHOPPING_ID != null)
+			if (SHOPPING_ID != null) {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			}
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
+			}
 
 			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeURL(url));
 
@@ -121,10 +128,12 @@ public class HomeServlet extends HttpServlet {
 			out.print("<TD> <P ALIGN=\"center\">");
 			url = "best_sellers";
 			url = url + "?subject=" + column1.elementAt(i);
-			if (SHOPPING_ID != null)
+			if (SHOPPING_ID != null) {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			}
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
+			}
 
 			out.print("<A HREF=\"" + res.encodeURL(url));
 
@@ -132,10 +141,12 @@ public class HomeServlet extends HttpServlet {
 
 			url = "best_sellers";
 			url = url + "?subject=" + column2.elementAt(i);
-			if (SHOPPING_ID != null)
+			if (SHOPPING_ID != null) {
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			}
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
+			}
 
 			out.print("<TD><P ALIGN=\"center\"><A HREF=\"" + res.encodeURL(url));
 			out.print("\">" + column2.elementAt(i) + "</A></P></TD>\n");
@@ -147,10 +158,12 @@ public class HomeServlet extends HttpServlet {
 		out.print("<P ALIGN=\"CENTER\">\n");
 		url = "shopping_cart";
 		url = url + "?ADD_FLAG=N";
-		if (SHOPPING_ID != null)
+		if (SHOPPING_ID != null) {
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
-		if (C_ID != null)
+		}
+		if (C_ID != null) {
 			url = url + "&C_ID=" + C_ID;
+		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
@@ -159,10 +172,12 @@ public class HomeServlet extends HttpServlet {
 		url = "search_request";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
-		} else if (C_ID != null)
+			}
+		} else if (C_ID != null) {
 			url = url + "?C_ID=" + C_ID;
+		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
@@ -170,10 +185,12 @@ public class HomeServlet extends HttpServlet {
 		url = "order_inquiry";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
-			if (C_ID != null)
+			if (C_ID != null) {
 				url = url + "&C_ID=" + C_ID;
-		} else if (C_ID != null)
+			}
+		} else if (C_ID != null) {
 			url = url + "?C_ID=" + C_ID;
+		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
