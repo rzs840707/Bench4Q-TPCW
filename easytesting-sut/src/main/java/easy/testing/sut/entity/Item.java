@@ -2,11 +2,14 @@ package easy.testing.sut.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /*
@@ -46,6 +49,7 @@ public class Item {
 	private int page;
 	private String backing;
 	private String dimensions;
+	private Stock stock;
 
 	@Id
 	@Column(name = "I_ID")
@@ -99,7 +103,7 @@ public class Item {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	protected void setSubject(String subject) {
 		this.subject = subject;
 	}
 
@@ -108,7 +112,7 @@ public class Item {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	protected void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -117,7 +121,7 @@ public class Item {
 		return suggestedRetailPrice;
 	}
 
-	public void setSuggestedRetailPrice(double suggestedRetailPrice) {
+	protected void setSuggestedRetailPrice(double suggestedRetailPrice) {
 		this.suggestedRetailPrice = suggestedRetailPrice;
 	}
 
@@ -126,7 +130,7 @@ public class Item {
 		return cost;
 	}
 
-	public void setCost(double cost) {
+	protected void setCost(double cost) {
 		this.cost = cost;
 	}
 
@@ -135,7 +139,7 @@ public class Item {
 		return availableDate;
 	}
 
-	public void setAvailableDate(Date availableDate) {
+	protected void setAvailableDate(Date availableDate) {
 		this.availableDate = availableDate;
 	}
 
@@ -144,7 +148,7 @@ public class Item {
 		return isbn;
 	}
 
-	public void setIsbn(String isbn) {
+	protected void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 
@@ -153,7 +157,7 @@ public class Item {
 		return page;
 	}
 
-	public void setPage(int page) {
+	protected void setPage(int page) {
 		this.page = page;
 	}
 
@@ -162,7 +166,7 @@ public class Item {
 		return backing;
 	}
 
-	public void setBacking(String backing) {
+	protected void setBacking(String backing) {
 		this.backing = backing;
 	}
 
@@ -171,8 +175,18 @@ public class Item {
 		return dimensions;
 	}
 
-	public void setDimensions(String dimensions) {
+	protected void setDimensions(String dimensions) {
 		this.dimensions = dimensions;
+	}
+
+	@OneToOne(targetEntity = Stock.class, cascade = { CascadeType.ALL })
+	@PrimaryKeyJoinColumn
+	public Stock getStock() {
+		return stock;
+	}
+
+	protected void setStock(Stock stock) {
+		this.stock = stock;
 	}
 
 	protected Item() {
