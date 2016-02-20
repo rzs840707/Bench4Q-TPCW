@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * Primary Key: (A_ID)
  */
 @Entity
-@Table(name = "ITEM")
+@Table(name = "AUTHOR")
 public class Author {
 
 	private int id;
