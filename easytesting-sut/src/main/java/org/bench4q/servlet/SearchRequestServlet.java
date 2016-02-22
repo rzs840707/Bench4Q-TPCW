@@ -48,13 +48,7 @@ public class SearchRequestServlet extends HttpServlet {
 		// Insert Promotional processing
 		PromotionalProcessing.displayPromotions(out, req, res, -1);
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		String sessionIdStrToAppend = req.getRequestedSessionId();
-		if (sessionIdStrToAppend != null) {
-			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
-		} else {
-			sessionIdStrToAppend = "";
-		}
+		String sessionIdStrToAppend = Util.appendSessionId(req);
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		out.print("<FORM ACTION=\"execute_search" + sessionIdStrToAppend + "\" METHOD=\"get\">\n");

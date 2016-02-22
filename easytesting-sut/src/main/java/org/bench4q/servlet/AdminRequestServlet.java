@@ -33,13 +33,7 @@ public class AdminRequestServlet extends HttpServlet {
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		String sessionIdStrToAppend = req.getRequestedSessionId();
-		if (sessionIdStrToAppend != null) {
-			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
-		} else {
-			sessionIdStrToAppend = "";
-		}
+		String sessionIdStrToAppend = Util.appendSessionId(req);
 
 		int I_ID = Integer.parseInt(I_IDstr, 10);
 

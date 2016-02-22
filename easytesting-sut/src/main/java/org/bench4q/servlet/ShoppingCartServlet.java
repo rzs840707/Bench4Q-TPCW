@@ -96,13 +96,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		// Print out the promotional processing stuff
 		PromotionalProcessing.displayPromotions(out, req, res, SHOPPING_ID);
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		String sessionIdStrToAppend = req.getRequestedSessionId();
-		if (sessionIdStrToAppend != null) {
-			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
-		} else {
-			sessionIdStrToAppend = "";
-		}
+		String sessionIdStrToAppend = Util.appendSessionId(req);
 
 		// Display the shopping cart contents
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4

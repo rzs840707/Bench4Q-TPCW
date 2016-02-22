@@ -56,13 +56,7 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("</H1><H2 ALIGN=\"center\">Customer Registration Page</H2>\n");
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		String sessionIdStrToAppend = req.getRequestedSessionId();
-		if (sessionIdStrToAppend != null) {
-			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
-		} else {
-			sessionIdStrToAppend = "";
-		}
+		String sessionIdStrToAppend = Util.appendSessionId(req);
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
 		out.print("<FORM ACTION=\"buy_request" + sessionIdStrToAppend + "\" METHOD=\"get\">");

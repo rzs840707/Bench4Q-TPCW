@@ -109,13 +109,7 @@ public class BuyRequestServlet extends HttpServlet {
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
-		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
-		String sessionIdStrToAppend = req.getRequestedSessionId();
-		if (sessionIdStrToAppend != null) {
-			sessionIdStrToAppend = ";jsessionid=" + sessionIdStrToAppend;
-		} else {
-			sessionIdStrToAppend = "";
-		}
+		String sessionIdStrToAppend = Util.appendSessionId(req);
 
 		// Print out the web page
 
