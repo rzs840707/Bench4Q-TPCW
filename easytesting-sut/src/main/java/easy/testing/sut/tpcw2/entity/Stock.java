@@ -1,4 +1,4 @@
-package easy.testing.sut.entity;
+package easy.testing.sut.tpcw2.entity;
 
 import java.util.Date;
 
