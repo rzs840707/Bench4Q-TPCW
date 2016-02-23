@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /*
@@ -40,6 +42,7 @@ public class Order {
 	private Address billAddress;
 	private Address shipAddress;
 	private String status;
+	private CreditCardTransaction creditCardTransaction;
 
 	@Id
 	@Column(name = "O_ID")
@@ -142,6 +145,16 @@ public class Order {
 
 	protected void setStatus(String status) {
 		this.status = status;
+	}
+
+	@OneToOne(targetEntity = CreditCardTransaction.class)
+	@PrimaryKeyJoinColumn
+	public CreditCardTransaction getCreditCardTransaction() {
+		return creditCardTransaction;
+	}
+
+	protected void setCreditCardTransaction(CreditCardTransaction creditCardTransaction) {
+		this.creditCardTransaction = creditCardTransaction;
 	}
 
 	protected Order() {
