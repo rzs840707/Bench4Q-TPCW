@@ -5,6 +5,18 @@
 <web-app>
 	<display-name>Bench4Q</display-name>
 	<description>Bench4Q</description>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:/easy/testing/sut/config/application-context.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>HomeServlet</servlet-name>
 		<servlet-class>

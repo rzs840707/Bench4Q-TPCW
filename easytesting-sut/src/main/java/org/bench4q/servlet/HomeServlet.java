@@ -11,8 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.helper.SessionHelper;
 
 public class HomeServlet extends HttpServlet {
 
@@ -22,6 +27,10 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		Date before = new Date(System.currentTimeMillis());
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		SessionHelper sessionHelper = webApplicationContext.getBean(SessionHelper.class);
+		Session hibernateSession = sessionHelper.getSession();
 
 		int i;
 		String url;
