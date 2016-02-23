@@ -12,6 +12,7 @@ import javax.persistence.Table;
  * CO_NAME	Variable text, size 50	Name of Country
  * CO_EXCHANGE	Numeric, (6, 6) digits	Exchange rate to US Dollars
  * CO_CURRENCY	Variable text, size 18	Name of Currency
+ * Primary Key: (CO_ID)
  */
 @Entity
 @Table(name = "COUNTRY")
