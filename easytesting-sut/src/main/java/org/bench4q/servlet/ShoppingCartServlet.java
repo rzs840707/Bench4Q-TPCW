@@ -94,7 +94,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Shopping Cart Page</H2>\n");
 
 		// Print out the promotional processing stuff
-		PromotionalProcessing.displayPromotions(out, req, res, SHOPPING_ID);
+		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, SHOPPING_ID);
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 

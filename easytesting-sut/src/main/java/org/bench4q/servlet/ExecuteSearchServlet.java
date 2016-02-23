@@ -53,7 +53,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
 
 		Vector<Book> books = null; // placate javac
 		// Display new products

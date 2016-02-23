@@ -47,11 +47,11 @@ public class Item {
 	private String publisher;
 	private String subject;
 	private String description;
-	private Item related1;
-	private Item related2;
-	private Item related3;
-	private Item related4;
-	private Item related5;
+	private int related1;
+	private int related2;
+	private int related3;
+	private int related4;
+	private int related5;
 	private String thumbnail;
 	private String image;
 	private double suggestedRetailPrice;
@@ -128,53 +128,48 @@ public class Item {
 		this.description = description;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "I_RELATED1")
-	public Item getRelated1() {
+	@Column(name = "I_RELATED1")
+	public int getRelated1() {
 		return related1;
 	}
 
-	protected void setRelated1(Item related1) {
+	protected void setRelated1(int related1) {
 		this.related1 = related1;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "I_RELATED2")
-	public Item getRelated2() {
+	@Column(name = "I_RELATED2")
+	public int getRelated2() {
 		return related2;
 	}
 
-	protected void setRelated2(Item related2) {
+	protected void setRelated2(int related2) {
 		this.related2 = related2;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "I_RELATED3")
-	public Item getRelated3() {
+	@Column(name = "I_RELATED3")
+	public int getRelated3() {
 		return related3;
 	}
 
-	protected void setRelated3(Item related3) {
+	protected void setRelated3(int related3) {
 		this.related3 = related3;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "I_RELATED4")
-	public Item getRelated4() {
+	@Column(name = "I_RELATED4")
+	public int getRelated4() {
 		return related4;
 	}
 
-	protected void setRelated4(Item related4) {
+	protected void setRelated4(int related4) {
 		this.related4 = related4;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "I_RELATED5")
-	public Item getRelated5() {
+	@Column(name = "I_RELATED5")
+	public int getRelated5() {
 		return related5;
 	}
 
-	protected void setRelated5(Item related5) {
+	protected void setRelated5(int related5) {
 		this.related5 = related5;
 	}
 

@@ -50,7 +50,7 @@ public class NewProductsServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">New Products Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(out, req, res, -1);
+		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
 
 		// Display new products
 
