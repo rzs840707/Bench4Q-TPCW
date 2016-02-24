@@ -2,7 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Customer;
+import easy.testing.sut.service.CustomerService;
 
 public class BuyRequestServlet extends HttpServlet {
 
@@ -40,7 +45,7 @@ public class BuyRequestServlet extends HttpServlet {
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 		String RETURNING_FLAG = req.getParameter("RETURNING_FLAG");
 
-		Customer cust = null;
+		Customer customer = null;
 
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
 		out.print("<HTML><HEAD><TITLE>Buy Request</TITLE></HEAD>\n");
@@ -48,7 +53,9 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("<H1 ALIGN=\"center\">Bench4Q</H1>\n");
 		out.print("<H1 ALIGN=\"center\">A QoS oriented B2C benchmark for Internetware Middleware</H1>\n");
 		out.print("<H2 ALIGN=\"CENTER\">Buy Request Page</H2>\n");
-
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
 		if (RETURNING_FLAG == null) {
 			out.print("ERROR: RETURNING_FLAG not set!</BODY><HTML>");
 			return;
@@ -60,38 +67,41 @@ public class BuyRequestServlet extends HttpServlet {
 				out.print("Error: Invalid Input</BODY></HTML>");
 				return;
 			}
+
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			cust = Database.getCustomer(UNAME);
-			Database.refreshSession(cust.c_id);
+			customer = customerService.getCustomerByUserName(UNAME);
+			customerService.refreshSession(customer.getId());
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
 					"BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
-			if (!PASSWD.equals(cust.c_passwd)) {
+			if (!PASSWD.equals(customer.getPassword())) {
 				out.print("Error: Incorrect Password</BODY></HTML>");
 				return;
 			}
 		} else if (RETURNING_FLAG.equals("N")) {
-			cust = new Customer();
-			cust.c_fname = req.getParameter("FNAME");
-			cust.c_lname = req.getParameter("LNAME");
-			cust.addr_street1 = req.getParameter("STREET1");
-			cust.addr_street2 = req.getParameter("STREET2");
-			cust.addr_city = req.getParameter("CITY");
-			cust.addr_state = req.getParameter("STATE");
-			cust.addr_zip = req.getParameter("ZIP");
-			cust.co_name = req.getParameter("COUNTRY");
-			cust.c_phone = req.getParameter("PHONE");
-			cust.c_email = req.getParameter("EMAIL");
+			String firstName = req.getParameter("FNAME");
+			String lastName = req.getParameter("LNAME");
+			String phone = req.getParameter("PHONE");
+			String email = req.getParameter("EMAIL");
+			Date birthDate = null;
 			try {
-				cust.c_birthdate = new SimpleDateFormat("dd/MM/YYYY").parse(req.getParameter("BIRTHDATE"));
+				birthDate = new SimpleDateFormat("dd/MM/YYYY").parse(req.getParameter("BIRTHDATE"));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cust.c_data = req.getParameter("DATA");
+			String data = req.getParameter("DATA");
+
+			String streetLine1 = req.getParameter("STREET1");
+			String streetLine2 = req.getParameter("STREET2");
+			String city = req.getParameter("CITY");
+			String state = req.getParameter("STATE");
+			String zipCode = req.getParameter("ZIP");
+			String countryName = req.getParameter("COUNTRY");
 
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			cust = Database.createNewCustomer(cust);
+			customer = customerService.newCustomer(firstName, lastName, phone, email, birthDate, data, streetLine1,
+					streetLine2, city, state, zipCode, countryName);
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
 					"BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -105,7 +115,7 @@ public class BuyRequestServlet extends HttpServlet {
 		}
 		// Update the shopping cart cost and get the current contents
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), cust.c_discount);
+		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), customer.getDiscount());
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("BuyRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
@@ -122,19 +132,19 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("<H2>Billing Information:</H2>\n");
 		out.print("<TABLE WIDTH=\"100%\" BORDER=\"0\"><TR>\n");
 
-		out.print("<TR><TD>Firstname:</TD><TD>" + cust.c_fname + "</TD></TR>\n");
-		out.print("<TR><TD>Lastname: </TD><TD>" + cust.c_lname + "</TD></TR>\n");
-		out.print("<TR><TD>Addr_street_1:</TD><TD>" + cust.addr_street1 + "</TD></TR>\n");
-		out.print("<TR><TD>Addr_street_2:</TD><TD>" + cust.addr_street2 + "</TD></TR>\n");
-		out.print("<TR><TD>City:</TD><TD>" + cust.addr_city + "</TD></TR>\n");
-		out.print("<TR><TD>State:</TD><TD>" + cust.addr_state + "</TD></TR>\n");
-		out.print("<TR><TD>Zip:</TD><TD>" + cust.addr_zip + "</TD></TR>\n");
-		out.print("<TR><TD>Country:</TD><TD>" + cust.co_name + "</TD></TR>\n");
-		out.print("<TR><TD>Email:</TD><TD>" + cust.c_email + "</TD></TR>\n");
-		out.print("<TR><TD>Phone:</TD><TD>" + cust.c_phone + "</TD></TR>\n");
+		out.print("<TR><TD>Firstname:</TD><TD>" + customer.getFirstName() + "</TD></TR>\n");
+		out.print("<TR><TD>Lastname: </TD><TD>" + customer.getLastName() + "</TD></TR>\n");
+		out.print("<TR><TD>Addr_street_1:</TD><TD>" + customer.getAddress().getStreetLine1() + "</TD></TR>\n");
+		out.print("<TR><TD>Addr_street_2:</TD><TD>" + customer.getAddress().getStreetLine2() + "</TD></TR>\n");
+		out.print("<TR><TD>City:</TD><TD>" + customer.getAddress().getCity() + "</TD></TR>\n");
+		out.print("<TR><TD>State:</TD><TD>" + customer.getAddress().getState() + "</TD></TR>\n");
+		out.print("<TR><TD>Zip:</TD><TD>" + customer.getAddress().getZipCode() + "</TD></TR>\n");
+		out.print("<TR><TD>Country:</TD><TD>" + customer.getAddress().getCountry().getName() + "</TD></TR>\n");
+		out.print("<TR><TD>Email:</TD><TD>" + customer.getEmail() + "</TD></TR>\n");
+		out.print("<TR><TD>Phone:</TD><TD>" + customer.getPhone() + "</TD></TR>\n");
 		if (RETURNING_FLAG.equals("N")) {
-			out.print("<TR><TD>USERNAME:</TD><TD>" + cust.c_uname + "</TD></TR>\n");
-			out.print("<TR><TD>C_ID:</TD><TD>" + cust.c_id + "</TD></TR>\n");
+			out.print("<TR><TD>USERNAME:</TD><TD>" + customer.getUserName() + "</TD></TR>\n");
+			out.print("<TR><TD>C_ID:</TD><TD>" + customer.getId() + "</TD></TR>\n");
 		}
 		out.print("</TABLE></TD>");
 
@@ -178,8 +188,8 @@ public class BuyRequestServlet extends HttpServlet {
 
 		out.print("</TABLE>\n");
 		out.print("<P><BR></P><TABLE BORDER=\"0\">\n");
-		out.print("<TR><TD><B>Subtotal with discount (" + cust.c_discount + "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$"
-				+ mycart.SC_SUB_TOTAL + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Subtotal with discount (" + customer.getDiscount()
+				+ "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SUB_TOTAL + "</B></TD></TR>\n");
 		out.print("<TR><TD><B>Tax</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TAX + "</B></TD></TR>\n");
 		out.print("<TR><TD><B>Shipping &amp; Handling</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SHIP_COST
 				+ "</B></TD></TR>\n");
@@ -215,15 +225,15 @@ public class BuyRequestServlet extends HttpServlet {
 		out.print("</TD></TR></TABLE><P><CENTER>\n");
 		if (SHOPPING_ID != null)
 			out.print("<INPUT TYPE=HIDDEN NAME=\"SHOPPING_ID\" value = \"" + SHOPPING_ID + "\">\n");
-		out.print("<INPUT TYPE=HIDDEN NAME=\"C_ID\" value = \"" + cust.c_id + "\">\n");
+		out.print("<INPUT TYPE=HIDDEN NAME=\"C_ID\" value = \"" + customer.getId() + "\">\n");
 		out.print("<INPUT TYPE=\"IMAGE\" NAME=\"Confirm Buy\" SRC=\"Images/submit_B.gif\">\n");
-		url = "shopping_cart?ADD_FLAG=N&C_ID=" + cust.c_id;
+		url = "shopping_cart?ADD_FLAG=N&C_ID=" + customer.getId();
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 		out.print("<A HREF=\"" + res.encodeURL(url));
 		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
 
-		url = "order_inquiry?C_ID=" + cust.c_id;
+		url = "order_inquiry?C_ID=" + customer.getId();
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 

@@ -136,7 +136,8 @@ public class Customer {
 		this.registrationDate = registrationDate;
 	}
 
-	@Column(name = "C_LAST_VISIT")
+	// @Column(name = "C_LAST_VISIT")
+	@Column(name = "C_LAST_LOGIN")
 	public Date getLastVisitDate() {
 		return lastVisitDate;
 	}
@@ -210,5 +211,41 @@ public class Customer {
 
 	protected Customer() {
 
+	}
+
+	public void refreshSession() {
+		Date now = new Date(System.currentTimeMillis());
+		this.setSessionStart(now);
+		this.setSessionExpiration(new Date(now.getTime() + 2 * 60 * 60 * 1000));
+	}
+
+	public static Customer create(String userName, String password, String firstName, String lastName, Address address,
+			String phone, String email, Date registrationDate, Date lastVisitDate, Date sessionStart,
+			Date sessionExpiration, double discount, double balance, double yearToDatePayment, Date birthDate,
+			String data) {
+		Customer customer = new Customer();
+		customer.setUserName(userName);
+		customer.setPassword(password);
+		customer.setFirstName(firstName);
+		customer.setLastName(lastName);
+		customer.setAddress(address);
+		customer.setPhone(phone);
+		customer.setEmail(email);
+		customer.setRegistrationDate(registrationDate);
+		customer.setLastVisitDate(lastVisitDate);
+		customer.setSessionStart(sessionStart);
+		customer.setSessionExpiration(sessionExpiration);
+		customer.setDiscount(discount);
+		customer.setBalance(balance);
+		customer.setYearToDatePayment(yearToDatePayment);
+		customer.setBirthDate(birthDate);
+		customer.setData(data);
+		return customer;
+	}
+
+	public void updateInformation(String userName, String password, Address address) {
+		this.setUserName(userName);
+		this.setPassword(password);
+		this.setAddress(address);
 	}
 }

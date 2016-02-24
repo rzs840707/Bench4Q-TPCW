@@ -150,39 +150,6 @@ public class Database {
 		return book;
 	}
 
-	public static Customer getCustomer(String UNAME) {
-		Customer cust = null;
-		Connection con = null;
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		try {
-			// Prepare SQL
-			con = getConnection();
-			statement = con.prepareStatement(
-					"SELECT * FROM customer, address, country WHERE customer.c_addr_id = address.addr_id AND address.addr_co_id = country.co_id AND customer.c_uname = ?");
-
-			// Set parameter
-			statement.setString(1, UNAME);
-			rs = statement.executeQuery();
-
-			// Results
-			if (rs.next())
-				cust = new Customer(rs);
-			else {
-				System.err.println("ERROR: NULL returned in getCustomer!");
-				return null;
-			}
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(statement);
-			closeConnection(con);
-		}
-		return cust;
-	}
-
 	public static Vector<Book> doSubjectSearch(String search_key) {
 		Vector<Book> vec = new Vector<Book>();
 		Connection con = null;
@@ -336,39 +303,6 @@ public class Database {
 			closeConnection(con);
 		}
 		return vec;
-	}
-
-	public static void getRelated(int i_id, Vector<Integer> i_id_vec, Vector<String> i_thumbnail_vec) {
-		Connection con = null;
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		try {
-			// Prepare SQL
-			con = getConnection();
-			statement = con.prepareStatement(
-					"SELECT J.i_id,J.i_thumbnail from item I, item J where (I.i_related1 = J.i_id or I.i_related2 = J.i_id or I.i_related3 = J.i_id or I.i_related4 = J.i_id or I.i_related5 = J.i_id) and I.i_id = ?");
-
-			// Set parameter
-			statement.setInt(1, i_id);
-			rs = statement.executeQuery();
-
-			// Clear the vectors
-			i_id_vec.removeAllElements();
-			i_thumbnail_vec.removeAllElements();
-
-			// Results
-			while (rs.next()) {
-				i_id_vec.addElement(new Integer(rs.getInt(1)));
-				i_thumbnail_vec.addElement(rs.getString(2));
-			}
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(statement);
-			closeConnection(con);
-		}
 	}
 
 	public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
@@ -855,70 +789,70 @@ public class Database {
 		}
 	}
 
-	public static Customer createNewCustomer(Customer cust) {
-		Connection con = null;
-		PreparedStatement insert_customer_row = null;
-		ResultSet rs = null;
-		try {
-			// Get largest customer ID already in use.
-			con = getConnection();
-
-			cust.c_discount = (int) (java.lang.Math.random() * 51);
-			cust.c_balance = 0.0;
-			cust.c_ytd_pmt = 0.0;
-			// FIXME - Use SQL CURRENT_TIME to do this
-			cust.c_last_visit = new Date(System.currentTimeMillis());
-			cust.c_since = new Date(System.currentTimeMillis());
-			cust.c_login = new Date(System.currentTimeMillis());
-			cust.c_expiration = new Date(System.currentTimeMillis() + 7200000);// milliseconds
-			// in 2
-			// hours
-			insert_customer_row = con.prepareStatement(
-					"INSERT into customer (c_uname, c_passwd, c_fname, c_lname, c_addr_id, c_phone, c_email, c_since, c_last_login, c_login, c_expiration, c_discount, c_balance, c_ytd_pmt, c_birthdate, c_data) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-			insert_customer_row.setString(3, cust.c_fname);
-			insert_customer_row.setString(4, cust.c_lname);
-			insert_customer_row.setString(6, cust.c_phone);
-			insert_customer_row.setString(7, cust.c_email);
-			insert_customer_row.setDate(8, new java.sql.Date(cust.c_since.getTime()));
-			insert_customer_row.setDate(9, new java.sql.Date(cust.c_last_visit.getTime()));
-			insert_customer_row.setDate(10, new java.sql.Date(cust.c_login.getTime()));
-			insert_customer_row.setDate(11, new java.sql.Date(cust.c_expiration.getTime()));
-			insert_customer_row.setDouble(12, cust.c_discount);
-			insert_customer_row.setDouble(13, cust.c_balance);
-			insert_customer_row.setDouble(14, cust.c_ytd_pmt);
-			insert_customer_row.setDate(15, new java.sql.Date(cust.c_birthdate.getTime()));
-			insert_customer_row.setString(16, cust.c_data);
-
-			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city, cust.addr_state,
-					cust.addr_zip, cust.co_name);
-
-			insert_customer_row.setString(1, cust.c_uname);
-			insert_customer_row.setString(2, cust.c_passwd);
-			insert_customer_row.setInt(5, cust.addr_id);
-			insert_customer_row.executeUpdate();
-			rs = insert_customer_row.getGeneratedKeys();
-			if (rs.next()) {
-				cust.c_id = rs.getInt(1);
-			}
-			cust.c_uname = Util.DigSyl(cust.c_id, 0);
-			cust.c_passwd = cust.c_uname.toLowerCase();
-			PreparedStatement updateUnameANDPasswd = con
-					.prepareStatement("UPDATE customer SET c_uname = ?, c_passwd = ? WHERE c_id = ?");
-			updateUnameANDPasswd.setString(1, cust.c_uname);
-			updateUnameANDPasswd.setString(2, cust.c_passwd);
-			updateUnameANDPasswd.setLong(3, cust.c_id);
-			updateUnameANDPasswd.executeUpdate();
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(insert_customer_row);
-			closeConnection(con);
-		}
-		return cust;
-	}
+//	public static Customer createNewCustomer(Customer cust) {
+//		Connection con = null;
+//		PreparedStatement insert_customer_row = null;
+//		ResultSet rs = null;
+//		try {
+//			// Get largest customer ID already in use.
+//			con = getConnection();
+//
+//			cust.c_discount = (int) (java.lang.Math.random() * 51);
+//			cust.c_balance = 0.0;
+//			cust.c_ytd_pmt = 0.0;
+//			// FIXME - Use SQL CURRENT_TIME to do this
+//			cust.c_last_visit = new Date(System.currentTimeMillis());
+//			cust.c_since = new Date(System.currentTimeMillis());
+//			cust.c_login = new Date(System.currentTimeMillis());
+//			cust.c_expiration = new Date(System.currentTimeMillis() + 7200000);// milliseconds
+//			// in 2
+//			// hours
+//			insert_customer_row = con.prepareStatement(
+//					"INSERT into customer (c_uname, c_passwd, c_fname, c_lname, c_addr_id, c_phone, c_email, c_since, c_last_login, c_login, c_expiration, c_discount, c_balance, c_ytd_pmt, c_birthdate, c_data) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+//					Statement.RETURN_GENERATED_KEYS);
+//			insert_customer_row.setString(3, cust.c_fname);
+//			insert_customer_row.setString(4, cust.c_lname);
+//			insert_customer_row.setString(6, cust.c_phone);
+//			insert_customer_row.setString(7, cust.c_email);
+//			insert_customer_row.setDate(8, new java.sql.Date(cust.c_since.getTime()));
+//			insert_customer_row.setDate(9, new java.sql.Date(cust.c_last_visit.getTime()));
+//			insert_customer_row.setDate(10, new java.sql.Date(cust.c_login.getTime()));
+//			insert_customer_row.setDate(11, new java.sql.Date(cust.c_expiration.getTime()));
+//			insert_customer_row.setDouble(12, cust.c_discount);
+//			insert_customer_row.setDouble(13, cust.c_balance);
+//			insert_customer_row.setDouble(14, cust.c_ytd_pmt);
+//			insert_customer_row.setDate(15, new java.sql.Date(cust.c_birthdate.getTime()));
+//			insert_customer_row.setString(16, cust.c_data);
+//
+//			cust.addr_id = enterAddress(con, cust.addr_street1, cust.addr_street2, cust.addr_city, cust.addr_state,
+//					cust.addr_zip, cust.co_name);
+//
+//			insert_customer_row.setString(1, cust.c_uname);
+//			insert_customer_row.setString(2, cust.c_passwd);
+//			insert_customer_row.setInt(5, cust.addr_id);
+//			insert_customer_row.executeUpdate();
+//			rs = insert_customer_row.getGeneratedKeys();
+//			if (rs.next()) {
+//				cust.c_id = rs.getInt(1);
+//			}
+//			cust.c_uname = Util.DigSyl(cust.c_id, 0);
+//			cust.c_passwd = cust.c_uname.toLowerCase();
+//			PreparedStatement updateUnameANDPasswd = con
+//					.prepareStatement("UPDATE customer SET c_uname = ?, c_passwd = ? WHERE c_id = ?");
+//			updateUnameANDPasswd.setString(1, cust.c_uname);
+//			updateUnameANDPasswd.setString(2, cust.c_passwd);
+//			updateUnameANDPasswd.setLong(3, cust.c_id);
+//			updateUnameANDPasswd.executeUpdate();
+//			con.commit();
+//		} catch (java.lang.Exception ex) {
+//			ex.printStackTrace();
+//		} finally {
+//			closeResultSet(rs);
+//			closeStmt(insert_customer_row);
+//			closeConnection(con);
+//		}
+//		return cust;
+//	}
 
 	// BUY CONFIRM
 

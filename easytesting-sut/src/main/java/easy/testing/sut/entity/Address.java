@@ -99,4 +99,16 @@ public class Address {
 	protected Address() {
 
 	}
+
+	public static Address create(String streetLine1, String streetLine2, String city, String state, String zipCode,
+			Country country) {
+		Address address = new Address();
+		address.setStreetLine1(streetLine1);
+		address.setStreetLine2(streetLine2);
+		address.setCity(city);
+		address.setState(state);
+		address.setZipCode(zipCode);
+		address.setCountry(country);
+		return address;
+	}
 }
