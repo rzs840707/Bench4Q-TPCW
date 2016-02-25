@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Item;
+import easy.testing.sut.service.ItemService;
 
 public class ProductDetailServlet extends HttpServlet {
 
@@ -41,8 +46,12 @@ public class ProductDetailServlet extends HttpServlet {
 		PrintWriter out = res.getWriter();
 		res.setContentType("text/html");
 
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Book mybook = Database.getBook(I_ID);
+		Item item = itemService.getItemById(I_ID);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug(
 				"ProductDetailServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -54,22 +63,23 @@ public class ProductDetailServlet extends HttpServlet {
 
 		out.print("</CENTER> <H2 ALIGN=\"center\">Product Detail Page</H2>\n");
 
-		out.print("<H2> Title: " + mybook.i_title + "</H2>\n");
-		out.print("<P>Author: " + mybook.a_fname + " " + mybook.a_lname + "<BR>\n");
-		out.print("Subject: " + mybook.i_subject + "\n");
+		out.print("<H2> Title: " + item.getTitle() + "</H2>\n");
+		out.print("<P>Author: " + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName() + "<BR>\n");
+		out.print("Subject: " + item.getSubject() + "\n");
 
-		out.print("Decription: <I>" + mybook.i_desc + "</I></P>\n");
-		out.print("<BLOCKQUOTE><P><B>Suggested Retail: " + mybook.i_srp + "</B>\n");
+		out.print("Decription: <I>" + item.getDescription() + "</I></P>\n");
+		out.print("<BLOCKQUOTE><P><B>Suggested Retail: " + item.getSuggestedRetailPrice() + "</B>\n");
 		out.print("<BR><B>Our Price:</B>\n");
-		out.print("<FONT COLOR=\"#dd0000\"> <B> " + mybook.i_cost + "</B></FONT><BR>\n");
-		out.print("<B>You Save:</B><FONT COLOR=\"#dd0000\"> $" + (mybook.i_srp - mybook.i_cost) + "</B></FONT></P>\n");
+		out.print("<FONT COLOR=\"#dd0000\"> <B> " + item.getCost() + "</B></FONT><BR>\n");
+		out.print("<B>You Save:</B><FONT COLOR=\"#dd0000\"> $" + (item.getSuggestedRetailPrice() - item.getCost())
+				+ "</B></FONT></P>\n");
 		out.print("</BLOCKQUOTE><DL><DT><FONT SIZE=\"2\">\n");
-		out.print("Backing: " + mybook.i_backing + ", " + mybook.i_page + " pages<BR>\n");
-		out.print("Published by " + mybook.i_publisher + "<BR>\n");
-		out.print("Publication date: " + mybook.i_pub_Date + "<BR>\n");
-		out.print("Avail date: " + mybook.i_avail + "<BR>\n");
-		out.print("Dimensions (in inches): " + mybook.i_dimensions + "<BR>\n");
-		out.print("ISBN: " + mybook.i_isbn + "</FONT></DT></DL><P>\n");
+		out.print("Backing: " + item.getBacking() + ", " + item.getPage() + " pages<BR>\n");
+		out.print("Published by " + item.getPublisher() + "<BR>\n");
+		out.print("Publication date: " + item.getPublishDate() + "<BR>\n");
+		out.print("Avail date: " + item.getAvailableDate() + "<BR>\n");
+		out.print("Dimensions (in inches): " + item.getDimensions() + "<BR>\n");
+		out.print("ISBN: " + item.getIsbn() + "</FONT></DT></DL><P>\n");
 
 		url = "shopping_cart?I_ID=" + I_ID + "&QTY=1";
 		if (SHOPPING_ID != null)

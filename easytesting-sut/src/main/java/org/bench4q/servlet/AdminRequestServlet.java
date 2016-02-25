@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Item;
+import easy.testing.sut.service.ItemService;
 
 public class AdminRequestServlet extends HttpServlet {
 
@@ -35,10 +40,14 @@ public class AdminRequestServlet extends HttpServlet {
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
 		int I_ID = Integer.parseInt(I_IDstr, 10);
 
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Book book = Database.getBook(I_ID);
+		Item item = itemService.getItemById(I_ID);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug(
 				"AdminRequestServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -51,11 +60,12 @@ public class AdminRequestServlet extends HttpServlet {
 
 		out.print("<H2 ALIGN=\"center\">Admin Request Page</H2>");
 
-		out.print("<H2 ALIGN=\"center\">Title:" + book.i_title + "</H2>\n");
-		out.print("<P ALIGN=\"LEFT\">Author: " + book.a_fname + " " + book.a_lname + "<BR></P>\n");
-		out.print("<IMG SRC=\"Images/" + book.i_image + "\" ALIGN=\"RIGHT\" BORDER=\"0\" "
+		out.print("<H2 ALIGN=\"center\">Title:" + item.getTitle() + "</H2>\n");
+		out.print("<P ALIGN=\"LEFT\">Author: " + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName()
+				+ "<BR></P>\n");
+		out.print("<IMG SRC=\"Images/" + item.getImage() + "\" ALIGN=\"RIGHT\" BORDER=\"0\" "
 				+ "WIDTH=\"200\" HEIGHT=\"200\" >\n");
-		out.print("<IMG SRC=\"Images/" + book.i_thumbnail + "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
+		out.print("<IMG SRC=\"Images/" + item.getThumbnail() + "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
 		out.print("<P><BR><BR></P>");
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
@@ -63,8 +73,9 @@ public class AdminRequestServlet extends HttpServlet {
 
 		out.print("<INPUT NAME=\"I_ID\" TYPE=\"hidden\" VALUE=\"" + I_ID + "\">\n");
 		out.print("<TABLE BORDER=\"0\">\n");
-		out.print("<TR><TD><B>Suggested Retail:</B></TD><TD><B>$ " + book.i_srp + "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Our Current Price: </B></TD>" + "<TD><FONT COLOR=\"#dd0000\"><B>$ " + book.i_cost
+		out.print(
+				"<TR><TD><B>Suggested Retail:</B></TD><TD><B>$ " + item.getSuggestedRetailPrice() + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Our Current Price: </B></TD>" + "<TD><FONT COLOR=\"#dd0000\"><B>$ " + item.getCost()
 				+ "</B></FONT></TD></TR>\n");
 		out.print(
 				"<TR><TD><B>Enter New Price</B></TD>" + "<TD ALIGN=\"right\">$ <INPUT NAME=\"I_NEW_COST\"></TD></TR>");

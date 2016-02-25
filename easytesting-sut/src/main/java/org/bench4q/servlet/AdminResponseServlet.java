@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Item;
+import easy.testing.sut.service.ItemService;
 
 public class AdminResponseServlet extends HttpServlet {
 
@@ -39,9 +44,13 @@ public class AdminResponseServlet extends HttpServlet {
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");
 
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
 		// Get this book out of the database
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Book book = Database.getBook(I_ID);
+		Item item = itemService.getItemById(I_ID);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug(
 				"AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -64,23 +73,24 @@ public class AdminResponseServlet extends HttpServlet {
 					+ " ms");
 
 			out.print("<H2>Product Updated</H2>");
-			out.print("<H2>Title: " + book.i_title + "</H2>\n");
-			out.print("<P>Author: " + book.a_fname + " " + book.a_lname + "</P>\n");
+			out.print("<H2>Title: " + item.getTitle() + "</H2>\n");
+			out.print(
+					"<P>Author: " + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName() + "</P>\n");
 			out.print("<P><IMG SRC=\"Images/" + I_NEW_IMAGE + "\" ALIGN=\"RIGHT\" BORDER=\"0\" WIDTH=\"200\" "
 					+ "HEIGHT=\"200\">");
 			out.print("<IMG SRC=\"Images/" + I_NEW_THUMBNAIL + "\" ALT=\"Book 1\" ALIGN=\"RIGHT\" WIDTH=\"100\""
 					+ " HEIGHT=\"150\">\n");
-			out.print("Description: " + book.i_desc + "</P>\n");
-			out.print("<BLOCKQUOTE><P><B>Suggested Retail: $" + book.i_srp
+			out.print("Description: " + item.getDescription() + "</P>\n");
+			out.print("<BLOCKQUOTE><P><B>Suggested Retail: $" + item.getSuggestedRetailPrice()
 					+ "</B><BR><B>Our Price: </B><FONT COLOR=\"#DD0000\"><B>" + I_NEW_COSTstr
 					+ "</B></FONT><BR><B>You Save: </B><FONT " + "COLOR=\"#DD0000\"><B>"
-					+ Double.toString((book.i_srp - (Double.valueOf(I_NEW_COSTstr)).doubleValue()))
+					+ Double.toString((item.getSuggestedRetailPrice() - (Double.valueOf(I_NEW_COSTstr)).doubleValue()))
 					+ "</B></FONT></P></BLOCKQUOTE> ");
-			out.print("<P><FONT SIZE=\"2\">" + book.i_backing + ", " + book.i_page + " pages<BR>\n");
-			out.print("Published by " + book.i_publisher + "<BR>\n");
-			out.print("Publication date: " + book.i_pub_Date + "<BR>\n");
-			out.print("Dimensions (in inches): " + book.i_dimensions + "<BR>\n");
-			out.print("ISBN: " + book.i_isbn + "</FONT><BR CLEAR=\"ALL\"></P>\n");
+			out.print("<P><FONT SIZE=\"2\">" + item.getBacking() + ", " + item.getPage() + " pages<BR>\n");
+			out.print("Published by " + item.getPublisher() + "<BR>\n");
+			out.print("Publication date: " + item.getPublishDate() + "<BR>\n");
+			out.print("Dimensions (in inches): " + item.getDimensions() + "<BR>\n");
+			out.print("ISBN: " + item.getIsbn() + "</FONT><BR CLEAR=\"ALL\"></P>\n");
 
 			out.print("<CENTER>");
 			url = "search_request";

@@ -87,32 +87,6 @@ public class Database {
 		}
 	}
 
-	public static Book getBook(int i_id) {
-		Book book = null;
-		Connection con = null;
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		try {
-			// Prepare SQL
-			con = getConnection();
-			statement = con.prepareStatement("SELECT * FROM item,author WHERE item.i_a_id = author.a_id AND i_id = ?");
-			// Set parameter
-			statement.setInt(1, i_id);
-			rs = statement.executeQuery();
-			// Results
-			rs.next();
-			book = new Book(rs);
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(statement);
-			closeConnection(con);
-		}
-		return book;
-	}
-
 	public static Vector<Book> doSubjectSearch(String search_key) {
 		Vector<Book> vec = new Vector<Book>();
 		Connection con = null;
