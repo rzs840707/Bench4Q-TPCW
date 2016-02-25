@@ -55,6 +55,25 @@ public class CustomerService {
 		}
 	}
 
+	public Customer getCustomerById(int customerId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Customer.class);
+			criteria.add(Restrictions.eq("id", customerId));
+			Customer customer = (Customer) criteria.uniqueResult();
+			session.getTransaction().commit();
+			return customer;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
 	public boolean refreshSession(int customerId) {
 		Session session = null;
 		try {
@@ -105,7 +124,7 @@ public class CustomerService {
 				session.getTransaction().commit();
 				return null;
 			}
-			customer.updateInformation(userName, password,address);
+			customer.updateInformation(userName, password, address);
 			session.update(customer);
 			session.getTransaction().commit();
 			return customer;
@@ -154,4 +173,5 @@ public class CustomerService {
 			return null;
 		}
 	}
+
 }
