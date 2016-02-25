@@ -87,44 +87,6 @@ public class Database {
 		}
 	}
 
-	// public static Vector<ShortBook> getBestSellers(String subject) {
-	// Vector<ShortBook> vec = new Vector<ShortBook>(); // Vector of Books
-	// Connection con = null;
-	// PreparedStatement statement = null;
-	// ResultSet rs = null;
-	// try {
-	// // Prepare SQL
-	// con = getConnection();
-	// // The following is the original, unoptimized best sellers query.
-	// statement = con
-	// .prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item,
-	// author, order_line "
-	// + "WHERE item.i_id = order_line.ol_i_id " + "AND item.i_a_id =
-	// author.a_id "
-	// + "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)" + "AND
-	// item.i_subject = ? "
-	// + "GROUP BY i_id, i_title, a_fname, a_lname " + "ORDER BY SUM(ol_qty)
-	// DESC LIMIT 50");
-	//
-	// // Set parameter
-	// statement.setString(1, subject);
-	// rs = statement.executeQuery();
-	//
-	// // Results
-	// while (rs.next()) {
-	// vec.addElement(new ShortBook(rs));
-	// }
-	// con.commit();
-	// } catch (java.lang.Exception ex) {
-	// ex.printStackTrace();
-	// } finally {
-	// closeResultSet(rs);
-	// closeStmt(statement);
-	// closeConnection(con);
-	// }
-	// return vec;
-	// }
-
 	public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
 		Connection con = null;
 		PreparedStatement statement = null;
@@ -196,34 +158,6 @@ public class Database {
 			closeStmt(related);
 			closeConnection(con);
 		}
-	}
-
-	public static String GetUserName(int C_ID) {
-		String u_name = null;
-		Connection con = null;
-		PreparedStatement get_user_name = null;
-		ResultSet rs = null;
-		try {
-			// Prepare SQL
-			con = getConnection();
-			get_user_name = con.prepareStatement("SELECT c_uname FROM customer WHERE c_id = ?");
-
-			// Set parameter
-			get_user_name.setInt(1, C_ID);
-			rs = get_user_name.executeQuery();
-
-			// Results
-			rs.next();
-			u_name = rs.getString("c_uname");
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(get_user_name);
-			closeConnection(con);
-		}
-		return u_name;
 	}
 
 	public static String GetPassword(String C_UNAME) {

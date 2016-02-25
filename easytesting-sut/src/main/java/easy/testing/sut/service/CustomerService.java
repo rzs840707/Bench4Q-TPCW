@@ -102,17 +102,16 @@ public class CustomerService {
 	public Customer newCustomer(String firstName, String lastName, String phone, String email, Date birthDate,
 			String data, String streetLine1, String streetLine2, String city, String state, String zipCode,
 			String countryName) {
-		Customer customer = this.doCreateCustomer(firstName, lastName, phone, email, birthDate, data, streetLine1,
-				streetLine2, city, state, zipCode, countryName);
-		String userName = Util.DigSyl(customer.getId(), 0);
+		int customerId = this.createCustomer(firstName, lastName, phone, email, birthDate, data);
+		String userName = Util.DigSyl(customerId, 0);
 		String password = userName.toLowerCase();
 		Address address = this.getAddressService().newAddress(streetLine1, streetLine2, city, state, zipCode,
 				countryName);
-		customer = this.updateInformation(customer.getId(), userName, password, address);
-		return customer;
+		this.updateInformation(customerId, userName, password, address);
+		return this.getCustomerById(customerId);
 	}
 
-	public Customer updateInformation(int customerId, String userName, String password, Address address) {
+	public boolean updateInformation(int customerId, String userName, String password, Address address) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getSession();
@@ -122,30 +121,29 @@ public class CustomerService {
 			Customer customer = (Customer) criteria.uniqueResult();
 			if (customer == null) {
 				session.getTransaction().commit();
-				return null;
+				return false;
 			}
 			customer.updateInformation(userName, password, address);
 			session.update(customer);
 			session.getTransaction().commit();
-			return customer;
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
+			return false;
 		}
 	}
 
-	public Customer doCreateCustomer(String firstName, String lastName, String phone, String email, Date birthDate,
-			String data, String streetLine1, String streetLine2, String city, String state, String zipCode,
-			String countryName) {
+	public int createCustomer(String firstName, String lastName, String phone, String email, Date birthDate,
+			String data) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getSession();
 			session.beginTransaction();
 
-			double discount = (int) (java.lang.Math.random() * 51);
+			double discount = (int) (Math.random() * 51);
 			double balance = 0.0;
 			double yearToDatePayment = 0.0;
 			Date now = new Date(System.currentTimeMillis());
@@ -161,16 +159,16 @@ public class CustomerService {
 			Customer customer = Customer.create(userName, password, firstName, lastName, address, phone, email,
 					registrationDate, lastVisitDate, sessionStart, sessionExpiration, discount, balance,
 					yearToDatePayment, birthDate, data);
-			session.save(customer);
 
+			session.save(customer);
 			session.getTransaction().commit();
-			return customer;
+			return customer.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {
 				session.getTransaction().rollback();
 			}
-			return null;
+			return -1;
 		}
 	}
 
