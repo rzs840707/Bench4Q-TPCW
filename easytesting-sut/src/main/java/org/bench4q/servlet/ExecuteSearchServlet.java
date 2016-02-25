@@ -3,7 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Vector;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Item;
+import easy.testing.sut.service.ItemService;
 
 public class ExecuteSearchServlet extends HttpServlet {
 
@@ -55,15 +60,19 @@ public class ExecuteSearchServlet extends HttpServlet {
 		// Display promotions
 		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
 
-		Vector<Book> books = null; // placate javac
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
+		List<Item> items = null; // placate javac
 		// Display new products
 		Date databaseBefore = new Date(System.currentTimeMillis());
 		if (search_type.equals("author")) {
-			books = Database.doAuthorSearch(search_string);
+			items = itemService.getItemsByAuthor(search_string, 50);
 		} else if (search_type.equals("title")) {
-			books = Database.doTitleSearch(search_string);
+			items = itemService.getItemsByTitle(search_string, 50);
 		} else if (search_type.equals("subject")) {
-			books = Database.doSubjectSearch(search_string);
+			items = itemService.getItemsBySubject(search_string, 50);
 		}
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug(
@@ -75,17 +84,17 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
 
 		// Print out a line for each item returned by the DB
-		for (i = 0; i < books.size(); i++) {
-			Book myBook = (Book) books.elementAt(i);
+		for (i = 0; i < items.size(); i++) {
+			Item item = items.get(i);
 			out.print("<TR><TD>" + (i + 1) + "</TD>\n");
-			out.print("<TD><I>" + myBook.a_fname + " " + myBook.a_lname + "</I></TD>");
-			url = "product_detail?I_ID=" + String.valueOf(myBook.i_id);
+			out.print("<TD><I>" + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName() + "</I></TD>");
+			url = "product_detail?I_ID=" + String.valueOf(item.getId());
 			if (SHOPPING_ID != null)
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 			out.print("<TD><A HREF=\"" + res.encodeURL(url));
-			out.print("\">" + myBook.i_title + "</A></TD></TR>\n");
+			out.print("\">" + item.getTitle() + "</A></TD></TR>\n");
 		}
 
 		out.print("</TABLE><P><CENTER>\n");
