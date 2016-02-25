@@ -3,7 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Vector;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Item;
+import easy.testing.sut.service.ItemService;
 
 public class BestSellersServlet extends HttpServlet {
 
@@ -50,25 +55,30 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<TD><FONT SIZE=\"+1\">Author</FONT></TD>\n");
 		out.print("<TD><FONT SIZE=\"+1\">Title</FONT></TD></TR>\n");
 
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
 		// Get best sellers from DB
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Vector<ShortBook> books = Database.getBestSellers(subject);
+		List<Item> items = itemService.getBestSellers(subject, 50);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("BestSellersServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Print out the best sellers.
 		int i;
-		for (i = 0; i < books.size(); i++) {
-			ShortBook book = (ShortBook) books.elementAt(i);
+		for (i = 0; i < items.size(); i++) {
+			Item item = items.get(i);
 			out.print("<TR><TD>" + (i + 1) + "</TD>\n");
-			out.print("<TD><I>" + book.a_fname + " " + book.a_lname + "</I></TD>\n");
-			url = "product_detail?I_ID=" + String.valueOf(book.i_id);
+			out.print(
+					"<TD><I>" + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName() + "</I></TD>\n");
+			url = "product_detail?I_ID=" + String.valueOf(item.getId());
 			if (SHOPPING_ID != null)
 				url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 			if (C_ID != null)
 				url = url + "&C_ID=" + C_ID;
 			out.print("<TD><A HREF=\"" + res.encodeURL(url));
-			out.print("\">" + book.i_title + "</A></TD></TR>\n");
+			out.print("\">" + item.getTitle() + "</A></TD></TR>\n");
 		}
 
 		out.print("</TABLE><P><CENTER>\n");
