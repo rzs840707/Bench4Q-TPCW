@@ -92,13 +92,14 @@ public class ItemService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked" })
 	public List<Item> getBestSellers(String subject, int count) {
 		Session session = null;
 		try {
 			session = this.getSessionHelper().getSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Order.class);
+
+			Criteria criteria = session.createCriteria(easy.testing.sut.entity.Order.class);
 			criteria.setProjection(Projections.max("id"));
 			Integer orderId = (Integer) criteria.uniqueResult();
 			if (orderId == null) {
@@ -107,17 +108,21 @@ public class ItemService {
 			}
 
 			criteria = session.createCriteria(OrderLine.class);
-			criteria.createAlias("item", "i");
-			criteria.createAlias("order", "o");
-			criteria.add(Restrictions.eq("i.subject", subject));
-			criteria.add(Restrictions.ge("o.id", orderId - 3333));
+			criteria.createAlias("item", "item");
+			criteria.createAlias("order", "order");
+			criteria.add(Restrictions.eq("item.subject", subject));
+			criteria.add(Restrictions.ge("order.id", -3333));
 			ProjectionList projectionList = Projections.projectionList();
-			projectionList.add(Projections.groupProperty("i.id"));
+			projectionList.add(Projections.groupProperty("item.id"));
 			projectionList.add(Projections.sum("quantity"), "sum");
 			criteria.setProjection(projectionList);
 			criteria.addOrder(Order.desc("sum"));
 			criteria.setMaxResults(count);
-			List<Item> items = criteria.list();
+			List<Object[]> results = criteria.list();
+			List<Item> items = new ArrayList<Item>();
+			for (Object[] orderLine : results) {
+				items.add(session.get(Item.class, (Integer) orderLine[0]));
+			}
 			session.getTransaction().commit();
 			return items;
 		} catch (Exception e) {

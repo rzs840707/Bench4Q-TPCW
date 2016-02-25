@@ -87,39 +87,43 @@ public class Database {
 		}
 	}
 
-//	public static Vector<ShortBook> getBestSellers(String subject) {
-//		Vector<ShortBook> vec = new Vector<ShortBook>(); // Vector of Books
-//		Connection con = null;
-//		PreparedStatement statement = null;
-//		ResultSet rs = null;
-//		try {
-//			// Prepare SQL
-//			con = getConnection();
-//			// The following is the original, unoptimized best sellers query.
-//			statement = con
-//					.prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item, author, order_line "
-//							+ "WHERE item.i_id = order_line.ol_i_id " + "AND item.i_a_id = author.a_id "
-//							+ "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)" + "AND item.i_subject = ? "
-//							+ "GROUP BY i_id, i_title, a_fname, a_lname " + "ORDER BY SUM(ol_qty) DESC LIMIT 50");
-//
-//			// Set parameter
-//			statement.setString(1, subject);
-//			rs = statement.executeQuery();
-//
-//			// Results
-//			while (rs.next()) {
-//				vec.addElement(new ShortBook(rs));
-//			}
-//			con.commit();
-//		} catch (java.lang.Exception ex) {
-//			ex.printStackTrace();
-//		} finally {
-//			closeResultSet(rs);
-//			closeStmt(statement);
-//			closeConnection(con);
-//		}
-//		return vec;
-//	}
+	// public static Vector<ShortBook> getBestSellers(String subject) {
+	// Vector<ShortBook> vec = new Vector<ShortBook>(); // Vector of Books
+	// Connection con = null;
+	// PreparedStatement statement = null;
+	// ResultSet rs = null;
+	// try {
+	// // Prepare SQL
+	// con = getConnection();
+	// // The following is the original, unoptimized best sellers query.
+	// statement = con
+	// .prepareStatement("SELECT i_id, i_title, a_fname, a_lname " + "FROM item,
+	// author, order_line "
+	// + "WHERE item.i_id = order_line.ol_i_id " + "AND item.i_a_id =
+	// author.a_id "
+	// + "AND order_line.ol_o_id > (SELECT MAX(o_id)-3333 FROM orders)" + "AND
+	// item.i_subject = ? "
+	// + "GROUP BY i_id, i_title, a_fname, a_lname " + "ORDER BY SUM(ol_qty)
+	// DESC LIMIT 50");
+	//
+	// // Set parameter
+	// statement.setString(1, subject);
+	// rs = statement.executeQuery();
+	//
+	// // Results
+	// while (rs.next()) {
+	// vec.addElement(new ShortBook(rs));
+	// }
+	// con.commit();
+	// } catch (java.lang.Exception ex) {
+	// ex.printStackTrace();
+	// } finally {
+	// closeResultSet(rs);
+	// closeStmt(statement);
+	// closeConnection(con);
+	// }
+	// return vec;
+	// }
 
 	public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
 		Connection con = null;
@@ -843,7 +847,7 @@ public class Database {
 		try {
 			insert_row = con.prepareStatement(
 					"INSERT into orders (o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) "
-							+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, CURRENT_DATE + ? DAYS, ?, ?, 'Pending')",
+							+ "VALUES ( ?, CURRENT_DATE, ?, 8.25, ?, ?, date_add(current_date(), interval ? day), ?, ?, 'Pending')",
 					Statement.RETURN_GENERATED_KEYS);
 			insert_row.setInt(1, customer_id);
 			insert_row.setDouble(2, cart.SC_SUB_TOTAL);
