@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.Customer;
+import easy.testing.sut.service.CustomerService;
 
 public class OrderDisplayServlet extends HttpServlet {
 
@@ -40,12 +45,16 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"CENTER\">Order Display Page</H2>\n");
 		out.print("<BLOCKQUOTE> <BLOCKQUOTE> <BLOCKQUOTE> <BLOCKQUOTE> <HR>\n");
 
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
+
 		String uname = req.getParameter("UNAME");
 		String passwd = req.getParameter("PASSWD");
 		if (uname != null && passwd != null) {
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			String storedpasswd = Database.GetPassword(uname);
-			if (!storedpasswd.equals(passwd)) {
+			Customer customer = customerService.getCustomerByUserName(uname);
+			if (!customer.getPassword().equals(passwd)) {
 				out.print("Error: Incorrect password.\n");
 			} else {
 				Vector<OrderLine> lines = new Vector<OrderLine>();

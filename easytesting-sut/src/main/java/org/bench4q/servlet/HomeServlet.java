@@ -22,7 +22,6 @@ public class HomeServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		Date before = new Date(System.currentTimeMillis());
-
 		int i;
 		String url;
 		Vector<String> column1 = new Vector<String>();

@@ -65,9 +65,15 @@ public class AdminResponseServlet extends HttpServlet {
 		if (I_NEW_COSTstr.length() == 0 || I_NEW_IMAGE.length() == 0 || I_NEW_THUMBNAIL.length() == 0) {
 			out.print("<H2>Invalid Input</H2>");
 		} else {
+
 			// Update the database
 			databaseBefore = new Date(System.currentTimeMillis());
-			Database.adminUpdate(I_ID, I_NEW_COSTdbl.doubleValue(), I_NEW_IMAGE, I_NEW_THUMBNAIL);
+			int itemId = I_ID;
+			double newCost = I_NEW_COSTdbl.doubleValue();
+			String newImage = I_NEW_IMAGE;
+			String newThumbnail = I_NEW_THUMBNAIL;
+			itemService.updateInformation(itemId, newCost, newImage, newThumbnail);
+			itemService.updateRelatedItems(itemId);
 			databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug("AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime())
 					+ " ms");

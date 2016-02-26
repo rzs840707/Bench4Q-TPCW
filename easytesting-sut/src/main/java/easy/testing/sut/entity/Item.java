@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -64,6 +66,7 @@ public class Item {
 	private String dimensions;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "I_ID")
 	public int getId() {
 		return id;
@@ -265,5 +268,20 @@ public class Item {
 
 	protected Item() {
 
+	}
+
+	public void updateInformation(double newCost, String newImage, String newThumbnail) {
+		this.setCost(newCost);
+		this.setImage(newImage);
+		this.setThumbnail(newThumbnail);
+		this.setPublishDate(new Date(System.currentTimeMillis()));
+	}
+
+	public void updateRelatedItems(int related1, int related2, int related3, int related4, int related5) {
+		this.setRelated1(related1);
+		this.setRelated2(related2);
+		this.setRelated3(related3);
+		this.setRelated4(related4);
+		this.setRelated5(related5);
 	}
 }

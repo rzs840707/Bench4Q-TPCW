@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -111,7 +113,7 @@ public class ItemService {
 			criteria.createAlias("item", "item");
 			criteria.createAlias("order", "order");
 			criteria.add(Restrictions.eq("item.subject", subject));
-			criteria.add(Restrictions.ge("order.id", -3333));
+			criteria.add(Restrictions.ge("order.id", orderId - 3333));
 			ProjectionList projectionList = Projections.projectionList();
 			projectionList.add(Projections.groupProperty("item.id"));
 			projectionList.add(Projections.sum("quantity"), "sum");
@@ -188,5 +190,119 @@ public class ItemService {
 		relatedItems.add(this.getItemById(item.getRelated4()));
 		relatedItems.add(this.getItemById(item.getRelated5()));
 		return relatedItems;
+	}
+
+	public boolean updateInformation(int itemId, double newCost, String newImage, String newThumbnail) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Item.class);
+			criteria.add(Restrictions.eq("id", itemId));
+			Item item = (Item) criteria.uniqueResult();
+			if (item == null) {
+				session.getTransaction().commit();
+				return false;
+			}
+			item.updateInformation(newCost, newImage, newThumbnail);
+			session.update(item);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean updateRelatedItems(int itemId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+			Item item = (Item) session.createCriteria(Item.class).add(Restrictions.eq("id", itemId)).uniqueResult();
+			if (item == null) {
+				session.getTransaction().commit();
+				return false;
+			}
+
+			// SELECT ol_i_id FROM orders, order_line
+			// WHERE orders.o_id = order_line.ol_o_id
+			// AND NOT (order_line.ol_i_id = ?)
+			// AND orders.o_c_id IN
+			// (SELECT o_c_id FROM orders, order_line
+			// WHERE orders.o_id = order_line.ol_o_id
+			// AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)
+			// AND order_line.ol_i_id = ?)
+			// GROUP BY ol_i_id
+			// ORDER BY SUM(ol_qty) DESC LIMIT 5
+
+			Integer maxOrderId = (Integer) session.createCriteria(easy.testing.sut.entity.Order.class)
+					.setProjection(Projections.max("id")).uniqueResult();
+			Integer maxItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.max("id"))
+					.uniqueResult();
+			Integer minItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.min("id"))
+					.uniqueResult();
+			DetachedCriteria subQuery = DetachedCriteria.forClass(OrderLine.class);
+			subQuery.createAlias("order", "order");
+			subQuery.createAlias("item", "item");
+			subQuery.add(Restrictions.ge("order.id", (maxOrderId == null ? 0 : maxOrderId.intValue()) - 10000));
+			subQuery.add(Restrictions.eq("item.id", itemId));
+			subQuery.setProjection(Projections.property("order.customer.id"));
+			Criteria query = session.createCriteria(OrderLine.class);
+			query.createAlias("item", "item");
+			query.createAlias("order", "order");
+			query.add(Restrictions.ne("item.id", itemId));
+			query.add(Property.forName("order.customer.id").in(subQuery));
+			ProjectionList projectionList = Projections.projectionList();
+			projectionList.add(Projections.groupProperty("item.id"));
+			projectionList.add(Projections.sum("quantity"), "sum");
+			query.setProjection(projectionList);
+			query.addOrder(Order.desc("sum"));
+			query.setMaxResults(5);
+			List<Object[]> results = query.list();
+			int[] itemIds = new int[5];
+			if (results.size() == 0) {
+				int currentItemId = itemId;
+				int i = 0;
+				for (i = 0; i < 5; i++) {
+					currentItemId += 7;
+					if (currentItemId > maxItemId) {
+						currentItemId = minItemId;
+					}
+					itemIds[i] = currentItemId;
+				}
+
+			}
+			if (results.size() < 5) {
+				int i = 0;
+				for (Object[] result : results) {
+					i++;
+					itemIds[i] = (Integer) result[0];
+				}
+				while (i < 5) {
+					itemIds[i] = itemIds[i - 1] + 1;
+				}
+			}
+			if (results.size() == 5) {
+				int i = 0;
+				for (i = 0; i < 5; i++) {
+					itemIds[i] = (Integer) results.get(i)[0];
+				}
+			}
+			item.updateRelatedItems(itemIds[0], itemIds[1], itemIds[2], itemIds[3], itemIds[4]);
+			session.update(item);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
+		}
 	}
 }

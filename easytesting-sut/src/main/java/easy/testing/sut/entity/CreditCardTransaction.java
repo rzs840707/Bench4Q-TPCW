@@ -94,6 +94,7 @@ public class CreditCardTransaction {
 		this.name = name;
 	}
 
+	// @Column(name = "CX_EXPIRY")
 	@Column(name = "CX_EXPIRE")
 	public Date getExpirationDate() {
 		return expirationDate;
