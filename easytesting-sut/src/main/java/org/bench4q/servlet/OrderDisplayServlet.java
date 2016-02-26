@@ -3,7 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Vector;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +16,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import easy.testing.sut.entity.Customer;
+import easy.testing.sut.entity.Order;
+import easy.testing.sut.entity.OrderLine;
 import easy.testing.sut.service.CustomerService;
+import easy.testing.sut.service.OrderService;
 
 public class OrderDisplayServlet extends HttpServlet {
 
@@ -48,6 +51,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(this.getServletContext());
 		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
+		OrderService orderService = webApplicationContext.getBean(OrderService.class);
 
 		String uname = req.getParameter("UNAME");
 		String passwd = req.getParameter("PASSWD");
@@ -57,10 +61,10 @@ public class OrderDisplayServlet extends HttpServlet {
 			if (!customer.getPassword().equals(passwd)) {
 				out.print("Error: Incorrect password.\n");
 			} else {
-				Vector<OrderLine> lines = new Vector<OrderLine>();
-				Order order = Database.GetMostRecentOrder(uname, lines);
+				Order order = orderService.getMostRecentOrder(uname);
 				if (order != null) {
-					printOrder(order, lines, out);
+					List<OrderLine> orderLines = orderService.getOrderLines(order.getId());
+					printOrder(order, orderLines, out);
 				} else {
 					out.print("User has no order!\n");
 				}
@@ -100,31 +104,32 @@ public class OrderDisplayServlet extends HttpServlet {
 		LOGGER.debug("OrderDisplayServlet - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
-	private void printOrder(Order order, Vector<OrderLine> lines, PrintWriter out) {
+	private void printOrder(Order order, List<OrderLine> lines, PrintWriter out) {
 		int i;
-		out.print("<P>Order ID:" + order.o_id + "<BR>\n");
-		out.print("Order Placed on " + order.o_date + "<BR>\n");
-		out.print("Shipping Type:" + order.o_ship_type + "<BR>\n");
-		out.print("Ship Date: " + order.o_ship_date + "<BR>\n");
-		out.print("Order Subtotal: " + order.o_subtotal + "<BR>\n");
-		out.print("Order Tax: " + order.o_tax + "<BR>\n");
-		out.print("Order Total:" + order.o_total + "<BR></P>\n");
+		out.print("<P>Order ID:" + order.getId() + "<BR>\n");
+		out.print("Order Placed on " + order.getOrderDate() + "<BR>\n");
+		out.print("Shipping Type:" + order.getShipType() + "<BR>\n");
+		out.print("Ship Date: " + order.getShipDate() + "<BR>\n");
+		out.print("Order Subtotal: " + order.getSubTotal() + "<BR>\n");
+		out.print("Order Tax: " + order.getTax() + "<BR>\n");
+		out.print("Order Total:" + order.getTotal() + "<BR></P>\n");
 
 		out.print("<TABLE BORDER=\"0\" WIDTH=\"80%\">\n");
 		out.print("<TR><TD><B>Bill To:</B></TD><TD><B>Ship To:</B></TD></TR>");
-		out.print("<TR><TD COLSPAN=\"2\"> <H4>" + order.c_fname + " " + order.c_lname + "</H4></TD></TR>\n");
-		out.print("<TR><TD WIDTH=\"50%\"><ADDRESS>" + order.ship_addr_street1 + "<BR>\n");
-		out.print(order.ship_addr_street2 + "<BR>\n");
-		out.print(order.ship_addr_state + " " + order.ship_addr_zip + "<BR>\n");
-		out.print(order.ship_co_name + "<BR><BR>\n");
-		out.print("Email: " + order.c_email + "<BR>\n");
-		out.print("Phone: " + order.c_phone + "</ADDRESS><BR><P>\n");
-		out.print("Credit Card Type: " + order.cx_type + "<BR>\n");
-		out.print("Order Status: " + order.o_status + "</P></TD>\n");
-		out.print("<TD VALIGN=\"TOP\" WIDTH=\"50%\"><ADDRESS>" + order.bill_addr_street1 + "<BR>\n");
-		out.print(order.bill_addr_street2 + "<BR>\n");
-		out.print(order.bill_addr_state + " " + order.bill_addr_zip + "<BR>\n");
-		out.print(order.bill_co_name + "\n");
+		out.print("<TR><TD COLSPAN=\"2\"> <H4>" + order.getCustomer().getFirstName() + " "
+				+ order.getCustomer().getLastName() + "</H4></TD></TR>\n");
+		out.print("<TR><TD WIDTH=\"50%\"><ADDRESS>" + order.getShipAddress().getStreetLine1() + "<BR>\n");
+		out.print(order.getShipAddress().getStreetLine2() + "<BR>\n");
+		out.print(order.getShipAddress().getState() + " " + order.getShipAddress().getZipCode() + "<BR>\n");
+		out.print(order.getShipAddress().getCountry().getName() + "<BR><BR>\n");
+		out.print("Email: " + order.getCustomer().getEmail() + "<BR>\n");
+		out.print("Phone: " + order.getCustomer().getPhone() + "</ADDRESS><BR><P>\n");
+		out.print("Credit Card Type: " + order.getCreditCardTransaction().getType() + "<BR>\n");
+		out.print("Order Status: " + order.getStatus() + "</P></TD>\n");
+		out.print("<TD VALIGN=\"TOP\" WIDTH=\"50%\"><ADDRESS>" + order.getBillAddress().getStreetLine1() + "<BR>\n");
+		out.print(order.getBillAddress().getStreetLine2() + "<BR>\n");
+		out.print(order.getBillAddress().getState() + " " + order.getBillAddress().getZipCode() + "<BR>\n");
+		out.print(order.getBillAddress().getCountry().getName() + "\n");
 		out.print("</ADDRESS></TD></TR></TABLE>");
 		out.print("</BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE></ BLOCKQUOTE>");
 
@@ -138,15 +143,15 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("<TD> <H4>Comment</H4></TD></TR>\n");
 		if (lines != null) {
 			for (i = 0; i < lines.size(); i++) {
-				OrderLine line = (OrderLine) lines.elementAt(i);
+				OrderLine line = lines.get(i);
 				out.print("<TR>");
-				out.print("<TD> <H4>" + line.ol_i_id + "</H4></TD>\n");
-				out.print("<TD VALIGN=\"top\"><H4>" + line.i_title + "<BR>Publisher: " + line.i_publisher
-						+ "</H4></TD>\n");
-				out.print("<TD> <H4>" + line.i_cost + "</H4></TD>\n"); // Cost
-				out.print("<TD> <H4>" + line.ol_qty + "</H4></TD>\n"); // Qty
-				out.print("<TD> <H4>" + line.ol_discount + "</H4></TD>\n"); // Discount
-				out.print("<TD> <H4>" + line.ol_comments + "</H4></TD></TR>\n");
+				out.print("<TD> <H4>" + line.getItem().getId() + "</H4></TD>\n");
+				out.print("<TD VALIGN=\"top\"><H4>" + line.getItem().getTitle() + "<BR>Publisher: "
+						+ line.getItem().getPublisher() + "</H4></TD>\n");
+				out.print("<TD> <H4>" + line.getItem().getCost() + "</H4></TD>\n"); // Cost
+				out.print("<TD> <H4>" + line.getQuantity() + "</H4></TD>\n"); // Qty
+				out.print("<TD> <H4>" + line.getDiscount() + "</H4></TD>\n"); // Discount
+				out.print("<TD> <H4>" + line.getComments() + "</H4></TD></TR>\n");
 			}
 		}
 		out.print("</TABLE><BR></CENTER>\n");
