@@ -15,6 +15,8 @@ import easy.testing.sut.entity.Customer;
 import easy.testing.sut.entity.Item;
 import easy.testing.sut.entity.Order;
 import easy.testing.sut.entity.OrderLine;
+import easy.testing.sut.entity.ShoppingCart;
+import easy.testing.sut.entity.ShoppingCartLine;
 
 @Component
 public final class SessionHelper {
@@ -52,6 +54,8 @@ public final class SessionHelper {
 			configuration.addAnnotatedClass(Item.class);
 			configuration.addAnnotatedClass(Order.class);
 			configuration.addAnnotatedClass(OrderLine.class);
+			configuration.addAnnotatedClass(ShoppingCart.class);
+			configuration.addAnnotatedClass(ShoppingCartLine.class);
 
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 					.applySettings(configuration.getProperties()).build();

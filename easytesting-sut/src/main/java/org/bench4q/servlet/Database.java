@@ -201,35 +201,6 @@ public class Database {
 
 	// ********************** Shopping Cart code below *************************
 
-	// Called from: TPCW_shopping_cart_interaction
-	public static int createEmptyCart() {
-		Connection con = null;
-		Statement insert_cart = null;
-		ResultSet rs = null;
-		int SHOPPING_ID = 0;
-		try {
-			con = getConnection();
-			insert_cart = null;
-			rs = null;
-			insert_cart = con.createStatement();
-			insert_cart.executeUpdate("INSERT INTO shopping_cart (sc_time) VALUES (CURRENT_TIMESTAMP)",
-					Statement.RETURN_GENERATED_KEYS);
-			rs = insert_cart.getGeneratedKeys();
-			if (rs.next()) {
-				SHOPPING_ID = rs.getInt(1);
-			}
-			// System.out.println(SHOPPING_ID);
-			con.commit();
-		} catch (java.lang.Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			closeResultSet(rs);
-			closeStmt(insert_cart);
-			closeConnection(con);
-		}
-		return SHOPPING_ID;
-	}
-
 	public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector<String> ids, Vector<String> quantities) {
 		Cart cart = null;
 		Connection con = null;

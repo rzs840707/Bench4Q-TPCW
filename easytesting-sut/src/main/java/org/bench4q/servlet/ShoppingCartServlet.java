@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.service.ShoppingCartService;
 
 public class ShoppingCartServlet extends HttpServlet {
 
@@ -21,6 +25,9 @@ public class ShoppingCartServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
 		Date before = new Date(System.currentTimeMillis());
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		ShoppingCartService shoppingCartService = webApplicationContext.getBean(ShoppingCartService.class);
 
 		Cart cart;
 		String url;
@@ -37,7 +44,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		int SHOPPING_ID;
 		if (SHOPPING_IDstr == null) {
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			SHOPPING_ID = Database.createEmptyCart();
+			SHOPPING_ID = shoppingCartService.newShoppingCart().getId();
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
 					"ShoppingCartServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");

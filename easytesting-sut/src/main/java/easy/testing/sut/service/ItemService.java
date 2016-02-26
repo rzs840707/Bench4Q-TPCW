@@ -229,23 +229,14 @@ public class ItemService {
 				return false;
 			}
 
-			// SELECT ol_i_id FROM orders, order_line
-			// WHERE orders.o_id = order_line.ol_o_id
-			// AND NOT (order_line.ol_i_id = ?)
-			// AND orders.o_c_id IN
-			// (SELECT o_c_id FROM orders, order_line
-			// WHERE orders.o_id = order_line.ol_o_id
-			// AND orders.o_id > (SELECT MAX(o_id)-10000 FROM orders)
-			// AND order_line.ol_i_id = ?)
-			// GROUP BY ol_i_id
-			// ORDER BY SUM(ol_qty) DESC LIMIT 5
-
 			Integer maxOrderId = (Integer) session.createCriteria(easy.testing.sut.entity.Order.class)
 					.setProjection(Projections.max("id")).uniqueResult();
+			
 			Integer maxItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.max("id"))
 					.uniqueResult();
 			Integer minItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.min("id"))
 					.uniqueResult();
+			
 			DetachedCriteria subQuery = DetachedCriteria.forClass(OrderLine.class);
 			subQuery.createAlias("order", "order");
 			subQuery.createAlias("item", "item");
