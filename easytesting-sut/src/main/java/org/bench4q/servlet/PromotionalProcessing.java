@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +20,8 @@ import easy.testing.sut.service.ItemService;
 public class PromotionalProcessing {
 	private static Logger LOGGER = LoggerFactory.getLogger(PromotionalProcessing.class);
 
-	public static void displayPromotions(ServletContext servletContext, PrintWriter out, HttpServletRequest req,
-			HttpServletResponse res, int new_sid) {
+	public static void displayPromotions(UUID requestUuid, ServletContext servletContext, PrintWriter out,
+			HttpServletRequest req, HttpServletResponse res, int new_sid) {
 		int I_ID = Util.getRandomI_ID();
 		// Vector<Integer> related_item_ids = new Vector<Integer>();
 		// Vector<String> thumbnails = new Vector<String>();
@@ -34,8 +35,8 @@ public class PromotionalProcessing {
 		List<Item> items = itemService.getRelatedItems(I_ID);
 		// Database.getRelated(I_ID, related_item_ids, thumbnails);
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug(
-				"PromotionalProcessing - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("PromotionalProcessing - " + requestUuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		String C_ID = req.getParameter("C_ID");
 		String SHOPPING_ID = req.getParameter("SHOPPING_ID");

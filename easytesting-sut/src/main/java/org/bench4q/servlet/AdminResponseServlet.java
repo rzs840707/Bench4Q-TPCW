@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +25,7 @@ public class AdminResponseServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		String url;
@@ -52,8 +54,8 @@ public class AdminResponseServlet extends HttpServlet {
 		Date databaseBefore = new Date(System.currentTimeMillis());
 		Item item = itemService.getItemById(I_ID);
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug(
-				"AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("AdminResponseServlet - " + uuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Spit out the HTML
 		out.print("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD W3 HTML//EN\">\n");
@@ -75,8 +77,8 @@ public class AdminResponseServlet extends HttpServlet {
 			itemService.updateInformation(itemId, newCost, newImage, newThumbnail);
 			itemService.updateRelatedItems(itemId);
 			databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug("AdminResponseServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime())
-					+ " ms");
+			LOGGER.debug("AdminResponseServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 			out.print("<H2>Product Updated</H2>");
 			out.print("<H2>Title: " + item.getTitle() + "</H2>\n");
@@ -130,7 +132,8 @@ public class AdminResponseServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("AdminResponseServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug(
+				"AdminResponseServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -24,6 +25,7 @@ public class ShoppingCartServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(this.getServletContext());
@@ -46,8 +48,8 @@ public class ShoppingCartServlet extends HttpServlet {
 			Date databaseBefore = new Date(System.currentTimeMillis());
 			SHOPPING_ID = shoppingCartService.newShoppingCart().getId();
 			Date databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug(
-					"ShoppingCartServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+			LOGGER.debug("ShoppingCartServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		} else {
 			SHOPPING_ID = Integer.parseInt(SHOPPING_IDstr);
@@ -88,8 +90,8 @@ public class ShoppingCartServlet extends HttpServlet {
 		Date databaseBefore = new Date(System.currentTimeMillis());
 		cart = Database.doCart(SHOPPING_ID, I_ID, ids, quantities);
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug(
-				"ShoppingCartServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("ShoppingCartServlet - " + uuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		// Add the top part of the HTML
 
@@ -101,7 +103,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Shopping Cart Page</H2>\n");
 
 		// Print out the promotional processing stuff
-		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, SHOPPING_ID);
+		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, SHOPPING_ID);
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 
@@ -149,7 +151,7 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("ShoppingCartServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("ShoppingCartServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

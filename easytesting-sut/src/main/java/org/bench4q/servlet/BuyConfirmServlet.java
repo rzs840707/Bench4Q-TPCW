@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +54,7 @@ public class BuyConfirmServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		int i;
@@ -95,14 +97,14 @@ public class BuyConfirmServlet extends HttpServlet {
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING, STREET_1, STREET_2, CITY, STATE, ZIP, COUNTRY);
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
-					"BuyConfirmServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+					"BuyConfirmServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 		} else {
 			Date databaseBefore = new Date(System.currentTimeMillis());
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING);
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
-					"BuyConfirmServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+					"BuyConfirmServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 		}
 
 		// Make Database call to read the current countent of the shopping
@@ -162,7 +164,7 @@ public class BuyConfirmServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyConfirmServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

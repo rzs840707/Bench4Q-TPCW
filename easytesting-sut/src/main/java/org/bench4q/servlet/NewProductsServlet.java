@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +34,7 @@ public class NewProductsServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		PrintWriter out = res.getWriter();
@@ -55,7 +57,7 @@ public class NewProductsServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">New Products Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
 
 		// Display new products
 
@@ -74,7 +76,8 @@ public class NewProductsServlet extends HttpServlet {
 		Date databaseBefore = new Date(System.currentTimeMillis());
 		List<Item> items = itemService.getNewItemsBySubject(subject, 50);
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug("NewProductsServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("NewProductsServlet - " + uuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		for (i = 0; i < items.size(); i++) {
 			Item item = items.get(i);
@@ -124,7 +127,7 @@ public class NewProductsServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("NewProductServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("NewProductServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

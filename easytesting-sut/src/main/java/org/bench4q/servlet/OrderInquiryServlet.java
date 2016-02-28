@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +20,7 @@ public class OrderInquiryServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		Util.determinePriorityLevel(req);
@@ -80,7 +82,7 @@ public class OrderInquiryServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("OrderInquiryServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("OrderInquiryServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

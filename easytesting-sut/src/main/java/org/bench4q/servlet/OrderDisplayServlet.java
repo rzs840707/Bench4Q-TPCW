@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +29,7 @@ public class OrderDisplayServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		PrintWriter out = res.getWriter();
@@ -71,7 +73,7 @@ public class OrderDisplayServlet extends HttpServlet {
 			}
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug(
-					"OrderDisplayServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+					"OrderDisplayServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		} else
 			out.print("Error:order_display, " + "uname and passwd not set!.\n");
@@ -101,7 +103,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("OrderDisplayServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("OrderDisplayServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 	private void printOrder(Order order, List<OrderLine> lines, PrintWriter out) {

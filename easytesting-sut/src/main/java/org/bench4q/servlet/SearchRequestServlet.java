@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +28,7 @@ public class SearchRequestServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		PrintWriter out = res.getWriter();
@@ -46,7 +48,7 @@ public class SearchRequestServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Request Page</H2>");
 
 		// Insert Promotional processing
-		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 
@@ -93,7 +95,8 @@ public class SearchRequestServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("SearchRequestServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug(
+				"SearchRequestServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

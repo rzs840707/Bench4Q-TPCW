@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,6 +34,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		int i;
@@ -58,7 +60,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
 
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(this.getServletContext());
@@ -75,8 +77,8 @@ public class ExecuteSearchServlet extends HttpServlet {
 			items = itemService.getItemsBySubject(search_string, 50);
 		}
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug(
-				"ExecuteSearchServlet - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("ExecuteSearchServlet - " + uuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"1\" CELLSPACING=\"1\">\n");
 		out.print("<TR> <TD WIDTH=\"30\"></TD>\n");
@@ -133,7 +135,8 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("ExecuteSearchServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug(
+				"ExecuteSearchServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

@@ -3,6 +3,7 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ public class HomeServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
 		int i;
@@ -85,7 +87,7 @@ public class HomeServlet extends HttpServlet {
 		SayHello.printHello(session, req, out);
 
 		// Insert the promotional processing
-		PromotionalProcessing.displayPromotions(this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
 
 		// Generate Table of What's New and BestSellers
 		// Table headings
@@ -200,7 +202,7 @@ public class HomeServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("HomeServlet - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("HomeServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }
