@@ -82,7 +82,7 @@ public class OrderInquiryServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("OrderInquiryServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("OrderInquiryServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

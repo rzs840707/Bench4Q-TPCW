@@ -120,7 +120,7 @@ public class AdminRequestServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("AdminRequestServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("AdminRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

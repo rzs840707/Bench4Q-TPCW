@@ -103,7 +103,7 @@ public class OrderDisplayServlet extends HttpServlet {
 		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("OrderDisplayServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("OrderDisplayServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 	private void printOrder(Order order, List<OrderLine> lines, PrintWriter out) {

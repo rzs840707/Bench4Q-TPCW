@@ -132,7 +132,7 @@ public class CustomerRegistrationServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("CustomerRegistrationServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime())
+		LOGGER.debug("CustomerRegistrationServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
 				+ " ms");
 	}
 

@@ -74,8 +74,8 @@ public class BuyRequestServlet extends HttpServlet {
 			customer = customerService.getCustomerByUserName(UNAME);
 			customerService.refreshSession(customer.getId());
 			Date databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug(
-					"BuyRequestServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+			LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 			if (!PASSWD.equals(customer.getPassword())) {
 				out.print("Error: Incorrect Password</BODY></HTML>");
 				return;
@@ -89,7 +89,6 @@ public class BuyRequestServlet extends HttpServlet {
 			try {
 				birthDate = new SimpleDateFormat("dd/MM/YYYY").parse(req.getParameter("BIRTHDATE"));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String data = req.getParameter("DATA");
@@ -105,8 +104,8 @@ public class BuyRequestServlet extends HttpServlet {
 			customer = customerService.newCustomer(firstName, lastName, phone, email, birthDate, data, streetLine1,
 					streetLine2, city, state, zipCode, countryName);
 			Date databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug(
-					"BuyRequestServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+			LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		} else
 			out.print("ERROR: RETURNING_FLAG not set to Y or N!\n");
@@ -119,7 +118,8 @@ public class BuyRequestServlet extends HttpServlet {
 		Date databaseBefore = new Date(System.currentTimeMillis());
 		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), customer.getDiscount());
 		Date databaseAfter = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Database - "
+				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 
@@ -245,7 +245,7 @@ public class BuyRequestServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

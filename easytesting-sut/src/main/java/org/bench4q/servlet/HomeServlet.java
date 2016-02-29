@@ -202,7 +202,7 @@ public class HomeServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("HomeServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("HomeServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

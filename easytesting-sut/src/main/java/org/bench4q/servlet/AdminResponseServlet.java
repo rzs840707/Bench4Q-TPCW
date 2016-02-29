@@ -133,7 +133,7 @@ public class AdminResponseServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug(
-				"AdminResponseServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+				"AdminResponseServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

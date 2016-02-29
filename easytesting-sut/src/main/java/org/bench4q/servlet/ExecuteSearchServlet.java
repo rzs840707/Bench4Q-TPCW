@@ -136,7 +136,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug(
-				"ExecuteSearchServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+				"ExecuteSearchServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

@@ -79,7 +79,6 @@ public class BuyConfirmServlet extends HttpServlet {
 		try {
 			CC_EXPIRY = new SimpleDateFormat("dd/MM/YYYY").parse(CC_EXPIRYstr);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String SHIPPING = req.getParameter("SHIPPING");
@@ -96,15 +95,15 @@ public class BuyConfirmServlet extends HttpServlet {
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING, STREET_1, STREET_2, CITY, STATE, ZIP, COUNTRY);
 			Date databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug(
-					"BuyConfirmServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+			LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 		} else {
 			Date databaseBefore = new Date(System.currentTimeMillis());
 			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
 					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING);
 			Date databaseAfter = new Date(System.currentTimeMillis());
-			LOGGER.debug(
-					"BuyConfirmServlet - " + uuid.toString() + " - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+			LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Database - "
+					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 		}
 
 		// Make Database call to read the current countent of the shopping
@@ -164,7 +163,7 @@ public class BuyConfirmServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

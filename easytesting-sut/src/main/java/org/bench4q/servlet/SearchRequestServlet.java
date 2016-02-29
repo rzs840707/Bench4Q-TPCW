@@ -96,7 +96,7 @@ public class SearchRequestServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug(
-				"SearchRequestServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+				"SearchRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

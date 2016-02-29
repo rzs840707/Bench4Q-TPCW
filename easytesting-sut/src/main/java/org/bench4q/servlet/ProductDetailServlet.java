@@ -130,7 +130,7 @@ public class ProductDetailServlet extends HttpServlet {
 
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug(
-				"ProductDetailServlet - " + uuid.toString() + " - " + (after.getTime() - before.getTime()) + " ms");
+				"ProductDetailServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
 	}
 
 }
