@@ -48,7 +48,7 @@ public class SearchRequestServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Request Page</H2>");
 
 		// Insert Promotional processing
-		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(this.getClass(), uuid, this.getServletContext(), out, req, res, -1);
 
 		String sessionIdStrToAppend = Util.appendSessionId(req);
 

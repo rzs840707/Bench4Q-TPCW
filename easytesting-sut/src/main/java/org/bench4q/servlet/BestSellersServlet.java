@@ -48,7 +48,7 @@ public class BestSellersServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Best Sellers Page - Subject: " + subject + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(this.getClass(), uuid, this.getServletContext(), out, req, res, -1);
 
 		// Display new products
 

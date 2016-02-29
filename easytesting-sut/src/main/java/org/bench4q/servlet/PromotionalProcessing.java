@@ -18,10 +18,10 @@ import easy.testing.sut.entity.Item;
 import easy.testing.sut.service.ItemService;
 
 public class PromotionalProcessing {
-	private static Logger LOGGER = LoggerFactory.getLogger(PromotionalProcessing.class);
 
-	public static void displayPromotions(UUID requestUuid, ServletContext servletContext, PrintWriter out,
-			HttpServletRequest req, HttpServletResponse res, int new_sid) {
+	public static void displayPromotions(Class<?> loggerClass, UUID requestUuid, ServletContext servletContext,
+			PrintWriter out, HttpServletRequest req, HttpServletResponse res, int new_sid) {
+		Logger LOGGER = LoggerFactory.getLogger(loggerClass);
 		int I_ID = Util.getRandomI_ID();
 		// Vector<Integer> related_item_ids = new Vector<Integer>();
 		// Vector<String> thumbnails = new Vector<String>();

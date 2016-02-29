@@ -60,7 +60,7 @@ public class ExecuteSearchServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Search Result Page - " + search_type + ": " + search_string + "</H2>\n");
 
 		// Display promotions
-		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);
+		PromotionalProcessing.displayPromotions(this.getClass(), uuid, this.getServletContext(), out, req, res, -1);
 
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(this.getServletContext());

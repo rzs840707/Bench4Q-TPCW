@@ -16,12 +16,13 @@ import easy.testing.sut.entity.Customer;
 import easy.testing.sut.service.CustomerService;
 
 public class SayHello {
-	private static Logger LOGGER = LoggerFactory.getLogger(SayHello.class);
 
-	public static void printHello(UUID requestUuid, HttpSession session, HttpServletRequest req, PrintWriter out) {
+	public static void printHello(Class<?> loggerClass, UUID requestUuid, HttpSession session, HttpServletRequest req,
+			PrintWriter out) {
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(req.getServletContext());
 		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
+		Logger LOGGER = LoggerFactory.getLogger(loggerClass);
 
 		// If we have seen this session id before
 		if (!session.isNew()) {
