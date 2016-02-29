@@ -3,14 +3,14 @@
 <configuration>
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{50} - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
 			</pattern>
 		</layout>
 	</appender>
 	<appender name="file" class="ch.qos.logback.core.FileAppender">
 		<file>D:/log.log</file>
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{50} - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
 			</pattern>
 		</layout>
 		<append>true</append>
