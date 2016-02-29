@@ -84,7 +84,7 @@ public class HomeServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Home Page</H2>\n");
 
 		// Say Hello!
-		SayHello.printHello(session, req, out);
+		SayHello.printHello(uuid, session, req, out);
 
 		// Insert the promotional processing
 		PromotionalProcessing.displayPromotions(uuid, this.getServletContext(), out, req, res, -1);

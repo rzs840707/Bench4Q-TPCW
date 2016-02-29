@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,7 @@ import easy.testing.sut.service.CustomerService;
 public class SayHello {
 	private static Logger LOGGER = LoggerFactory.getLogger(SayHello.class);
 
-	public static void printHello(HttpSession session, HttpServletRequest req, PrintWriter out) {
+	public static void printHello(UUID requestUuid, HttpSession session, HttpServletRequest req, PrintWriter out) {
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(req.getServletContext());
 		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
@@ -46,7 +47,8 @@ public class SayHello {
 				Date databaseBefore = new Date(System.currentTimeMillis());
 				Customer customer = customerService.getCustomerById(C_ID[0]);
 				Date databaseAfter = new Date(System.currentTimeMillis());
-				LOGGER.debug("SayHello - Database - " + (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
+				LOGGER.debug("SayHello - " + requestUuid.toString() + " - Database - "
+						+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 
 				// Set the values for this session.
 				if (customer == null) {

@@ -5,8 +5,7 @@
 	<artifactId>easytesting-sut</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>easytesting-sut Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+	<name>EasyTesting-SUT</name>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -24,6 +23,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.37</version>
 		</dependency>
+		
 		<!-- Spring MVC -->
 		<dependency>
 			<groupId>org.springframework</groupId>

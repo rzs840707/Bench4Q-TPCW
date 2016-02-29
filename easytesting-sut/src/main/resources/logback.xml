@@ -7,10 +7,20 @@
 			</pattern>
 		</layout>
 	</appender>
+	<appender name="file" class="ch.qos.logback.core.FileAppender">
+		<file>D:/log.log</file>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{50} - %msg%n
+			</pattern>
+		</layout>
+		<append>true</append>
+		<prudent>false</prudent>
+	</appender>
 
 	<logger name="org.bench4q.servlet" level="TRACE" />
 
 	<root level="INFO">
-		<appender-ref ref="console" />
+		<!-- <appender-ref ref="console" /> -->
+		<appender-ref ref="file" />
 	</root>
 </configuration>
