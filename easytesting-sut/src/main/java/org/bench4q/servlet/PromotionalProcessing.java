@@ -23,17 +23,14 @@ public class PromotionalProcessing {
 			PrintWriter out, HttpServletRequest req, HttpServletResponse res, int new_sid) {
 		Logger LOGGER = LoggerFactory.getLogger(loggerClass);
 		int I_ID = Util.getRandomI_ID();
-		// Vector<Integer> related_item_ids = new Vector<Integer>();
-		// Vector<String> thumbnails = new Vector<String>();
 		int i;
 		String url;
-
-		Date databaseBefore = new Date(System.currentTimeMillis());
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(servletContext);
 		ItemService itemService = webApplicationContext.getBean(ItemService.class);
+
+		Date databaseBefore = new Date(System.currentTimeMillis());
 		List<Item> items = itemService.getRelatedItems(I_ID);
-		// Database.getRelated(I_ID, related_item_ids, thumbnails);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("PromotionalProcessing - " + requestUuid.toString() + " - Database - "
 				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");

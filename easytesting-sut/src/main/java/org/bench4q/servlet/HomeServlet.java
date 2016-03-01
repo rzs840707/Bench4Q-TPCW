@@ -2,6 +2,7 @@ package org.bench4q.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.util.UUID;
 import java.util.Vector;
@@ -169,7 +170,9 @@ public class HomeServlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\"" + " ALT=\"Shopping Cart\"></A>\n");
+		out.print("\"><IMG SRC=\"image?uuid=" + URLEncoder.encode(uuid.toString(), "utf-8") + "&className="
+				+ URLEncoder.encode(this.getClass().getName(), "utf-8") + "&imageName=shopping_cart_B.gif\""
+				+ " ALT=\"Shopping Cart\"></A>\n");
 
 		url = "search_request";
 		if (SHOPPING_ID != null) {
