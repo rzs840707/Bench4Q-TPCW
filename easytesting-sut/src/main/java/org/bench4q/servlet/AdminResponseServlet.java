@@ -84,10 +84,10 @@ public class AdminResponseServlet extends HttpServlet {
 			out.print("<H2>Title: " + item.getTitle() + "</H2>\n");
 			out.print(
 					"<P>Author: " + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName() + "</P>\n");
-			out.print("<P><IMG SRC=\"Images/" + I_NEW_IMAGE + "\" ALIGN=\"RIGHT\" BORDER=\"0\" WIDTH=\"200\" "
-					+ "HEIGHT=\"200\">");
-			out.print("<IMG SRC=\"Images/" + I_NEW_THUMBNAIL + "\" ALT=\"Book 1\" ALIGN=\"RIGHT\" WIDTH=\"100\""
-					+ " HEIGHT=\"150\">\n");
+			out.print("<P><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), I_NEW_IMAGE)
+					+ "\" ALIGN=\"RIGHT\" BORDER=\"0\" WIDTH=\"200\" " + "HEIGHT=\"200\">");
+			out.print("<IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), I_NEW_THUMBNAIL)
+					+ "\" ALT=\"Book 1\" ALIGN=\"RIGHT\" WIDTH=\"100\"" + " HEIGHT=\"150\">\n");
 			out.print("Description: " + item.getDescription() + "</P>\n");
 			out.print("<BLOCKQUOTE><P><B>Suggested Retail: $" + item.getSuggestedRetailPrice()
 					+ "</B><BR><B>Our Price: </B><FONT COLOR=\"#DD0000\"><B>" + I_NEW_COSTstr
@@ -111,7 +111,8 @@ public class AdminResponseServlet extends HttpServlet {
 			}
 
 			out.print("<A HREF=\"" + res.encodeURL(url));
-			out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
+			out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\" "
+					+ "ALT=\"Search\"></A>\n");
 
 			url = "home";
 			if (SHOPPING_ID != null) {
@@ -124,7 +125,8 @@ public class AdminResponseServlet extends HttpServlet {
 
 			out.print("<A HREF=\"" + res.encodeURL(url));
 
-			out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+			out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" "
+					+ "ALT=\"Home\"></A></P></CENTER>\n");
 
 			out.print("</FORM>\n");
 		}
@@ -132,8 +134,8 @@ public class AdminResponseServlet extends HttpServlet {
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug(
-				"AdminResponseServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("AdminResponseServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
+				+ " ms");
 	}
 
 }

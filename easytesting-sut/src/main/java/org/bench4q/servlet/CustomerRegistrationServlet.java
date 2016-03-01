@@ -115,7 +115,8 @@ public class CustomerRegistrationServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\" ALT=\"Search Item\"></A>");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif")
+				+ "\" ALT=\"Search Item\"></A>");
 
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -126,14 +127,14 @@ public class CustomerRegistrationServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" ALT=\"Home\"></A>");
 		out.print("</CENTER></FORM>");
 		out.print("</BODY></HTML>");
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("CustomerRegistrationServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
-				+ " ms");
+		LOGGER.debug("CustomerRegistrationServlet - " + uuid.toString() + " - Total - "
+				+ (after.getTime() - before.getTime()) + " ms");
 	}
 
 }

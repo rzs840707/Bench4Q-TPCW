@@ -58,8 +58,8 @@ public class PromotionalProcessing {
 				url = url + "&C_ID=" + C_ID;
 			}
 			out.print("<TD><A HREF=\"" + res.encodeURL(url));
-			out.print("\"><IMG SRC=\"Images/" + items.get(i).getThumbnail() + "\" ALT=\"Book " + String.valueOf(i + 1)
-					+ "\" WIDTH=\"100\" HEIGHT=\"150\"></A>\n");
+			out.print("\"><IMG SRC=\"" + Util.buildImageUrl(requestUuid, loggerClass, items.get(i).getThumbnail())
+					+ "\" ALT=\"Book " + String.valueOf(i + 1) + "\" WIDTH=\"100\" HEIGHT=\"150\"></A>\n");
 			out.print("</TD>");
 		}
 		out.print("</TR></TABLE>\n");

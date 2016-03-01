@@ -1,6 +1,9 @@
 package org.bench4q.servlet;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -113,6 +116,16 @@ public class Util {
 			sessionIdStrToAppend = "";
 		}
 		return sessionIdStrToAppend;
+	}
+
+	public static String buildImageUrl(UUID uuid, Class<?> clazz, String imageName) {
+		try {
+			return "image?uuid=" + URLEncoder.encode(uuid.toString(), "utf-8") + "&className="
+					+ URLEncoder.encode(clazz.getName(), "utf-8") + "&imageName=" + imageName;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

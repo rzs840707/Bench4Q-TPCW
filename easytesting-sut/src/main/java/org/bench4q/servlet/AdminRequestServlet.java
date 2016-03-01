@@ -65,9 +65,10 @@ public class AdminRequestServlet extends HttpServlet {
 		out.print("<H2 ALIGN=\"center\">Title:" + item.getTitle() + "</H2>\n");
 		out.print("<P ALIGN=\"LEFT\">Author: " + item.getAuthor().getFirstName() + " " + item.getAuthor().getLastName()
 				+ "<BR></P>\n");
-		out.print("<IMG SRC=\"Images/" + item.getImage() + "\" ALIGN=\"RIGHT\" BORDER=\"0\" "
-				+ "WIDTH=\"200\" HEIGHT=\"200\" >\n");
-		out.print("<IMG SRC=\"Images/" + item.getThumbnail() + "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
+		out.print("<IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), item.getImage())
+				+ "\" ALIGN=\"RIGHT\" BORDER=\"0\" " + "WIDTH=\"200\" HEIGHT=\"200\" >\n");
+		out.print("<IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), item.getThumbnail())
+				+ "\" ALIGN=\"RIGHT\" BORDER=\"0\">");
 		out.print("<P><BR><BR></P>");
 
 		// by xiaowei zhou, change "$sessionid$" to "jsessionid=", 2010.11.4
@@ -103,7 +104,8 @@ public class AdminRequestServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 		}
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\" "
+				+ "ALT=\"Search\"></A>\n");
 		url = "home";
 		if (SHOPPING_ID != null) {
 			url = url + "?SHOPPING_ID=" + SHOPPING_ID;
@@ -114,13 +116,15 @@ public class AdminRequestServlet extends HttpServlet {
 		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" "
+				+ "ALT=\"Home\"></A></P>\n");
 
 		out.print("</FORM></BODY></HTML>");
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("AdminRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("AdminRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
+				+ " ms");
 	}
 
 }

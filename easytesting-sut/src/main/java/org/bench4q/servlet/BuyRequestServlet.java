@@ -233,19 +233,22 @@ public class BuyRequestServlet extends HttpServlet {
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "shopping_cart_B.gif") + "\" "
+				+ "ALT=\"Shopping Cart\"></A>\n");
 
 		url = "order_inquiry?C_ID=" + customer.getId();
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/order_status_B.gif\" " + "ALT=\"Order Status\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "order_status_B.gif") + "\" "
+				+ "ALT=\"Order Status\"></A>\n");
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
+				+ " ms");
 	}
 
 }

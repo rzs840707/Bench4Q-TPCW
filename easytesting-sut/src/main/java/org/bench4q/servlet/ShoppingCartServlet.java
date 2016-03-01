@@ -132,14 +132,14 @@ public class ShoppingCartServlet extends HttpServlet {
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
 		out.print("<P><BR><A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/checkout_B.gif\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "checkout_B.gif") + "\"></A>\n");
 
 		url = "home?SHOPPING_ID=" + SHOPPING_ID;
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
-		out.print("\"><IMG SRC=\"Images/home_B.gif\"></P></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\"></P></A>\n");
 		out.print("<P>If you have changed the quantities and/or taken "
 				+ "anything out<BR> of your shopping cart, click here to " + "refresh your shopping cart:</P> ");
 		out.print("<INPUT TYPE=HIDDEN NAME=\"ADD_FLAG\" value = \"N\">\n");

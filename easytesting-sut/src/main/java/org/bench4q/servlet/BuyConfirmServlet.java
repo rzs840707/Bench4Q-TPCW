@@ -151,19 +151,22 @@ public class BuyConfirmServlet extends HttpServlet {
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
 		out.print("<CENTER><P><A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\"" + " ALT=\"Search\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\""
+				+ " ALT=\"Search\"></A>\n");
 
 		url = "home?SHOPPING_ID=" + SHOPPING_ID;
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" ALT=\"Home\"></A>\n");
+		out.print(
+				"\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" ALT=\"Home\"></A>\n");
 		out.print("</CENTER></BLOCKQUOTE></BLOCKQUOTE></BLOCKQUOTE>" + "</BLOCKQUOTE></BODY></HTML>");
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
+				+ " ms");
 	}
 
 }

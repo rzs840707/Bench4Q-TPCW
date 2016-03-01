@@ -101,7 +101,8 @@ public class NewProductsServlet extends HttpServlet {
 		if (C_ID != null)
 			url = url + "&C_ID=" + C_ID;
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/shopping_cart_B.gif\" " + "ALT=\"Shopping Cart\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "shopping_cart_B.gif") + "\" "
+				+ "ALT=\"Shopping Cart\"></A>\n");
 
 		url = "search_request";
 		if (SHOPPING_ID != null) {
@@ -112,7 +113,8 @@ public class NewProductsServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/search_B.gif\" " + "ALT=\"Search\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\" "
+				+ "ALT=\"Search\"></A>\n");
 
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -122,12 +124,14 @@ public class NewProductsServlet extends HttpServlet {
 		} else if (C_ID != null)
 			url = url + "?C_ID=" + C_ID;
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"Images/home_B.gif\" " + "ALT=\"Home\"></A></P></CENTER>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" "
+				+ "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</BODY> </HTML>\n");
 		out.close();
 
 		Date after = new Date(System.currentTimeMillis());
-		LOGGER.debug("NewProductServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime()) + " ms");
+		LOGGER.debug("NewProductServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())
+				+ " ms");
 	}
 
 }
