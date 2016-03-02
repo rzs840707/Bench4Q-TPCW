@@ -1,5 +1,8 @@
 package easy.testing.sut.helper;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -32,19 +35,12 @@ public final class SessionHelper {
 
 	public SessionHelper() {
 		try {
-			Configuration configuration = new Configuration();
+			InputStream inputStream = this.getClass().getResourceAsStream("/database.properties");
+			Properties properties = new Properties();
+			properties.load(inputStream);
 
-			configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-			configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-			configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/bench4q");
-			configuration.setProperty("hibernate.connection.username", "root");
-			configuration.setProperty("hibernate.connection.password", "onceas");
-			configuration.setProperty("hibernate.connection.pool_size", "1");
-			configuration.setProperty("hibernate.show_sql", "false");
-			configuration.setProperty("hibernate.format_sql", "true");
-			configuration.setProperty("connection.useUnicode", "true");
-			configuration.setProperty("hibernate.connection.characterEncoding", "utf-8");
-			configuration.setProperty("hibernate.current_session_context_class", "thread");
+			Configuration configuration = new Configuration();
+			configuration.setProperties(properties);
 
 			configuration.addAnnotatedClass(Address.class);
 			configuration.addAnnotatedClass(Author.class);
