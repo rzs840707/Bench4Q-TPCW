@@ -14,6 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.entity.BuyResult;
+import easy.testing.sut.entity.ShoppingCartLine;
+import easy.testing.sut.service.BuyService;
 
 // DATABASE CONNECTIVITY NEEDED: Lots!
 // 1. Given a SHOPPING_ID, I need a way to get the SCL_ID, SC_COST, and
@@ -54,6 +60,10 @@ public class BuyConfirmServlet extends HttpServlet {
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils
+				.getWebApplicationContext(this.getServletContext());
+		BuyService buyService = webApplicationContext.getBean(BuyService.class);
+
 		UUID uuid = UUID.randomUUID();
 		Date before = new Date(System.currentTimeMillis());
 
@@ -84,7 +94,7 @@ public class BuyConfirmServlet extends HttpServlet {
 		String SHIPPING = req.getParameter("SHIPPING");
 
 		String STREET_1 = req.getParameter("STREET_1");
-		BuyConfirmResult result = null;
+		BuyResult result = null;
 		if (!STREET_1.equals("")) {
 			String STREET_2 = req.getParameter("STREET_2");
 			String CITY = req.getParameter("CITY");
@@ -92,15 +102,15 @@ public class BuyConfirmServlet extends HttpServlet {
 			String ZIP = req.getParameter("ZIP");
 			String COUNTRY = req.getParameter("COUNTRY");
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
-					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING, STREET_1, STREET_2, CITY, STATE, ZIP, COUNTRY);
+			result = buyService.buy(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME, new Date(CC_EXPIRY.getTime()),
+					SHIPPING, STREET_1, STREET_2, CITY, STATE, ZIP, COUNTRY);
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Database - "
 					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
 		} else {
 			Date databaseBefore = new Date(System.currentTimeMillis());
-			result = Database.doBuyConfirm(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME,
-					new java.sql.Date(CC_EXPIRY.getTime()), SHIPPING);
+			result = buyService.buy(SHOPPING_ID, C_ID, CC_TYPE, CC_NUMBER, CC_NAME, new Date(CC_EXPIRY.getTime()),
+					SHIPPING);
 			Date databaseAfter = new Date(System.currentTimeMillis());
 			LOGGER.debug("BuyConfirmServlet - " + uuid.toString() + " - Database - "
 					+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -125,25 +135,25 @@ public class BuyConfirmServlet extends HttpServlet {
 		out.print("<TR><TD><B>Qty</B></TD><TD><B>Product</B></TD></TR> ");
 
 		// For each item in the shopping cart, print out its contents
-		for (i = 0; i < result.cart.lines.size(); i++) {
-			CartLine line = (CartLine) result.cart.lines.elementAt(i);
-			out.print("<TR><TD VALIGN=\"TOP\">" + line.scl_qty + "</TD>\n");
-			out.print("<TD VALIGN=\"TOP\">Title:<I>" + line.scl_title + "</I> - Backing: " + line.scl_backing
-					+ "<BR>SRP. $" + line.scl_srp + "<FONT COLOR=\"#aa0000\"><B>Your Price: $" + line.scl_cost
-					+ "</FONT> </TD></TR>\n");
+		for (i = 0; i < result.getShoppingCartList().getShoppingCartLines().size(); i++) {
+			ShoppingCartLine line = result.getShoppingCartList().getShoppingCartLines().get(i);
+			out.print("<TR><TD VALIGN=\"TOP\">" + line.getQuantity() + "</TD>\n");
+			out.print("<TD VALIGN=\"TOP\">Title:<I>" + line.getItem().getTitle() + "</I> - Backing: "
+					+ line.getItem().getBacking() + "<BR>SRP. $" + line.getItem().getSuggestedRetailPrice()
+					+ "<FONT COLOR=\"#aa0000\"><B>Your Price: $" + line.getItem().getCost() + "</FONT> </TD></TR>\n");
 		}
 		out.print("</TABLE><H2 ALIGN=\"LEFT\">Your Order has been processed.</H2>\n");
 		out.print("<TABLE BORDER=\"1\" CELLPADDING=\"5\" CELLSPACING=\"0\">\n");
 		out.print("<TR><TD><H4>Subtotal with discount:</H4></TD>\n");
-		out.print("<TD> <H4>$" + result.cart.SC_SUB_TOTAL + "</H4></TD></TR>");
+		out.print("<TD> <H4>$" + result.getShoppingCartList().getSubTotal() + "</H4></TD></TR>");
 		out.print("<TR><TD><H4>Tax (8.25%):</H4></TD>\n");
-		out.print("<TD><H4>$" + result.cart.SC_TAX + "</H4></TD></TR>\n");
+		out.print("<TD><H4>$" + result.getShoppingCartList().getTax() + "</H4></TD></TR>\n");
 		out.print("<TR><TD><H4>Shipping &amp; Handling:</H4></TD>\n");
-		out.print("<TD><H4>$" + result.cart.SC_SHIP_COST + "</H4></TD></TR>\n");
+		out.print("<TD><H4>$" + result.getShoppingCartList().getShipCost() + "</H4></TD></TR>\n");
 		out.print("<TR><TD> <H4>Total:</H4></TD>\n");
-		out.print("<TD><H4>$" + result.cart.SC_TOTAL + "</H4></TD></TR></TABLE>\n");
-		out.print("<P><BR></P><H2>Order Number: " + result.order_id + "</H2>\n");
-		out.print("<!--STUB Total:" + result.cart.SC_TOTAL + "-->\n");
+		out.print("<TD><H4>$" + result.getShoppingCartList().getTotalCost() + "</H4></TD></TR></TABLE>\n");
+		out.print("<P><BR></P><H2>Order Number: " + result.getOrder().getId() + "</H2>\n");
+		out.print("<!--STUB Total:" + result.getShoppingCartList().getTotalCost() + "-->\n");
 		out.print("<H1>Thank you for shopping at Bench4Q</H1> <P></P>\n");
 
 		// Add the buttons

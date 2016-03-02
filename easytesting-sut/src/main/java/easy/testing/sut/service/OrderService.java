@@ -87,7 +87,7 @@ public class OrderService {
 		}
 	}
 
-	public int addOrder(int customerId, ShoppingCartList shoppingCartList, int shipAddressId, String shipType,
+	public Order addOrder(int customerId, ShoppingCartList shoppingCartList, int shipAddressId, String shipType,
 			double discount) {
 		Order order = this.doAddOrder(customerId, shoppingCartList.getSubTotal(), shoppingCartList.getTotalCost(),
 				shipType, shipAddressId);
@@ -103,7 +103,7 @@ public class OrderService {
 				this.getItemService().updateStock(line.getItem().getId(), stock - line.getQuantity());
 			}
 		}
-		return order.getId();
+		return order;
 	}
 
 	public Order doAddOrder(int customerId, double subTotal, double total, String shipType, int shipAddressId) {

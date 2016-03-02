@@ -208,7 +208,7 @@ public class ShoppingCartService {
 				return true;
 			}
 
-			int count = (Integer) session.createCriteria(ShoppingCartLine.class)
+			long count = (Long) session.createCriteria(ShoppingCartLine.class)
 					.createAlias("shoppingCart", "shoppingCart")
 					.add(Restrictions.eq("shoppingCart.id", shoppingCart.getId())).setProjection(Projections.rowCount())
 					.uniqueResult();
