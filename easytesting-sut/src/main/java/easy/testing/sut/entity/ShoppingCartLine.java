@@ -62,6 +62,10 @@ public class ShoppingCartLine implements Serializable {
 		return shoppingCartLine;
 	}
 
+	public void updateQuantity(int newQuantity) {
+		this.setQuantity(newQuantity);
+	}
+
 	@Override
 	public int hashCode() {
 		int result = 17;

@@ -44,4 +44,8 @@ public class ShoppingCart {
 		shoppingCart.setTime(new Date(System.currentTimeMillis()));
 		return shoppingCart;
 	}
+
+	public void resetTime() {
+		this.setTime(new Date(System.currentTimeMillis()));
+	}
 }
