@@ -144,4 +144,19 @@ public class CreditCardTransaction {
 	protected CreditCardTransaction() {
 
 	}
+
+	public static CreditCardTransaction create(Order order, String type, String number, String name,
+			Date expirationDate, String authorizationId, double amount, Date authorizationDate, Country country) {
+		CreditCardTransaction creditCardTransaction = new CreditCardTransaction();
+		creditCardTransaction.setOrder(order);
+		creditCardTransaction.setType(type);
+		creditCardTransaction.setNumber(number);
+		creditCardTransaction.setName(name);
+		creditCardTransaction.setExpirationDate(expirationDate);
+		creditCardTransaction.setAuthorizationId(authorizationId);
+		creditCardTransaction.setAmount(amount);
+		creditCardTransaction.setAuthorizationDate(authorizationDate);
+		creditCardTransaction.setCountry(country);
+		return creditCardTransaction;
+	}
 }

@@ -73,6 +73,34 @@ public class ShoppingCartService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public boolean clearShoppingCart(int shoppingCartId) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(ShoppingCartLine.class);
+			criteria.createAlias("shoppingCart", "shoppingCart");
+			criteria.add(Restrictions.eq("shoppingCart.id", shoppingCartId));
+			List<ShoppingCartLine> shoppingCartLines = criteria.list();
+			if (shoppingCartLines == null) {
+				session.getTransaction().commit();
+				return false;
+			}
+			for (ShoppingCartLine line : shoppingCartLines) {
+				session.delete(line);
+			}
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
+		}
+	}
+
 	private boolean doAddItemToShoppingCart(Session session, int shoppingCartId, int itemId) {
 		ShoppingCart shoppingCart = (ShoppingCart) session.createCriteria(ShoppingCart.class)
 				.add(Restrictions.eq("id", shoppingCartId)).uniqueResult();
