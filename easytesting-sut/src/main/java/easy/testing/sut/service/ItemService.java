@@ -231,12 +231,12 @@ public class ItemService {
 
 			Integer maxOrderId = (Integer) session.createCriteria(easy.testing.sut.entity.Order.class)
 					.setProjection(Projections.max("id")).uniqueResult();
-			
+
 			Integer maxItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.max("id"))
 					.uniqueResult();
 			Integer minItemId = (Integer) session.createCriteria(Item.class).setProjection(Projections.min("id"))
 					.uniqueResult();
-			
+
 			DetachedCriteria subQuery = DetachedCriteria.forClass(OrderLine.class);
 			subQuery.createAlias("order", "order");
 			subQuery.createAlias("item", "item");
@@ -267,8 +267,7 @@ public class ItemService {
 					itemIds[i] = currentItemId;
 				}
 
-			}
-			if (results.size() < 5) {
+			} else if (results.size() < 5) {
 				int i = 0;
 				for (Object[] result : results) {
 					i++;
@@ -276,9 +275,9 @@ public class ItemService {
 				}
 				while (i < 5) {
 					itemIds[i] = itemIds[i - 1] + 1;
+					i++;
 				}
-			}
-			if (results.size() == 5) {
+			} else if (results.size() == 5) {
 				int i = 0;
 				for (i = 0; i < 5; i++) {
 					itemIds[i] = (Integer) results.get(i)[0];
