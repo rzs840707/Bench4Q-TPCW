@@ -61,4 +61,34 @@ public class ShoppingCartLine implements Serializable {
 		shoppingCartLine.setQuantity(quantity);
 		return shoppingCartLine;
 	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 37 * result + (this.getShoppingCart() == null ? 0 : this.getShoppingCart().hashCode());
+		result = 37 * result + (this.getItem() == null ? 0 : this.getItem().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if ((this == obj)) {
+			return true;
+		}
+		if ((obj == null)) {
+			return false;
+		}
+		if (!(obj instanceof ShoppingCartLine)) {
+			return false;
+		}
+
+		ShoppingCartLine castOther = (ShoppingCartLine) obj;
+		boolean shoppingCartEquals = ((this.getShoppingCart() == castOther.getShoppingCart())
+				|| (this.getShoppingCart() != null && castOther.getShoppingCart() != null
+						&& this.getShoppingCart().equals(castOther.getShoppingCart())));
+		boolean itemEquals = ((this.getItem() == castOther.getItem()) || (this.getItem() != null
+				&& castOther.getItem() != null && this.getItem().equals(castOther.getItem())));
+		return shoppingCartEquals && itemEquals;
+	}
+
 }
