@@ -163,4 +163,20 @@ public class Order {
 	protected Order() {
 
 	}
+
+	public static Order create(Customer customer, Date orderDate, double subTotal, double tax, double total,
+			String shipType, Date shipDate, Address billAddress, Address shipAddress, String status) {
+		Order order = new Order();
+		order.setCustomer(customer);
+		order.setOrderDate(orderDate);
+		order.setSubTotal(subTotal);
+		order.setTax(tax);
+		order.setTotal(total);
+		order.setShipType(shipType);
+		order.setShipDate(shipDate);
+		order.setBillAddress(billAddress);
+		order.setShipAddress(shipAddress);
+		order.setStatus(status);
+		return order;
+	}
 }
