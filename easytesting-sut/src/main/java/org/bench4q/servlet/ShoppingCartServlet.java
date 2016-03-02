@@ -3,8 +3,9 @@ package org.bench4q.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import easy.testing.sut.entity.ShoppingCartLine;
+import easy.testing.sut.entity.ShoppingCartList;
 import easy.testing.sut.service.ShoppingCartService;
 
 public class ShoppingCartServlet extends HttpServlet {
@@ -31,7 +34,6 @@ public class ShoppingCartServlet extends HttpServlet {
 				.getWebApplicationContext(this.getServletContext());
 		ShoppingCartService shoppingCartService = webApplicationContext.getBean(ShoppingCartService.class);
 
-		Cart cart;
 		String url;
 
 		Util.determinePriorityLevel(req);
@@ -72,8 +74,7 @@ public class ShoppingCartServlet extends HttpServlet {
 
 		// We need to parse an arbitrary number of I_ID/QTR pairs from
 		// the url line.
-		Vector<String> quantities = new Vector<String>();
-		Vector<String> ids = new Vector<String>();
+		Map<Integer, Integer> itemQuantityMap = new HashMap<Integer, Integer>();
 		int i = 0;
 		String curr_QTYstr;
 		String curr_I_IDstr;
@@ -81,14 +82,15 @@ public class ShoppingCartServlet extends HttpServlet {
 		curr_QTYstr = req.getParameter("QTY_" + i);
 		curr_I_IDstr = req.getParameter("I_ID_" + i);
 		while (curr_I_IDstr != null) {
-			ids.addElement(curr_I_IDstr);
-			quantities.addElement(curr_QTYstr);
+			itemQuantityMap.put(Integer.valueOf(curr_I_IDstr), Integer.valueOf(curr_QTYstr));
 			i++;
 			curr_QTYstr = req.getParameter("QTY_" + i);
 			curr_I_IDstr = req.getParameter("I_ID_" + i);
 		}
+
+		ShoppingCartList cart;
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		cart = Database.doCart(SHOPPING_ID, I_ID, ids, quantities);
+		cart = shoppingCartService.doShopping(SHOPPING_ID, I_ID, itemQuantityMap);
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("ShoppingCartServlet - " + uuid.toString() + " - Database - "
 				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -116,18 +118,21 @@ public class ShoppingCartServlet extends HttpServlet {
 		out.print("<TR><TD><B>Qty</B></TD><TD><B>Product</B></TD></TR>\n");
 
 		// Print out the entries in the shopping cart
-		for (i = 0; i < cart.lines.size(); i++) {
-			CartLine line = (CartLine) cart.lines.elementAt(i);
+		for (i = 0; i < cart.getShoppingCartLines().size(); i++) {
+			ShoppingCartLine shoppingCartLine = cart.getShoppingCartLines().get(i);
 			out.print("<TR><TD VALIGN=\"top\">\n");
-			out.print("<INPUT TYPE=HIDDEN NAME=\"I_ID_" + i + "\" value = \"" + line.scl_i_id + "\">\n");
-			out.print("<INPUT NAME=\"QTY_" + i + "\" SIZE=\"3\" VALUE=\"" + line.scl_qty + "\"></TD>\n");
-			out.print(
-					"<TD VALIGN=\"top\">Title:<I>" + line.scl_title + "</I> - Backing: " + line.scl_backing + "<BR>\n");
-			out.print("SRP. $" + line.scl_srp + "</B>\n");
-			out.print("<FONT COLOR=\"#aa0000\"><B>Your Price: $" + line.scl_cost + "</B></FONT></TD></TR>\n");
+			out.print("<INPUT TYPE=HIDDEN NAME=\"I_ID_" + i + "\" value = \"" + shoppingCartLine.getItem().getId()
+					+ "\">\n");
+			out.print("<INPUT NAME=\"QTY_" + i + "\" SIZE=\"3\" VALUE=\"" + shoppingCartLine.getQuantity()
+					+ "\"></TD>\n");
+			out.print("<TD VALIGN=\"top\">Title:<I>" + shoppingCartLine.getItem().getTitle() + "</I> - Backing: "
+					+ shoppingCartLine.getItem().getBacking() + "<BR>\n");
+			out.print("SRP. $" + shoppingCartLine.getItem().getSuggestedRetailPrice() + "</B>\n");
+			out.print("<FONT COLOR=\"#aa0000\"><B>Your Price: $" + shoppingCartLine.getItem().getCost()
+					+ "</B></FONT></TD></TR>\n");
 		}
 
-		out.print("</TABLE><B><I>Subtotal price: " + cart.SC_SUB_TOTAL + "</I></B>\n");
+		out.print("</TABLE><B><I>Subtotal price: " + cart.getSubTotal() + "</I></B>\n");
 		url = "customer_registration?SHOPPING_ID=" + SHOPPING_ID;
 		if (C_IDstr != null)
 			url = url + "&C_ID=" + C_IDstr;

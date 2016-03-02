@@ -18,7 +18,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import easy.testing.sut.entity.Customer;
+import easy.testing.sut.entity.ShoppingCartLine;
+import easy.testing.sut.entity.ShoppingCartList;
 import easy.testing.sut.service.CustomerService;
+import easy.testing.sut.service.ShoppingCartService;
 
 public class BuyRequestServlet extends HttpServlet {
 
@@ -58,6 +61,8 @@ public class BuyRequestServlet extends HttpServlet {
 		WebApplicationContext webApplicationContext = WebApplicationContextUtils
 				.getWebApplicationContext(this.getServletContext());
 		CustomerService customerService = webApplicationContext.getBean(CustomerService.class);
+		ShoppingCartService shoppingCartService = webApplicationContext.getBean(ShoppingCartService.class);
+
 		if (RETURNING_FLAG == null) {
 			out.print("ERROR: RETURNING_FLAG not set!</BODY><HTML>");
 			return;
@@ -116,7 +121,8 @@ public class BuyRequestServlet extends HttpServlet {
 		}
 		// Update the shopping cart cost and get the current contents
 		Date databaseBefore = new Date(System.currentTimeMillis());
-		Cart mycart = Database.getCart(Integer.parseInt(SHOPPING_ID), customer.getDiscount());
+		ShoppingCartList cart = shoppingCartService.getShoppingCartList(Integer.parseInt(SHOPPING_ID),
+				customer.getDiscount());
 		Date databaseAfter = new Date(System.currentTimeMillis());
 		LOGGER.debug("BuyRequestServlet - " + uuid.toString() + " - Database - "
 				+ (databaseAfter.getTime() - databaseBefore.getTime()) + " ms");
@@ -178,24 +184,26 @@ public class BuyRequestServlet extends HttpServlet {
 		// Insert Shopping Cart Contents Here!
 		//
 		int i;
-		for (i = 0; i < mycart.lines.size(); i++) {
-			CartLine thisline = (CartLine) mycart.lines.elementAt(i);
-			out.print("<TR><TD VALIGN=\"TOP\">" + thisline.scl_qty + "</TD>\n");
-			out.print("<TD VALIGN=\"TOP\">Title:<I>" + thisline.scl_title + "</I> - Backing: " + thisline.scl_backing);
-			out.print("<BR>SRP. $" + thisline.scl_srp);
+		for (i = 0; i < cart.getShoppingCartLines().size(); i++) {
+			ShoppingCartLine line = cart.getShoppingCartLines().get(i);
+			out.print("<TR><TD VALIGN=\"TOP\">" + line.getQuantity() + "</TD>\n");
+			out.print("<TD VALIGN=\"TOP\">Title:<I>" + line.getItem().getTitle() + "</I> - Backing: "
+					+ line.getItem().getBacking());
+			out.print("<BR>SRP. $" + line.getItem().getSuggestedRetailPrice());
 			out.print("<FONT COLOR=\"#aa0000\">\n");
-			out.print("<B>Your Price:" + thisline.scl_cost + "</B>\n");
+			out.print("<B>Your Price:" + line.getItem().getCost() + "</B>\n");
 			out.print("</FONT></TD></TR>");
 		}
 
 		out.print("</TABLE>\n");
 		out.print("<P><BR></P><TABLE BORDER=\"0\">\n");
 		out.print("<TR><TD><B>Subtotal with discount (" + customer.getDiscount()
-				+ "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SUB_TOTAL + "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Tax</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TAX + "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Shipping &amp; Handling</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_SHIP_COST
+				+ "%):</B></TD><TD ALIGN=\"RIGHT\"><B>$" + cart.getSubTotal() + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Tax</B></TD><TD ALIGN=\"RIGHT\"><B>$" + cart.getTax() + "</B></TD></TR>\n");
+		out.print("<TR><TD><B>Shipping &amp; Handling</B></TD><TD ALIGN=\"RIGHT\"><B>$" + cart.getShipCost()
 				+ "</B></TD></TR>\n");
-		out.print("<TR><TD><B>Total</B></TD><TD ALIGN=\"RIGHT\"><B>$" + mycart.SC_TOTAL + "</B></TD></TR></TABLE>\n");
+		out.print(
+				"<TR><TD><B>Total</B></TD><TD ALIGN=\"RIGHT\"><B>$" + cart.getTotalCost() + "</B></TD></TR></TABLE>\n");
 
 		//
 		// Credit Card Stuff
