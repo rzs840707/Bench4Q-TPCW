@@ -277,6 +277,10 @@ public class Item {
 		this.setPublishDate(new Date(System.currentTimeMillis()));
 	}
 
+	public void updateStock(int newStock) {
+		this.setStock(newStock);
+	}
+
 	public void updateRelatedItems(int related1, int related2, int related3, int related4, int related5) {
 		this.setRelated1(related1);
 		this.setRelated2(related2);
@@ -284,4 +288,5 @@ public class Item {
 		this.setRelated4(related4);
 		this.setRelated5(related5);
 	}
+
 }

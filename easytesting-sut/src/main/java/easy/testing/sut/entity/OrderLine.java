@@ -2,8 +2,6 @@ package easy.testing.sut.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,7 +30,6 @@ public class OrderLine {
 	private String comments;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "OL_ID")
 	public int getId() {
 		return id;
@@ -91,5 +88,16 @@ public class OrderLine {
 
 	protected OrderLine() {
 
+	}
+
+	public static OrderLine create(int id, Order order, Item item, int quantity, double discount, String comments) {
+		OrderLine orderLine = new OrderLine();
+		orderLine.setId(id);
+		orderLine.setOrder(order);
+		orderLine.setItem(item);
+		orderLine.setQuantity(quantity);
+		orderLine.setDiscount(discount);
+		orderLine.setComments(comments);
+		return orderLine;
 	}
 }

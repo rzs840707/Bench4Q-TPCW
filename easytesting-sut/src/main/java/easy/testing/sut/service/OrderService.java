@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import easy.testing.sut.entity.Item;
 import easy.testing.sut.entity.Order;
 import easy.testing.sut.entity.OrderLine;
 import easy.testing.sut.helper.SessionHelper;
@@ -60,6 +61,38 @@ public class OrderService {
 			List<OrderLine> orderLines = criteria.list();
 			session.getTransaction().commit();
 			return orderLines;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return null;
+		}
+	}
+
+	public OrderLine addOrderLine(int orderLineId, int orderId, int itemId, int quantity, double discount,
+			String comments) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+
+			Order order = (Order) session.createCriteria(Order.class).add(Restrictions.eq("id", orderId))
+					.uniqueResult();
+			if (order == null) {
+				return null;
+			}
+
+			Item item = (Item) session.createCriteria(Item.class).add(Restrictions.eq("id", itemId)).uniqueResult();
+			if (item == null) {
+				return null;
+			}
+
+			OrderLine orderLine = OrderLine.create(orderLineId, order, item, quantity, discount, comments);
+
+			session.save(orderLine);
+			session.getTransaction().commit();
+			return orderLine;
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (session != null) {

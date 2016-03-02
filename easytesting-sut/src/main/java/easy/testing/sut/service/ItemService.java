@@ -295,4 +295,29 @@ public class ItemService {
 			return false;
 		}
 	}
+
+	public boolean updateStock(int itemId, int newStock) {
+		Session session = null;
+		try {
+			session = this.getSessionHelper().getSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Item.class);
+			criteria.add(Restrictions.eq("id", itemId));
+			Item item = (Item) criteria.uniqueResult();
+			if (item == null) {
+				session.getTransaction().commit();
+				return false;
+			}
+			item.updateStock(newStock);
+			session.update(item);
+			session.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (session != null) {
+				session.getTransaction().rollback();
+			}
+			return false;
+		}
+	}
 }
