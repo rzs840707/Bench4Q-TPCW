@@ -5,11 +5,17 @@
 <web-app>
 	<display-name>Bench4Q</display-name>
 	<description>Bench4Q</description>
+
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>
+			org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+		</param-value>
+	</context-param>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			classpath*:/application-context.xml
-		</param-value>
+		<param-value>easy.testing.sut.config.WebConfig</param-value>
 	</context-param>
 
 	<listener>
@@ -17,6 +23,9 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
+
+
+
 	<servlet>
 		<servlet-name>HomeServlet</servlet-name>
 		<servlet-class>
