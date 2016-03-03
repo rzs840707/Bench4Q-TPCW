@@ -24,8 +24,6 @@
 		</listener-class>
 	</listener>
 
-
-
 	<servlet>
 		<servlet-name>HomeServlet</servlet-name>
 		<servlet-class>
