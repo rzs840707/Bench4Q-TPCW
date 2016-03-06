@@ -95,13 +95,14 @@ public class HomeServlet extends HttpServlet {
 				+ " CELLPADDING=\"6\" CELLSPACING=\"0\" WIDTH=\"700\">\n");
 		out.print("<TR ALIGN=\"CENTER\" BGCOLOR=\"#ffffff\" VALIGN=\"top\">\n");
 		out.print("<TD COLSPAN=\"2\" VALIGN=\"MIDDLE\" WIDTH=\"300\">\n");
-		out.print("<IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "whats_new.gif") + "\""
-				+ " ALT=\"New Product\">\n");
+		out.print("<IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "whats_new.gif")
+				+ "\"" + " ALT=\"New Product\">\n");
 		out.print("</TD>\n");
 		out.print("<TD BGCOLOR=\"#ffffff\" WIDTH=\"100\"></TD>\n");
 		out.print("<TD COLSPAN=\"2\" WIDTH=\"300\">\n");
-		out.print("<IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "best_sellers.gif") + "\""
-				+ " ALT=\"Best Seller\"></TD></TR>\n");
+		out.print(
+				"<IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "best_sellers.gif")
+						+ "\"" + " ALT=\"Best Seller\"></TD></TR>\n");
 
 		for (i = 0; i < column1.size(); i++) {
 			out.print("<TR><TD><P ALIGN=\"center\">");
@@ -171,7 +172,8 @@ public class HomeServlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "shopping_cart_B.gif") + "\""
+		out.print("\"><IMG SRC=\""
+				+ Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "shopping_cart_B.gif") + "\""
 				+ " ALT=\"Shopping Cart\"></A>\n");
 
 		url = "search_request";
@@ -185,8 +187,8 @@ public class HomeServlet extends HttpServlet {
 		}
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\""
-				+ " ALT=\"Search\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "search_B.gif")
+				+ "\"" + " ALT=\"Search\"></A>\n");
 
 		url = "order_inquiry";
 		if (SHOPPING_ID != null) {
@@ -200,7 +202,8 @@ public class HomeServlet extends HttpServlet {
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
 
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "order_status_B.gif") + "\""
+		out.print("\"><IMG SRC=\""
+				+ Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "order_status_B.gif") + "\""
 				+ " ALT=\"Order Status\"></A>\n");
 
 		out.print("</font> </BODY> </HTML>\n");

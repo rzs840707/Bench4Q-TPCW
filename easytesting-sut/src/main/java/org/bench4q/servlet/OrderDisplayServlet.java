@@ -89,8 +89,8 @@ public class OrderDisplayServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif") + "\" "
-				+ "ALT=\"Search\"></A>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "search_B.gif")
+				+ "\" " + "ALT=\"Search\"></A>\n");
 
 		url = "home";
 		if (SHOPPING_ID != null) {
@@ -101,8 +101,8 @@ public class OrderDisplayServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" "
-				+ "ALT=\"Home\"></A></P></CENTER>\n");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "home_B.gif")
+				+ "\" " + "ALT=\"Home\"></A></P></CENTER>\n");
 		out.print("</CENTER></FORM></BODY></HTML>");
 		Date after = new Date(System.currentTimeMillis());
 		LOGGER.debug("OrderDisplayServlet - " + uuid.toString() + " - Total - " + (after.getTime() - before.getTime())

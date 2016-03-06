@@ -241,7 +241,8 @@ public class BuyRequestServlet extends HttpServlet {
 		if (SHOPPING_ID != null)
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "shopping_cart_B.gif") + "\" "
+		out.print("\"><IMG SRC=\""
+				+ Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "shopping_cart_B.gif") + "\" "
 				+ "ALT=\"Shopping Cart\"></A>\n");
 
 		url = "order_inquiry?C_ID=" + customer.getId();
@@ -249,7 +250,8 @@ public class BuyRequestServlet extends HttpServlet {
 			url = url + "&SHOPPING_ID=" + SHOPPING_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "order_status_B.gif") + "\" "
+		out.print("\"><IMG SRC=\""
+				+ Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "order_status_B.gif") + "\" "
 				+ "ALT=\"Order Status\"></A>\n");
 		out.print("</P></CENTER></BODY></HTML>");
 		out.close();

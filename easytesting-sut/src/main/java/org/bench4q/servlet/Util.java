@@ -5,8 +5,14 @@ import java.net.URLEncoder;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import easy.testing.sut.service.ImageService;
 
 public class Util {
 
@@ -118,8 +124,12 @@ public class Util {
 		return sessionIdStrToAppend;
 	}
 
-	public static String buildImageUrl(UUID uuid, Class<?> clazz, String imageName) {
+	public static String buildImageUrl(ServletContext servletContext, UUID uuid, Class<?> clazz, String imageName) {
 		try {
+			WebApplicationContext webApplicationContext = WebApplicationContextUtils
+					.getWebApplicationContext(servletContext);
+			ImageService imageService = webApplicationContext.getBean(ImageService.class);
+			imageService.getImage(uuid, clazz.getName(), imageName);
 			return "image?uuid=" + URLEncoder.encode(uuid.toString(), "utf-8") + "&className="
 					+ URLEncoder.encode(clazz.getName(), "utf-8") + "&imageName=" + imageName;
 		} catch (UnsupportedEncodingException e) {

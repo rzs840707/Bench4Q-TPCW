@@ -115,7 +115,7 @@ public class CustomerRegistrationServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "search_B.gif")
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "search_B.gif")
 				+ "\" ALT=\"Search Item\"></A>");
 
 		url = "home";
@@ -127,7 +127,8 @@ public class CustomerRegistrationServlet extends HttpServlet {
 			url = url + "?C_ID=" + C_ID;
 
 		out.print("<A HREF=\"" + res.encodeURL(url));
-		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(uuid, this.getClass(), "home_B.gif") + "\" ALT=\"Home\"></A>");
+		out.print("\"><IMG SRC=\"" + Util.buildImageUrl(this.getServletContext(), uuid, this.getClass(), "home_B.gif")
+				+ "\" ALT=\"Home\"></A>");
 		out.print("</CENTER></FORM>");
 		out.print("</BODY></HTML>");
 		out.close();
