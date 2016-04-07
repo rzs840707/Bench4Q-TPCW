@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
 	<appender name="file" class="ch.qos.logback.core.FileAppender">
-		<file>D:/log.log</file>
+		<file>/var/log/easytesting-sut.log</file>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
 			</pattern>
